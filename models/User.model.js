@@ -8,7 +8,6 @@ const UserSchema = new Schema(
     lastName: { type: String },
     chats: [{ type: Schema.Types.ObjectId, ref: "Chat" }],
     rooms: [{ type: Schema.Types.ObjectId, ref: "Room" }],
-    deviceId: { type: String },
   },
   { timestamps: true }
 );

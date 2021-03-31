@@ -39,9 +39,7 @@ function App() {
     user: null,
     isLoading: false,
     message: "",
-    userId: null,
     chats: [],
-    rooms: [],
     alertMessage: "",
     alertMessageId: null,
     alertSuccess: false,
@@ -66,7 +64,6 @@ function App() {
 
     updateState({
       token,
-      userId: id,
       isLoading: false,
       user: data.getUser,
       message: "",
@@ -175,7 +172,7 @@ function App() {
                   <Chat
                     {...props}
                     username={state.user?.email}
-                    userId={state.userId}
+                    userId={state.user?.id}
                     updateState={updateState}
                     chats={state.chats}
                   />
@@ -187,10 +184,9 @@ function App() {
                 render={(props) => (
                   <Room
                     {...props}
-                    username={state.user?.email}
-                    userId={state.userId}
+                    userId={state.user?.id}
+                    user={state.user}
                     updateState={updateState}
-                    rooms={state.rooms}
                   />
                 )}
               />
@@ -202,7 +198,7 @@ function App() {
                   <Chat
                     {...props}
                     username={state.user?.email}
-                    userId={state.userId}
+                    userId={state.user?.id}
                     updateState={updateState}
                     chats={state.chats}
                   />
@@ -214,10 +210,9 @@ function App() {
                 render={(props) => (
                   <Room
                     {...props}
-                    username={state.user?.email}
-                    userId={state.userId}
+                    user={state.user}
+                    userId={state.user?.id}
                     updateState={updateState}
-                    rooms={state.rooms}
                   />
                 )}
               />

@@ -1,10 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { cameraSelections, startStream, stopStream } from "./myVideoStream";
-import "./Room.css";
 import io from "socket.io-client";
 import Peer from "simple-peer";
+import { Button, FormLabel, Form, FormControl } from "react-bootstrap";
+import "./Room.css";
 
-export default function RoomUsersWithLiveVideos({ roomId, userId }) {
+export default function RoomUsersWithLiveVideos({
+  roomId,
+  user,
+  userId,
+  updateState,
+  setRoomUsers,
+}) {
   const [cameras, setCameras] = useState(null);
   const [deviceId, setDeviceId] = useState(null);
   const [myStream, setMyStream] = useState(null);
@@ -23,7 +30,7 @@ export default function RoomUsersWithLiveVideos({ roomId, userId }) {
   const [constraints, setConstrains] = useState({ video: true, audio: true });
   //   onMOUNT =-= -=-=-= =-=-=-=-= -=-=-=- -=-=-=-=
   useEffect(() => {
-    if (roomId) {
+    if (roomId && user) {
       // Get user cameras
       if (
         "mediaDevices" in navigator &&
@@ -40,7 +47,7 @@ export default function RoomUsersWithLiveVideos({ roomId, userId }) {
               .then(async (stream) => {
                 setMyStream(stream);
                 addVideoStream(videoRef.current, stream);
-                socketConnections(roomId);
+                socketConnections(roomId, user);
               })
               .catch((err) => {
                 stopStream(userId);
@@ -56,10 +63,10 @@ export default function RoomUsersWithLiveVideos({ roomId, userId }) {
       socketDisconnections();
     };
     // eslint-disable-next-line
-  }, [roomId]);
+  }, [roomId, user]);
 
   //   socket CONNECTIONs =-= =-=-=- -=-=- =-=-=- -=-=-= =-=-=-=-
-  const socketConnections = (roomId) => {
+  const socketConnections = (roomId, userDetails) => {
     socket.current = io.connect("ws://localhost:8000/", {
       withCredentials: true,
       //   extraHeaders: {
@@ -70,7 +77,7 @@ export default function RoomUsersWithLiveVideos({ roomId, userId }) {
     socket.current.on("yourId", (id) => {
       setMySocketId(id);
       socket.current.emit("userJoinedRoom", {
-        userId,
+        userDetails,
         roomId,
         socketId: id,
       });
@@ -78,6 +85,8 @@ export default function RoomUsersWithLiveVideos({ roomId, userId }) {
     // ROOMS =-=-=-=-=-
     socket.current.on("rooms", ({ rooms }) => {
       setRooms(rooms);
+      setRoomUsers(Object.values(rooms[roomId]));
+      //   updateState(rooms);
     });
     // INCOMING CALL =-=-=-=-=
     socket.current.on("incomingCall", ({ signalData, callFrom }) => {
@@ -185,59 +194,76 @@ export default function RoomUsersWithLiveVideos({ roomId, userId }) {
 
   return (
     <div>
-      <div>
-        <div className="video-options">
-          <select
-            onSelect={(val) => setDeviceId(val)}
-            className="custom-select"
-          >
-            {cameras?.map((videoDevice) => {
-              return (
-                <option key={videoDevice.deviceId} value={videoDevice.deviceId}>
-                  {videoDevice.label}
-                </option>
-              );
-            })}
-          </select>
-          <div id="video-grid">
-            <video muted ref={videoRef}></video>
-            {callAccepted && <video ref={partnerVideo}></video>}
-          </div>
-          <div>
-            {rooms[roomId]
-              ? Object.keys(rooms[roomId]).map((id) => {
-                  console.log(id);
-                  const users = rooms[roomId];
-                  if (
-                    id === mySocketId ||
-                    id === caller ||
-                    usersOnCall.includes(id)
-                  ) {
-                    return null;
-                  }
-
-                  return (
-                    <button
-                      disabled={receiver ? true : false}
-                      key={id}
-                      onClick={() => callPeer(id)}
-                    >
-                      {receiver ? `Calling ${users[id]}` : `Call ${users[id]}`}
-                    </button>
-                  );
-                })
-              : null}
-          </div>
-          <div>
-            {caller && (
-              <>
-                <h2>{caller} is calling you</h2>
-                <button onClick={() => acceptCall(caller)}>accept</button>
-                <button onClick={() => rejectCall(caller)}>reject</button>
-              </>
-            )}
+      <div className="video-options">
+        <select onSelect={(val) => setDeviceId(val)} className="custom-select">
+          {cameras?.map((videoDevice) => {
+            return (
+              <option key={videoDevice.deviceId} value={videoDevice.deviceId}>
+                {videoDevice.label}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+      <div className="actions-btns">
+        {caller && (
+          <>
+            <h2>{rooms[roomId][caller].firstName} is calling you...</h2>
+            <Button
+              variant="success mr-2 rounded"
+              onClick={() => acceptCall(caller)}
+            >
+              accept
+            </Button>
+            <Button variant="danger" onClick={() => rejectCall(caller)}>
+              reject
+            </Button>
+          </>
+        )}
+      </div>
+      <div id="video-grid">
+        <div className="videos-div">
+          <video muted ref={videoRef}></video>
+          <div className="userNames">
+            <p>You: {user.firstName}</p>
           </div>
         </div>
+
+        {callAccepted && (
+          <div className="videos-div">
+            <video ref={partnerVideo}></video>
+            <div className="userNames">
+              <p>{rooms[roomId]?.firstName}</p>
+            </div>
+          </div>
+        )}
+      </div>
+      <div>
+        {rooms[roomId]
+          ? Object.keys(rooms[roomId]).map((id) => {
+              console.log(id);
+              const users = rooms[roomId];
+              if (
+                id === mySocketId ||
+                id === caller ||
+                usersOnCall.includes(id)
+              ) {
+                return null;
+              }
+
+              return (
+                <button
+                  disabled={receiver ? true : false}
+                  key={id}
+                  onClick={() => callPeer(id)}
+                >
+                  {receiver
+                    ? `Calling ${users[id].firstName}`
+                    : `Call ${users[id].firstName}`}
+                </button>
+              );
+            })
+          : null}
       </div>
     </div>
   );

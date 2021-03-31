@@ -7,7 +7,6 @@ exports.RootTypeDefs = gql`
     firstName: String
     lastName: String
     chats: [Chat!]
-    deviceId: ID
   }
 
   type Chat {
@@ -22,7 +21,7 @@ exports.RootTypeDefs = gql`
     roomName: String!
     roomAuthor: User!
     # roomMessages: [Message!]
-    roomUsers: [User!]
+    # roomUsers: [User!]
   }
   type Message {
     id: ID!
@@ -73,15 +72,15 @@ exports.RootTypeDefs = gql`
     signup(data: SignupInput!): User!
     login(email: String!, password: String!): AuthData!
     isLoggedIn(token: String!): AuthData!
+
     createChat(userId: ID!, chatName: String!): Chat!
     deleteChat(chatId: ID!, userId: ID!): ResMessage!
     addChatUser(authorId: ID!, otherUserId: ID!, chatId: ID!): Chat
     deleteChatUser(authorId: ID!, otherUserId: ID!, chatId: ID!): ResMessage!
     searchedUser(email: String!): User
     updateChat(chatId: ID!, authorId: ID!, chatName: String!): Chat
+
     createRoom(userId: ID!, roomName: String!): Room!
-    joinToRoom(userId: ID!, roomId: ID!, deviceId: ID!): Room
-    leaveTheRoom(userId: ID!, roomId: ID!): Room
     deleteTheRoom(userId: ID!, roomId: ID!): ID
   }
 
@@ -90,6 +89,5 @@ exports.RootTypeDefs = gql`
     userChats(userId: ID!): [Chat]
     chatUsers(chatId: ID!): [User]
     userRooms(userId: ID!): [Room]
-    roomUsers(roomId: ID!): [User]
   }
 `;
