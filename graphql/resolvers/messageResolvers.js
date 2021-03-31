@@ -24,7 +24,7 @@ exports.MessageResolvers = {
         });
 
         // 1.One to get chatMessages is to add array property to Chat model and push each new message
-        // 2.Another just fond all chat messages through chatId that we add as property of the message. So I use 2 method as it will be easy when we need to remove the message!
+        // 2.Another just find all chat messages through chatId that we add as property of the message. So I use 2nd method as it will be easy when we need to remove the messages!
         // const updatedChat = await Chat.findByIdAndUpdate(
         //   chatId,
         //   {
