@@ -19,10 +19,10 @@ export default function MyNavbar({ token, logout, username }) {
             Home
           </NavLink>
           <NavLink className="mr-2" to="/chat">
-            Chat
+            Chats
           </NavLink>
           <NavLink className="mr-2" to="/room">
-            Room
+            VideoCalls
           </NavLink>
           <NavLink className="mr-2" to="/contact">
             Contact

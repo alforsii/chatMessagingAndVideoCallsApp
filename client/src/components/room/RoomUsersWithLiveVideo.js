@@ -1,58 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import { gql, useMutation, useSubscription } from "@apollo/client";
 import { cameraSelections, startStream, stopStream } from "./myVideoStream";
 import "./Room.css";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 
-const ROOM_USERS_QUERY = gql`
-  subscription($roomId: ID!) {
-    roomUsers(roomId: $roomId) {
-      id
-      email
-      lastName
-      firstName
-      deviceId
-    }
-  }
-`;
-const JOIN_TO_ROOM_QUERY = gql`
-  mutation($userId: ID!, $roomId: ID!, $deviceId: ID!) {
-    joinToRoom(
-      userId: $userId
-      roomId: $roomId
-      deviceId: $deviceId #   stream: $stream
-    ) {
-      id
-      roomName
-    }
-  }
-`;
-const LEAVE_ROOM_QUERY = gql`
-  mutation($roomId: ID!, $userId: ID!) {
-    leaveTheRoom(roomId: $roomId, userId: $userId) {
-      id
-    }
-  }
-`;
-
 export default function RoomUsersWithLiveVideos({ roomId, userId }) {
-  //   const [LeaveTheRoom] = useMutation(LEAVE_ROOM_QUERY);
-  const { data, error } = useSubscription(ROOM_USERS_QUERY, {
-    variables: { roomId },
-  });
   const [cameras, setCameras] = useState(null);
   const [deviceId, setDeviceId] = useState(null);
-  const [JoinToRoom] = useMutation(JOIN_TO_ROOM_QUERY);
   const [myStream, setMyStream] = useState(null);
   const [mySocketId, setMySocketId] = useState(null);
-  //   const [incomingCall, setIncomingCall] = useState(false);
   const [caller, setCaller] = useState(null);
   const [receiver, setReceiver] = useState(null);
   const [callerSignalData, setCallerSignalData] = useState(null);
   const [callAccepted, setCallAccepted] = useState(false);
   const [usersOnCall, setUsersOnCall] = useState([]);
-  const [users, setUsers] = useState({});
   const [rooms, setRooms] = useState({});
 
   const videoRef = useRef();
@@ -60,58 +21,38 @@ export default function RoomUsersWithLiveVideos({ roomId, userId }) {
   const socket = useRef();
 
   const [constraints, setConstrains] = useState({ video: true, audio: true });
-
-  // Join to the room
-  const joinToRoom = async (deviceId, stream) => {
-    try {
-      const { data, errors } = await JoinToRoom({
-        variables: {
-          userId,
-          roomId,
-          deviceId,
-          // stream,
-        },
-      });
-      if (data && data.joinToRoom) {
-        console.log(data);
-        return data.joinToRoom.id;
-      } else {
-        console.log(errors[0].message);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   //   onMOUNT =-= -=-=-= =-=-=-=-= -=-=-=- -=-=-=-=
   useEffect(() => {
-    if (
-      "mediaDevices" in navigator &&
-      "getUserMedia" in navigator.mediaDevices &&
-      roomId
-    ) {
-      // stream
-      startStream(constraints)
-        .then(async (stream) => {
-          setMyStream(stream);
-          addVideoStream(videoRef.current, stream);
-          socketConnections(roomId);
-          // Get user cameras
-          cameraSelections()
-            .then((videoCameras) => {
-              setCameras(videoCameras);
-              //   setDeviceId(videoCameras[0]?.deviceId);
-            })
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => {
-          stopStream();
-          console.log(err);
-        });
+    if (roomId) {
+      // Get user cameras
+      if (
+        "mediaDevices" in navigator &&
+        "getUserMedia" in navigator.mediaDevices
+      ) {
+        cameraSelections()
+          .then((videoCameras) => {
+            let deviceId = videoCameras[0]?.deviceId;
+            setCameras(videoCameras);
+            setDeviceId(deviceId);
+
+            // stream
+            startStream(constraints, userId)
+              .then(async (stream) => {
+                setMyStream(stream);
+                addVideoStream(videoRef.current, stream);
+                socketConnections(roomId);
+              })
+              .catch((err) => {
+                stopStream(userId);
+                console.log(err);
+              });
+          })
+          .catch((err) => console.log(err));
+      }
     }
 
     return () => {
-      stopStream();
+      stopStream(userId);
       socketDisconnections();
     };
     // eslint-disable-next-line
@@ -136,8 +77,6 @@ export default function RoomUsersWithLiveVideos({ roomId, userId }) {
     });
     // ROOMS =-=-=-=-=-
     socket.current.on("rooms", ({ rooms }) => {
-      console.log("🚀 ~socket.current.on ~ rooms", rooms);
-      setUsers(rooms[roomId]);
       setRooms(rooms);
     });
     // INCOMING CALL =-=-=-=-=
@@ -147,24 +86,25 @@ export default function RoomUsersWithLiveVideos({ roomId, userId }) {
     });
     // // user disconnected - now remove from UI
     socket.current.on("userDisconnected", (socketId) => {
-      const updateUsersOnCall = usersOnCall.filter(
-        (id) => id !== socketId || id !== caller
-      );
-      setUsersOnCall(updateUsersOnCall);
-      setCallAccepted(false);
-      setReceiver(null);
-      setCaller(null);
+      // 2.Remove from user UI who is still in the room
+      resetUserCallHistory();
     });
   };
   //   socket DISCONNECTED =-= -=-= -=-= =-=-=
   const socketDisconnections = () => {
-    // socket.current.emit("userLeftRoom", {
-    //   roomId,
-    //   socketId: mySocketId,
-    // });
     if (socket.current) {
+      // 1.Remove other user from disconnected UI
       socket.current.disconnect();
+      resetUserCallHistory();
     }
+  };
+
+  //   Reset user video calls | when switching between rooms or left
+  const resetUserCallHistory = () => {
+    setCallAccepted(false);
+    setUsersOnCall([]);
+    setReceiver(null);
+    setCaller(null);
   };
   //   addUserVideo =- =-=-= -=-=- =-== -=-=-=-
   const addVideoStream = (video, stream) => {
@@ -178,7 +118,7 @@ export default function RoomUsersWithLiveVideos({ roomId, userId }) {
     });
   };
 
-  //   CALL user =- =-=- =-=-=-= -=-=-= -=-==-= -=-=-= -=-=-=-
+  //   CALL a user =- =-=- =-=-=-= -=-=-= -=-==-= -=-=-= -=-=-=-
   const callPeer = (id) => {
     const peer = new Peer({
       initiator: true,
@@ -207,7 +147,7 @@ export default function RoomUsersWithLiveVideos({ roomId, userId }) {
       peer.signal(signalData);
     });
     socket.current.on("callRejected", ({ callFrom }) => {
-      //   setCallAccepted(false);
+      // setCallAccepted(false);
       setReceiver(null);
     });
   };
@@ -242,9 +182,6 @@ export default function RoomUsersWithLiveVideos({ roomId, userId }) {
     setCaller(null);
     socket.current.emit("rejectCall", { callTo: caller, callFrom: mySocketId });
   };
-
-  if (!data) return null;
-  if (error) return console.log(error);
 
   return (
     <div>
