@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 8000;
 // DB config
 require("./configs/db.configs");
 const myCors = {
-  origin: [process.env.FRONTEND_POINT],
+  origin: [process.env.FRONTEND_POINT, "http://localhost:3000/room/"],
   // methods: ["GET", "POST"],
   // allowedHeaders: ["my-custom-header"],
   credentials: true,
@@ -49,12 +49,38 @@ const { apolloServer } = require("./configs/apolloServer.configs");
 apolloServer.applyMiddleware({ app, path: "/graphql", cors: myCors });
 apolloServer.installSubscriptionHandlers(httpServer);
 
-// socketIO
+// // socketIO path
 const io = socketIO(httpServer, {
   cors: myCors,
+  path: "/room",
+});
+const io2 = socketIO(httpServer, {
+  cors: myCors,
+  path: "/group",
 });
 
+// let myPath = undefined;
+
+// io.use(function (socket, next) {
+//   myPath = socket.handshake.headers.myPath;
+//   console.log("🚀 ~ socket.handshake.headers", socket.handshake.headers);
+//   // authorize using authorization header in socket.request.headers
+//   next();
+// });
+
+// const registerGroupVideRoom = require("./socket/socket.group.io");
+// const registerVideoRoom = require("./socket/socket.io");
+
+// const onConnection = (socket) => {
+//   registerGroupVideRoom(io, socket);
+//   registerVideoRoom(io, socket);
+// };
+
+// io.on("connection", onConnection);
+
+// socket.connections
 require("./socket/socket.io")(io);
+require("./socket/socket.group.io")(io2);
 
 // Make sure to call listen on httpServer, NOT on app.
 httpServer.listen(PORT, () => {
