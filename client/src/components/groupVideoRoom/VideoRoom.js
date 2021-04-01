@@ -4,10 +4,10 @@ import UserRooms from "./UserRooms";
 import RoomUsers from "./RoomUsers";
 import RoomUsersWithLiveVideos from "./RoomUsersWithLiveVideo";
 
-export default function Room(props) {
-  const [roomUsers, setRoomUsers] = useState([]);
-  const roomId = props?.match?.params?.id;
+export default function VideoRoom(props) {
+  const roomId = props?.match?.params?.roomId;
   const { userId, user, updateState } = props;
+  const [roomUsers, setRoomUsers] = useState([]);
   return (
     <Container>
       <Row className="row row-cols-2 g-2">

@@ -11,6 +11,7 @@ import { Signup } from "./components/auth/Signup";
 import MyNavbar from "./components/navbar/MyNavbar";
 import MyAlertMessage from "./components/MyAlertMessage";
 import Room from "./components/room/Room";
+import VideoRoom from "./components/groupVideoRoom/VideoRoom";
 const IS_LOGGED_QUERY = gql`
   mutation($token: String!) {
     isLoggedIn(token: $token) {
@@ -179,6 +180,30 @@ function App() {
                 )}
               />
               <Route
+                path="/group"
+                exact
+                render={(props) => (
+                  <VideoRoom
+                    {...props}
+                    userId={state.user?.id}
+                    user={state.user}
+                    updateState={updateState}
+                  />
+                )}
+              />
+              <Route
+                path="/group/:roomId"
+                exact
+                render={(props) => (
+                  <VideoRoom
+                    {...props}
+                    userId={state.user?.id}
+                    user={state.user}
+                    updateState={updateState}
+                  />
+                )}
+              />
+              <Route
                 path="/room"
                 exact
                 render={(props) => (
@@ -204,6 +229,7 @@ function App() {
                   />
                 )}
               />
+
               <Route
                 path="/room/:id"
                 exact

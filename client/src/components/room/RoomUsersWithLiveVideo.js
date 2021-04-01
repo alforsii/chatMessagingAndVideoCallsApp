@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import { cameraSelections, startStream, stopStream } from "./myVideoStream";
+import { Button } from "react-bootstrap";
 import io from "socket.io-client";
 import Peer from "simple-peer";
-import { Button, FormLabel, Form, FormControl } from "react-bootstrap";
+import {
+  cameraSelections,
+  startStream,
+  stopStream,
+} from "./videoControlsUtils";
 import "./Room.css";
 
 export default function RoomUsersWithLiveVideos({
   roomId,
   user,
   userId,
-  updateState,
   setRoomUsers,
 }) {
   const [cameras, setCameras] = useState(null);
@@ -17,6 +20,7 @@ export default function RoomUsersWithLiveVideos({
   const [myStream, setMyStream] = useState(null);
   const [mySocketId, setMySocketId] = useState(null);
   const [caller, setCaller] = useState(null);
+  const [incomingCall, setIncomingCall] = useState(false);
   const [receiver, setReceiver] = useState(null);
   const [callerSignalData, setCallerSignalData] = useState(null);
   const [callAccepted, setCallAccepted] = useState(false);
@@ -47,7 +51,7 @@ export default function RoomUsersWithLiveVideos({
               .then(async (stream) => {
                 setMyStream(stream);
                 addVideoStream(videoRef.current, stream);
-                socketConnections(roomId, user);
+                socketConnection(roomId, user);
               })
               .catch((err) => {
                 stopStream(userId);
@@ -60,18 +64,19 @@ export default function RoomUsersWithLiveVideos({
 
     return () => {
       stopStream(userId);
-      socketDisconnections();
+      socketDisconnection();
     };
     // eslint-disable-next-line
   }, [roomId, user]);
 
   //   socket CONNECTIONs =-= =-=-=- -=-=- =-=-=- -=-=-= =-=-=-=-
-  const socketConnections = (roomId, userDetails) => {
+  const socketConnection = (roomId, userDetails) => {
     socket.current = io.connect("ws://localhost:8000/", {
       withCredentials: true,
-      //   extraHeaders: {
-      //     "my-custom-header": "abcd",
-      //   },
+      // extraHeaders: {
+      //   myPath: "/room",
+      // },
+      path: "/room",
     });
     // USER JOINED =-=-=-=
     socket.current.on("yourId", (id) => {
@@ -91,6 +96,7 @@ export default function RoomUsersWithLiveVideos({
     // INCOMING CALL =-=-=-=-=
     socket.current.on("incomingCall", ({ signalData, callFrom }) => {
       setCaller(callFrom);
+      setIncomingCall(true);
       setCallerSignalData(signalData);
     });
     // // user disconnected - now remove from UI
@@ -100,7 +106,7 @@ export default function RoomUsersWithLiveVideos({
     });
   };
   //   socket DISCONNECTED =-= -=-= -=-= =-=-=
-  const socketDisconnections = () => {
+  const socketDisconnection = () => {
     if (socket.current) {
       // 1.Remove other user from disconnected UI
       socket.current.disconnect();
@@ -150,9 +156,11 @@ export default function RoomUsersWithLiveVideos({
       }
     });
 
-    socket.current.on("callAccepted", ({ signalData }) => {
+    socket.current.on("callAccepted", ({ signalData, callFrom }) => {
       setCallAccepted(true);
+      setReceiver(callFrom);
       setUsersOnCall([...usersOnCall, id]);
+
       peer.signal(signalData);
     });
     socket.current.on("callRejected", ({ callFrom }) => {
@@ -165,7 +173,7 @@ export default function RoomUsersWithLiveVideos({
   const acceptCall = (caller) => {
     setUsersOnCall([...usersOnCall, caller]);
     setCallAccepted(true);
-    setCaller(null);
+    setIncomingCall(false);
     const peer = new Peer({
       initiator: false,
       trickle: false,
@@ -176,6 +184,7 @@ export default function RoomUsersWithLiveVideos({
       socket.current.emit("acceptCall", {
         signalData,
         callTo: caller,
+        callFrom: mySocketId,
       });
     });
 
@@ -188,10 +197,11 @@ export default function RoomUsersWithLiveVideos({
 
   //   REJECT call =-=-=-= -=-=-=- =-=-=-=-= =-=-=-= -=-=-=-= -=-=- =
   const rejectCall = (caller) => {
-    setCaller(null);
+    setIncomingCall(false);
     socket.current.emit("rejectCall", { callTo: caller, callFrom: mySocketId });
   };
-
+  // console.log("caller: ", rooms[roomId]?.[caller]?.firstName);
+  // console.log("receiver: ", rooms[roomId]?.[receiver]?.firstName);
   return (
     <div>
       <div className="video-options">
@@ -206,13 +216,10 @@ export default function RoomUsersWithLiveVideos({
         </select>
       </div>
       <div className="actions-btns">
-        {caller && (
+        {incomingCall && (
           <>
             <h2>{rooms[roomId][caller].firstName} is calling you...</h2>
-            <Button
-              variant="success mr-2 rounded"
-              onClick={() => acceptCall(caller)}
-            >
+            <Button variant="success mr-2" onClick={() => acceptCall(caller)}>
               accept
             </Button>
             <Button variant="danger" onClick={() => rejectCall(caller)}>
@@ -224,24 +231,23 @@ export default function RoomUsersWithLiveVideos({
       <div id="video-grid">
         <div className="videos-div">
           <video muted ref={videoRef}></video>
-          <div className="userNames">
-            <p>You: {user.firstName}</p>
-          </div>
+          <p className="userNames">You: {user.firstName}</p>
         </div>
 
         {callAccepted && (
           <div className="videos-div">
             <video ref={partnerVideo}></video>
-            <div className="userNames">
-              <p>{rooms[roomId]?.firstName}</p>
-            </div>
+            <p className="userNames">
+              {mySocketId !== caller
+                ? rooms[roomId][caller]?.firstName
+                : rooms[roomId][receiver]?.firstName}
+            </p>
           </div>
         )}
       </div>
       <div>
         {rooms[roomId]
           ? Object.keys(rooms[roomId]).map((id) => {
-              console.log(id);
               const users = rooms[roomId];
               if (
                 id === mySocketId ||
@@ -253,7 +259,7 @@ export default function RoomUsersWithLiveVideos({
 
               return (
                 <button
-                  disabled={receiver ? true : false}
+                  disabled={receiver === id ? true : false}
                   key={id}
                   onClick={() => callPeer(id)}
                 >

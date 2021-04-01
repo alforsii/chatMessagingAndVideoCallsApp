@@ -15,17 +15,14 @@ export default function MyNavbar({ token, logout, username }) {
       <Container>
         <Navbar.Brand href="#home">MyBrand</Navbar.Brand>
         <Nav className="mr-auto">
-          <NavLink className="mr-2" to="/home">
-            Home
-          </NavLink>
           <NavLink className="mr-2" to="/chat">
             Chats
           </NavLink>
           <NavLink className="mr-2" to="/room">
             VideoCalls
           </NavLink>
-          <NavLink className="mr-2" to="/contact">
-            Contact
+          <NavLink className="mr-2" to="/group">
+            VideoGroups
           </NavLink>
         </Nav>
         {token ? (
