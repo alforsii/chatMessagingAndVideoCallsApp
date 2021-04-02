@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import { startStream, stopStream } from "./videoControlsUtils";
+import { baseUrl } from "../../ApolloClient";
 
 //   addUserVideo =- =-=-= -=-=- =-== -=-=-=-
 const addVideoStream = (video, stream) => {
@@ -75,7 +76,7 @@ export default function RoomUsersWithLiveVideos({
   const gotMediaStream = async (stream) => {
     addVideoStream(videoRef.current, stream);
     // Socket connections
-    socketRef.current = io.connect("ws://localhost:8000/", {
+    socketRef.current = io.connect(baseUrl, {
       withCredentials: true,
       // extraHeaders: {
       //   myPath: "/group",

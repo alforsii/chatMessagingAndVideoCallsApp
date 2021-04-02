@@ -2,10 +2,11 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { WebSocketLink } from "@apollo/client/link/ws";
 // import { HttpLink, split } from "@apollo/client";
 // import { getMainDefinition } from "@apollo/client/utilities";
+export const baseUrl = "http://localhost:8080";
 
 // // 1. One way of doing Apollo client
 const wsLink = new WebSocketLink({
-  uri: "ws://localhost:8000/subscriptions",
+  uri: `ws://localhost:8080/subscriptions`,
   options: {
     reconnect: true,
     // connectionParams: {
@@ -16,7 +17,7 @@ const wsLink = new WebSocketLink({
 
 export const client = new ApolloClient({
   link: wsLink,
-  uri: "http://localhost:8000/graphql",
+  uri: `${baseUrl}/graphql`,
   cache: new InMemoryCache(),
   credentials: true,
 });

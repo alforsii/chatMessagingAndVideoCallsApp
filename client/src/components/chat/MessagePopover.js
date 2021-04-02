@@ -1,4 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
+import React, { useEffect, useRef, useState } from "react";
 import { Dropdown } from "react-bootstrap";
 
 const DELETE_MESSAGE_QUERY = gql`
@@ -8,8 +9,53 @@ const DELETE_MESSAGE_QUERY = gql`
     }
   }
 `;
-export function MessagePopover({ children, msg, userId }) {
+
+export function MessagePopover({ children, msg, userId, type, length, index }) {
   const [DeleteMessage] = useMutation(DELETE_MESSAGE_QUERY);
+  const [isMounted, setIsMounted] = useState(false);
+
+  const myRef = useRef();
+  const myClick = useRef();
+
+  let message;
+  if (isMounted) {
+    message = (
+      <p
+        ref={myRef.current}
+        onClick={(e) => {
+          e.preventDefault();
+          myClick.current(e);
+        }}
+        style={
+          index === length - 1
+            ? type === "sent"
+              ? {
+                  borderBottomRightRadius: 0,
+                }
+              : {
+                  borderBottomLeftRadius: 0,
+                }
+            : {}
+        }
+        className={`message ${
+          type === "sent" ? "user_messages" : "others_messages"
+        }`}
+      >
+        {children}
+      </p>
+    );
+  }
+
+  const CustomToggle = React.forwardRef(({ children, onClick }, ref) => {
+    myRef.current = ref;
+    myClick.current = onClick;
+    return <></>;
+  });
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+    // eslint-disable-next-line
+  }, [myRef.current]);
 
   const handleDeleteMessage = async () => {
     try {
@@ -22,11 +68,12 @@ export function MessagePopover({ children, msg, userId }) {
       console.log(err);
     }
   };
+
   return (
     <>
-      {children}
+      {message}
       <Dropdown>
-        <Dropdown.Toggle variant="basic" id="dropdown-basic"></Dropdown.Toggle>
+        <Dropdown.Toggle as={CustomToggle}></Dropdown.Toggle>
 
         <Dropdown.Menu>
           <Dropdown.ItemText>Actions</Dropdown.ItemText>

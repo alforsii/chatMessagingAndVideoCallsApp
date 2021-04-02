@@ -2,12 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import io from "socket.io-client";
 import Peer from "simple-peer";
+import styled from "styled-components";
 import {
   cameraSelections,
   startStream,
   stopStream,
 } from "./videoControlsUtils";
 import "./Room.css";
+import { baseUrl } from "../../ApolloClient";
+
+const ReverseIcon = styled.i({
+  marginLeft: 15,
+  color: "lawngreen",
+  cursor: "pointer",
+  fontSize: 18,
+});
 
 export default function RoomUsersWithLiveVideos({
   roomId,
@@ -71,7 +80,7 @@ export default function RoomUsersWithLiveVideos({
 
   //   socket CONNECTIONs =-= =-=-=- -=-=- =-=-=- -=-=-= =-=-=-=-
   const socketConnection = (roomId, userDetails) => {
-    socket.current = io.connect("ws://localhost:8000/", {
+    socket.current = io.connect(baseUrl, {
       withCredentials: true,
       // extraHeaders: {
       //   myPath: "/room",
@@ -239,8 +248,11 @@ export default function RoomUsersWithLiveVideos({
             muted
             ref={videoRef}
           ></video>
-          <p className="userNames">You: {user.firstName}</p>
-          <button onClick={mirrorMe}>ToggleMirror</button>
+          <p className="userNames">
+            You: {user.firstName}
+            <ReverseIcon onClick={mirrorMe} className="fab fa-rev" />
+            {/* <i onClick={mirrorMe} className="fab fa-rev"></i> */}
+          </p>
         </div>
 
         {callAccepted && (
