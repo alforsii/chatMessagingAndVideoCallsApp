@@ -11,6 +11,11 @@ video {
   background-color: #333;
   border: 2px solid #111;
 }
+.mirrored_video {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg); /* Safari and Chrome */
+  -moz-transform: rotateY(180deg); /* Firefox */
+}
 .userNames {
   position: absolute;
   top: 10px;

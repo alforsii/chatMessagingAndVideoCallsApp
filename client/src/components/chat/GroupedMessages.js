@@ -1,8 +1,9 @@
 import React from "react";
 import moment from "moment";
 import { Image } from "react-bootstrap";
+import { MessagePopover } from "./MessagePopover";
 
-export default function GroupedMessages({ id, type, messages, name }) {
+export default function GroupedMessages({ id, type, messages, name, userId }) {
   const handleTimeToggle = (msgId) => {
     document.querySelectorAll(".opacity_animation").forEach((el) => {
       el.classList.remove("opacity_animation");
@@ -25,45 +26,50 @@ export default function GroupedMessages({ id, type, messages, name }) {
         const time = new Date(Number(msg.createdAt)).toISOString();
         const myUTC = new Date().getUTCDate();
         return (
-          <div
-            key={msg.id}
-            onMouseEnter={() => handleTimeToggle(msg.id)}
-            onMouseLeave={() => handleTimeToggle(msg.id)}
-            style={{
-              display: "flex",
-              justifyContent: `${type === "sent" ? "flex-end" : "flex-start"}`,
-              alignItems: "center",
-            }}
-          >
-            {type === "sent" && (
-              <i id={msg.id} className="opacity_none text-muted">
-                {moment(time).utc(myUTC).format("MMM Do YYYY, h:mm a")}
-              </i>
-            )}
-            <p
-              style={
-                i === messages.length - 1
-                  ? type === "sent"
-                    ? {
-                        borderBottomRightRadius: 0,
-                      }
-                    : {
-                        borderBottomLeftRadius: 0,
-                      }
-                  : {}
-              }
-              className={`message ${
-                type === "sent" ? "user_messages" : "others_messages"
-              }`}
+          <React.Fragment key={msg.id}>
+            <div
+              onMouseEnter={() => handleTimeToggle(msg.id)}
+              onMouseLeave={() => handleTimeToggle(msg.id)}
+              style={{
+                display: "flex",
+                justifyContent: `${
+                  type === "sent" ? "flex-end" : "flex-start"
+                }`,
+                alignItems: "center",
+              }}
             >
-              {msg.text}
-            </p>
-            {type === "received" && (
-              <i id={msg.id} className="opacity_none text-muted">
-                {moment(time).utc(myUTC).format("MMM Do YYYY, h:mm a")}
-              </i>
-            )}
-          </div>
+              {type === "sent" && (
+                <i id={msg.id} className="opacity_none text-muted">
+                  {moment(time).utc(myUTC).format("MMM Do YYYY, h:mm a")}
+                </i>
+              )}
+              <MessagePopover userId={userId} msg={msg}>
+                <p
+                  style={
+                    i === messages.length - 1
+                      ? type === "sent"
+                        ? {
+                            borderBottomRightRadius: 0,
+                          }
+                        : {
+                            borderBottomLeftRadius: 0,
+                          }
+                      : {}
+                  }
+                  className={`message ${
+                    type === "sent" ? "user_messages" : "others_messages"
+                  }`}
+                >
+                  {msg.text}
+                </p>
+              </MessagePopover>
+              {type === "received" && (
+                <i id={msg.id} className="opacity_none text-muted">
+                  {moment(time).utc(myUTC).format("MMM Do YYYY, h:mm a")}
+                </i>
+              )}
+            </div>
+          </React.Fragment>
         );
       })}
       {type === "received" && (

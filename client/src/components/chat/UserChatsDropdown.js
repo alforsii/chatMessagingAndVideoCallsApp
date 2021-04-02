@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { withRouter } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
 import { NavLink, FormControl, Dropdown, Form } from "react-bootstrap";
@@ -112,7 +113,16 @@ export const UserChatsDropdown = ({ chatId, history }) => {
               <Dropdown.Toggle as={CustomToggle}>•••</Dropdown.Toggle>
 
               <Dropdown.Menu as={CustomMenu}>
-                <Dropdown.Item>Open Chat</Dropdown.Item>
+                <Dropdown.Item
+                  disabled={
+                    history?.location?.pathname === `/chat/${chatId}`
+                      ? true
+                      : false
+                  }
+                  onClick={() => history.push(`/chat/${chatId}`)}
+                >
+                  Open Chat
+                </Dropdown.Item>
                 <Dropdown.Item onClick={() => setSmShow2(true)}>
                   Rename
                 </Dropdown.Item>

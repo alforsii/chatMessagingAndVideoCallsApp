@@ -202,6 +202,9 @@ export default function RoomUsersWithLiveVideos({
   };
   // console.log("caller: ", rooms[roomId]?.[caller]?.firstName);
   // console.log("receiver: ", rooms[roomId]?.[receiver]?.firstName);
+  const mirrorMe = () => {
+    document.getElementById("myVideo").classList.toggle("mirrored_video");
+  };
   return (
     <div>
       <div className="video-options">
@@ -230,8 +233,14 @@ export default function RoomUsersWithLiveVideos({
       </div>
       <div id="video-grid">
         <div className="videos-div">
-          <video muted ref={videoRef}></video>
+          <video
+            className="mirrored_video"
+            id="myVideo"
+            muted
+            ref={videoRef}
+          ></video>
           <p className="userNames">You: {user.firstName}</p>
+          <button onClick={mirrorMe}>ToggleMirror</button>
         </div>
 
         {callAccepted && (

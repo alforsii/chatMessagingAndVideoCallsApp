@@ -11,17 +11,19 @@ const MESSAGES_SUB = gql`
       id
       username
       content
+      blackList
       messageAuthor {
         id
         firstName
         lastName
       }
+      chatId
       createdAt
     }
   }
 `;
 
-export const Messages = ({ username, chatId }) => {
+export const Messages = ({ username: myUsername, chatId, userId }) => {
   const [sortedMessages, setSortedMessages] = useState([]);
   const { data, loading, error } = useSubscription(MESSAGES_SUB, {
     variables: { chatId },
@@ -34,70 +36,71 @@ export const Messages = ({ username, chatId }) => {
   //    avatar: user image,
   //    messages: grouped lines of messages that belongs to the same user, which is between two users on the chat.
   // }
-  const sortMessages = () => {
+  const sortMessagesToGroups = () => {
     if (error) return console.log(error.message);
     if (data?.messages?.length) {
       let userMessages = [];
-      const newSortedMessages = [];
-      const allMessages = [...data.messages];
+      const formattedMessages = [];
+      // copy original | deep cloning
+      const allMessages = JSON.parse(JSON.stringify(data.messages));
 
       allMessages.forEach((msg, index) => {
         let nextUser = allMessages[index + 1]?.username || "";
+        // Lets check for message blackList, where it contains users ids who deleted other user message | since he is not the author of message we just hide this message from him so he wont see.
+        const isOnBlackList = msg.blackList.includes(userId);
+        const currentMsg = {
+          id: msg.id,
+          text: msg.content,
+          chatId: msg.chatId,
+          messageAuthor: msg.messageAuthor,
+          createdAt: msg.createdAt,
+        };
 
-        if (username === msg.username) {
-          if (username === nextUser) {
-            userMessages.push({
-              id: msg.id,
-              text: msg.content,
-              createdAt: msg.createdAt,
-            });
+        // 1.if current message is my message do: =>
+        if (myUsername === msg.username) {
+          if (myUsername === nextUser) {
+            // 1.1username === nextUser | means: is next message also belongs to me?
+            // a)if YES: then temporarily store it in the userMessages array
+            userMessages.push(currentMsg);
           } else {
+            // b)if NO: then take all messages from temp array userMessages and push to formattedMessages array, and clear temp array userMessages=[]
             const newObj = {
               id: msg.id,
               type: "sent",
               name: msg.username,
               avatar: "",
-              messages: [
-                ...userMessages,
-                {
-                  id: msg.id,
-                  text: msg.content,
-                  createdAt: msg.createdAt,
-                },
-              ],
+              messages: [...userMessages, currentMsg],
             };
-            newSortedMessages.push(newObj);
+            formattedMessages.push(newObj);
             userMessages = [];
           }
-        } else {
+        }
+        // 2.if current message is NOT my message do: =>
+        else {
+          // 2.1username === nextUser | means: is next message also belongs to the same user?
           if (msg.username === nextUser) {
-            userMessages.push({
-              id: msg.id,
-              text: msg.content,
-              createdAt: msg.createdAt,
-            });
+            // a)if YES: then temporarily store it in the userMessages array
+            !isOnBlackList && userMessages.push(currentMsg);
           } else {
+            // b)if NO: then take all messages from temp array userMessages and push to formattedMessages array, and clear temp array userMessages=[]
+            const messages = isOnBlackList
+              ? userMessages
+              : [...userMessages, currentMsg];
+
             const newObj = {
               id: msg.id,
               type: "received",
               name: msg.username,
               avatar: "",
-              messages: [
-                ...userMessages,
-                {
-                  id: msg.id,
-                  text: msg.content,
-                  createdAt: msg.createdAt,
-                },
-              ],
+              messages,
             };
-            newSortedMessages.push(newObj);
+            messages.length > 0 && formattedMessages.push(newObj);
             userMessages = [];
           }
         }
       });
 
-      setSortedMessages(newSortedMessages);
+      setSortedMessages(formattedMessages);
       const messagesEl = document.querySelector(".messages");
       messagesEl.scrollTop = messagesEl.scrollHeight;
     } else {
@@ -106,9 +109,14 @@ export const Messages = ({ username, chatId }) => {
   };
 
   useEffect(() => {
-    sortMessages();
+    sortMessagesToGroups();
     // eslint-disable-next-line
   }, [data]);
+  useEffect(() => {
+    const messagesEl = document.querySelector(".messages");
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    // eslint-disable-next-line
+  }, [sortedMessages]);
 
   return (
     <div
@@ -127,7 +135,7 @@ export const Messages = ({ username, chatId }) => {
         <p>Chat not selected!</p>
       ) : sortedMessages.length ? (
         sortedMessages?.map((msgData) => (
-          <GroupedMessages key={msgData.id} {...msgData} />
+          <GroupedMessages key={msgData.id} {...msgData} userId={userId} />
         ))
       ) : (
         <p>You have no messages in this Chat!</p>

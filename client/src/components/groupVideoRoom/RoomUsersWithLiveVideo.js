@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import { startStream, stopStream } from "./videoControlsUtils";
-import "./Room.css";
 
 //   addUserVideo =- =-=-= -=-=- =-== -=-=-=-
 const addVideoStream = (video, stream) => {
@@ -192,7 +191,7 @@ export default function RoomUsersWithLiveVideos({
   return (
     <div id="video-grid">
       <div className="videos-div">
-        <video muted ref={videoRef}></video>
+        <video className="mirrored_video" muted ref={videoRef}></video>
         <p className="userNames">You: {userDetails.firstName}</p>
       </div>
 

@@ -20,7 +20,11 @@ export default function Chat(props) {
         </Col>
 
         <Col md={8} lg={8}>
-          <Messages username={props.username} chatId={chatId} />
+          <Messages
+            username={props.username}
+            chatId={chatId}
+            userId={props.userId}
+          />
           {chatId && (
             <AddMessage
               username={props.username}
