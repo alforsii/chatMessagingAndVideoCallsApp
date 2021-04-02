@@ -25,10 +25,12 @@ exports.RootTypeDefs = gql`
   }
   type Message {
     id: ID!
+    chatId: ID!
+    # hideMessage: Boolean!
+    blackList: [ID]
     content: String!
     username: String!
     messageAuthor: User!
-    chatId: ID!
     createdAt: String!
   }
 
@@ -68,10 +70,12 @@ exports.RootTypeDefs = gql`
 
   type Mutation {
     getUser(id: ID!): User
-    addMessage(data: MessageInput!): Message
     signup(data: SignupInput!): User!
     login(email: String!, password: String!): AuthData!
     isLoggedIn(token: String!): AuthData!
+
+    addMessage(data: MessageInput!): Message
+    deleteMessage(chatId: ID!, messageId: ID!, userId: ID!): ResMessage
 
     createChat(userId: ID!, chatName: String!): Chat!
     deleteChat(chatId: ID!, userId: ID!): ResMessage!

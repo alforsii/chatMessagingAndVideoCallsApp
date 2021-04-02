@@ -4,6 +4,8 @@ const MessageSchema = new Schema(
   {
     content: { type: String, require: true },
     username: { type: String, require: true },
+    // hideMessage: { type: Boolean, default: false },
+    blackList: [{ type: Schema.Types.ObjectId, ref: "User" }],
     messageAuthor: { type: Schema.Types.ObjectId, ref: "User" },
     chatId: { type: Schema.Types.ObjectId, ref: "Chat" },
   },

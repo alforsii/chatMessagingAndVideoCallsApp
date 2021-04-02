@@ -53,6 +53,32 @@ exports.MessageResolvers = {
         return err;
       }
     },
+    deleteMessage: async (root, { chatId, messageId, userId }, { pubSub }) => {
+      try {
+        const foundMessage = await Message.findById(messageId).populate(
+          "author"
+        );
+        if (foundMessage.messageAuthor._id.toString() === userId.toString()) {
+          await Message.findByIdAndDelete(messageId);
+          // console.log("msg deleted");
+        } else {
+          await Message.findByIdAndUpdate(messageId, {
+            $push: { blackList: userId },
+          });
+          // console.log("msg pushed to blackList");
+        }
+        const messages = await Message.find({ chatId }).populate(
+          "messageAuthor"
+        );
+        pubSub.publish(`CHAT_MESSAGES-${chatId}`, {
+          messages,
+        });
+        return { message: "Message successfully removed!", id: messageId };
+      } catch (err) {
+        console.log(err);
+        return err;
+      }
+    },
   },
   Subscription: {
     messages: {
