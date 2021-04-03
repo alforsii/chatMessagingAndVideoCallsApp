@@ -48,7 +48,7 @@ export default function UserChats({ userId, updateState }) {
             key={chat.id}
           >
             <NavLink to={`/chat/${chat.id}`}>{chat.chatName}</NavLink>
-            <UserChatsDropdown chatId={chat.id} />
+            <UserChatsDropdown chatId={chat.id} chatName={chat.chatName} />
           </ListGroup.Item>
         ))}
       </ListGroup>

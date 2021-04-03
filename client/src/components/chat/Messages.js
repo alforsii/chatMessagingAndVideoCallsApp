@@ -101,8 +101,6 @@ export const Messages = ({ username: myUsername, chatId, userId }) => {
       });
 
       setSortedMessages(formattedMessages);
-      const messagesEl = document.querySelector(".messages");
-      messagesEl.scrollTop = messagesEl.scrollHeight;
     } else {
       setSortedMessages([]);
     }
@@ -115,6 +113,7 @@ export const Messages = ({ username: myUsername, chatId, userId }) => {
   useEffect(() => {
     const messagesEl = document.querySelector(".messages");
     messagesEl.scrollTop = messagesEl.scrollHeight;
+
     // eslint-disable-next-line
   }, [sortedMessages]);
 
@@ -122,8 +121,10 @@ export const Messages = ({ username: myUsername, chatId, userId }) => {
     <div
       style={{
         maxHeight: "500px",
+        minHeight: "500px",
         overflow: "scroll",
         padding: "20px",
+        paddingTop: "400px",
       }}
       className="box_shadow messages"
     >

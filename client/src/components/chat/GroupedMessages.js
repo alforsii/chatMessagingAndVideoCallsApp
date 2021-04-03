@@ -49,26 +49,7 @@ export default function GroupedMessages({ id, type, messages, name, userId }) {
                 type={type}
                 length={messages.length}
                 index={i}
-              >
-                {/* <p
-                  style={
-                    i === messages.length - 1
-                      ? type === "sent"
-                        ? {
-                            borderBottomRightRadius: 0,
-                          }
-                        : {
-                            borderBottomLeftRadius: 0,
-                          }
-                      : {}
-                  }
-                  className={`message ${
-                    type === "sent" ? "user_messages" : "others_messages"
-                  }`}
-                >
-                </p> */}
-                {msg.text}
-              </MessagePopover>
+              />
               {type === "received" && (
                 <i id={msg.id} className="opacity_none text-muted">
                   {moment(time).utc(myUTC).format("MMM Do YYYY, h:mm a")}

@@ -25,7 +25,7 @@ export default function RoomUsersWithLiveVideos({
   setRoomUsers,
 }) {
   const [cameras, setCameras] = useState(null);
-  const [deviceId, setDeviceId] = useState(null);
+  // const [deviceId, setDeviceId] = useState(null);
   const [myStream, setMyStream] = useState(null);
   const [mySocketId, setMySocketId] = useState(null);
   const [caller, setCaller] = useState(null);
@@ -40,7 +40,7 @@ export default function RoomUsersWithLiveVideos({
   const partnerVideo = useRef();
   const socket = useRef();
 
-  const [constraints, setConstrains] = useState({ video: true, audio: true });
+  const [constraints] = useState({ video: true, audio: true });
   //   onMOUNT =-= -=-=-= =-=-=-=-= -=-=-=- -=-=-=-=
   useEffect(() => {
     if (roomId && user) {
@@ -51,9 +51,9 @@ export default function RoomUsersWithLiveVideos({
       ) {
         cameraSelections()
           .then((videoCameras) => {
-            let deviceId = videoCameras[0]?.deviceId;
+            // let deviceId = videoCameras[0]?.deviceId;
             setCameras(videoCameras);
-            setDeviceId(deviceId);
+            // setDeviceId(deviceId);
 
             // stream
             startStream(constraints, userId)
@@ -217,7 +217,7 @@ export default function RoomUsersWithLiveVideos({
   return (
     <div>
       <div className="video-options">
-        <select onSelect={(val) => setDeviceId(val)} className="custom-select">
+        <select className="custom-select">
           {cameras?.map((videoDevice) => {
             return (
               <option key={videoDevice.deviceId} value={videoDevice.deviceId}>

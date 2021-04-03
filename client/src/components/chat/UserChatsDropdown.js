@@ -6,6 +6,7 @@ import { NavLink, FormControl, Dropdown, Form } from "react-bootstrap";
 import { Button, Modal, InputGroup } from "react-bootstrap";
 
 import { AuthContext } from "../../context/AuthContext";
+import { successAlert, errorAlert } from "../globalHelpers";
 
 const DELETE_CHAT_QUERY = gql`
   mutation($chatId: ID!, $userId: ID!) {
@@ -24,19 +25,23 @@ const UPDATE_CHAT_QUERY = gql`
   }
 `;
 
-export const UserChatsDropdown = ({ chatId, history }) => {
+export const UserChatsDropdown = ({
+  chatId,
+  chatName: theChatName,
+  history,
+}) => {
   const [DeleteChat] = useMutation(DELETE_CHAT_QUERY);
   const [UpdateChat] = useMutation(UPDATE_CHAT_QUERY);
   const [smShow, setSmShow] = useState(false);
   const [smShow2, setSmShow2] = useState(false);
-  const [chatName, setChatName] = useState("");
+  const [chatName, setChatName] = useState(theChatName);
 
   return (
     <AuthContext.Consumer>
       {(ctx) => {
         const handleDeleteChat = async () => {
+          setSmShow(false);
           try {
-            setSmShow(false);
             const userId = ctx.state.user.id;
             console.log({ chatId, userId });
             const { data, errors } = await DeleteChat({
@@ -44,65 +49,37 @@ export const UserChatsDropdown = ({ chatId, history }) => {
             });
             if (!data) return;
             if (errors?.length) {
-              return ctx.updateState({
-                alertMessage: errors[0].message,
-                alertSuccess: false,
-                alertMessageId: "Error",
-              });
+              return ctx.updateState(errorAlert(errors[0].message, true));
             }
-            setSmShow(false);
 
-            ctx.updateState({
-              alertMessage: data.deleteChat.message,
-              alertSuccess: false,
-              alertMessageId: data.deleteChat.id,
-            });
+            ctx.updateState(successAlert(data.deleteChat.message));
             history.push("/chat");
           } catch (err) {
             console.log("🚀 err", err);
-            setSmShow(false);
-            ctx.updateState({
-              alertMessage: err.message,
-              alertSuccess: false,
-              alertMessageId: `error-${Math.random() + 1}`,
-            });
+            ctx.updateState(errorAlert(err.message, true));
           }
         };
 
         const handleUpdateChat = async (e) => {
           e.preventDefault();
-          console.log(chatName);
           setSmShow2(false);
           try {
             if (!chatName) {
               return;
             }
+            console.log({ chatId, chatName, id: ctx.state.user.id });
             const { data, errors } = await UpdateChat({
               variables: { chatId, authorId: ctx.state.user.id, chatName },
             });
             if (!data) return console.log("No data");
             if (errors?.length) {
-              return ctx.updateState({
-                alertMessage: errors[0].message,
-                alertMessageId: data.updateChat.id,
-                alertSuccess: true,
-              });
+              return ctx.updateState(errorAlert(errors[0].message), true);
             }
 
-            setSmShow2(false);
-            ctx.updateState({
-              alertMessage: "ChatName Updated!",
-              alertMessageId: data.updateChat.id,
-              alertSuccess: true,
-            });
+            ctx.updateState(successAlert("ChatName Updated!"));
             history.push("/chat");
           } catch (err) {
-            setSmShow2(false);
-            ctx.updateState({
-              alertMessage: err.message,
-              alertSuccess: false,
-              alertMessageId: `error-${Math.random() + 1}`,
-            });
+            ctx.updateState(errorAlert(err.message, true));
             console.log(err);
           }
         };
@@ -121,7 +98,7 @@ export const UserChatsDropdown = ({ chatId, history }) => {
                   }
                   onClick={() => history.push(`/chat/${chatId}`)}
                 >
-                  Open Chat
+                  Open Chat: {theChatName}
                 </Dropdown.Item>
                 <Dropdown.Item onClick={() => setSmShow2(true)}>
                   Rename

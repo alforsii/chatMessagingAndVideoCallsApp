@@ -10,7 +10,7 @@ const DELETE_MESSAGE_QUERY = gql`
   }
 `;
 
-export function MessagePopover({ children, msg, userId, type, length, index }) {
+export function MessagePopover({ msg, userId, type, length, index }) {
   const [DeleteMessage] = useMutation(DELETE_MESSAGE_QUERY);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -25,6 +25,15 @@ export function MessagePopover({ children, msg, userId, type, length, index }) {
         onClick={(e) => {
           e.preventDefault();
           myClick.current(e);
+          // const messages =
+          //   e.currentTarget.parentElement.parentElement.parentElement;
+          // setTimeout(() => {
+          //   messages.scrollTop = messages.scrollHeight;
+          // }, 0);
+          // console.log(
+          //   "🚀 ~ file: MessagePopover.js ~ line 29 ~ MessagePopover ~ messages",
+          //   messages
+          // );
         }}
         style={
           index === length - 1
@@ -41,7 +50,7 @@ export function MessagePopover({ children, msg, userId, type, length, index }) {
           type === "sent" ? "user_messages" : "others_messages"
         }`}
       >
-        {children}
+        {msg.text}
       </p>
     );
   }
@@ -57,11 +66,48 @@ export function MessagePopover({ children, msg, userId, type, length, index }) {
     // eslint-disable-next-line
   }, [myRef.current]);
 
+  // const MESSAGES_QUERY = gql`
+  //   query Messages($chatId: ID!) {
+  //     messages(chatId: $chatId) {
+  //       id
+  //       username
+  //       content
+  //       blackList
+  //       messageAuthor {
+  //         id
+  //         firstName
+  //         lastName
+  //       }
+  //       chatId
+  //       createdAt
+  //     }
+  //   }
+  // `;
+
   const handleDeleteMessage = async () => {
     try {
       const { chatId, id } = msg;
       const { data } = await DeleteMessage({
         variables: { chatId, messageId: id, userId },
+        // update: (cache, { data }) => {
+        //   const messagesData = cache.readQuery({
+        //     query: MESSAGES_QUERY,
+        //     variables: { chatId },
+        //   });
+        //   console.log({ messagesData });
+
+        //   const res = cache.writeQuery({
+        //     query: MESSAGES_QUERY,
+        //     variables: { chatId },
+        //     data: {
+        //       messages: messagesData.messages.filter(
+        //         (msg) =>
+        //           msg._id.toString() !== data.deleteMessage._id.toString()
+        //       ),
+        //     },
+        //   });
+        //   console.log({ res });
+        // },
       });
       console.log(data);
     } catch (err) {
@@ -76,7 +122,7 @@ export function MessagePopover({ children, msg, userId, type, length, index }) {
         <Dropdown.Toggle as={CustomToggle}></Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.ItemText>Actions</Dropdown.ItemText>
+          <Dropdown.Header>Actions</Dropdown.Header>
           <Dropdown.Divider></Dropdown.Divider>
           <Dropdown.Item disabled={true}>Reply</Dropdown.Item>
           <Dropdown.Item disabled={true}>Like</Dropdown.Item>

@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
-import { Route, Switch, Redirect } from "react-router-dom";
-import { Container, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 
-import Chat from "./components/chat/Chat";
-import { LoginForm } from "./components/auth/Login";
-import { AuthContext } from "./context/AuthContext";
-import "./App.css";
-import { Signup } from "./components/auth/Signup";
-import MyNavbar from "./components/navbar/MyNavbar";
+// import MyNavbar from "./components/navbar/MyNavbar";
 import MyAlertMessage from "./components/MyAlertMessage";
-import Room from "./components/room/Room";
-import VideoRoom from "./components/groupVideoRoom/VideoRoom";
+import { AuthContext } from "./context/AuthContext";
+import { MyRoutes } from "./components/MyRoutes";
+import StyledNavbar from "./components/navbar/StyledNavbar";
+import { GlobalStyles, GlobalEl } from "./global/styles";
+
 const IS_LOGGED_QUERY = gql`
   mutation($token: String!) {
     isLoggedIn(token: $token) {
@@ -103,32 +100,6 @@ function App() {
     // eslint-disable-next-line
   }, []);
 
-  if (state.isLoading) {
-    return (
-      <Container>
-        <MyNavbar
-          token={state.token}
-          logout={handleLogout}
-          username={state.user?.email}
-        />
-        <div style={{ height: "60px" }}></div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "50vh",
-            width: "80vw",
-          }}
-        >
-          <Spinner animation="border" role="status">
-            <span className="sr-only">Loading...</span>
-          </Spinner>
-        </div>
-      </Container>
-    );
-  }
-
   return (
     <AuthContext.Provider
       value={{
@@ -138,129 +109,24 @@ function App() {
         getUserDetails: getUserDetails,
       }}
     >
-      <div>
-        <MyNavbar
-          token={state.token}
-          logout={handleLogout}
-          username={state.user?.email}
-        />
-        <div style={{ height: "60px" }}></div>
+      <GlobalEl.Container>
+        <GlobalStyles />
+        {/* <MyNavbar
+        token={state.token}
+        logout={handleLogout}
+        username={state.user?.email}
+      /> */}
+        <StyledNavbar />
         <MyAlertMessage
-          // showAlert={state.showAlert}
           success={state.alertSuccess}
           msg={state.alertMessage}
           msgId={state.alertMessageId}
         />
-        {/* {state.message && (
-          <Alert
-            variant={state.token && state.message ? "success" : "warning"}
-            onClose={() => updateState({ message: "" })}
-            dismissible
-          >
-            <Alert.Heading>{state.message}</Alert.Heading>
-          </Alert>
-        )} */}
-        <Switch>
-          {!state.token && <Redirect from="/chat" to="/" exact />}
-          {state.token && <Redirect from="/" to="/chat" exact />}
-
-          {state.token ? (
-            <>
-              <Route
-                path="/chat"
-                exact
-                render={(props) => (
-                  <Chat
-                    {...props}
-                    username={state.user?.email}
-                    userId={state.user?.id}
-                    updateState={updateState}
-                    chats={state.chats}
-                  />
-                )}
-              />
-              <Route
-                path="/group"
-                exact
-                render={(props) => (
-                  <VideoRoom
-                    {...props}
-                    userId={state.user?.id}
-                    user={state.user}
-                    updateState={updateState}
-                  />
-                )}
-              />
-              <Route
-                path="/group/:roomId"
-                exact
-                render={(props) => (
-                  <VideoRoom
-                    {...props}
-                    userId={state.user?.id}
-                    user={state.user}
-                    updateState={updateState}
-                  />
-                )}
-              />
-              <Route
-                path="/room"
-                exact
-                render={(props) => (
-                  <Room
-                    {...props}
-                    userId={state.user?.id}
-                    user={state.user}
-                    updateState={updateState}
-                  />
-                )}
-              />
-
-              <Route
-                path="/chat/:id"
-                exact
-                render={(props) => (
-                  <Chat
-                    {...props}
-                    username={state.user?.email}
-                    userId={state.user?.id}
-                    updateState={updateState}
-                    chats={state.chats}
-                  />
-                )}
-              />
-
-              <Route
-                path="/room/:id"
-                exact
-                render={(props) => (
-                  <Room
-                    {...props}
-                    user={state.user}
-                    userId={state.user?.id}
-                    updateState={updateState}
-                  />
-                )}
-              />
-            </>
-          ) : (
-            <>
-              <Route
-                path="/"
-                exact
-                render={(props) => <LoginForm {...props} />}
-              />
-              <Route
-                exact
-                path="/signup"
-                render={(props) => (
-                  <Signup {...props} updateState={updateState} />
-                )}
-              />
-            </>
-          )}
-        </Switch>
-      </div>
+        {/* <Spinner animation="border" role="status">
+        <span className="sr-only">Loading...</span>
+      </Spinner> */}
+        <MyRoutes state={state} updateState={updateState} />
+      </GlobalEl.Container>
     </AuthContext.Provider>
   );
 }
