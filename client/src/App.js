@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Spinner } from "react-bootstrap";
 
-// import MyNavbar from "./components/navbar/MyNavbar";
 import MyAlertMessage from "./components/MyAlertMessage";
 import { AuthContext } from "./context/AuthContext";
-import { MyRoutes } from "./components/MyRoutes";
-import StyledNavbar from "./components/navbar/StyledNavbar";
+import { AppRouter } from "./AppRouter";
+import StyledNavbar from "./components/navbar/Navbar";
 import { GlobalStyles, GlobalEl } from "./global/styles";
+import StyledSidebar from "./components/navbar/Sidebar";
+// import StyledLoader from "./components/StyledLoader";
 
 const IS_LOGGED_QUERY = gql`
   mutation($token: String!) {
@@ -36,6 +37,7 @@ function App() {
     token: "",
     user: null,
     isLoading: false,
+    isOpen: false,
     message: "",
     chats: [],
     alertMessage: "",
@@ -96,9 +98,22 @@ function App() {
 
   useEffect(() => {
     isLoginValid();
+    // handleGlobalClick();
     return () => {};
     // eslint-disable-next-line
   }, []);
+
+  // const handleGlobalClick = (e) => {
+  //   document.getElementById("main_container").addEventListener("click", (e) => {
+  //     console.log(e.currentTarget.getAttribute("id"));
+  //     if (
+  //       document.getElementById("myTooltip123") &&
+  //       e.currentTarget.getAttribute("id") !== "myTooltip123"
+  //     ) {
+  //       document.getElementById("myTooltip123").remove();
+  //     }
+  //   });
+  // };
 
   return (
     <AuthContext.Provider
@@ -109,14 +124,16 @@ function App() {
         getUserDetails: getUserDetails,
       }}
     >
-      <GlobalEl.Container>
-        <GlobalStyles />
-        {/* <MyNavbar
-        token={state.token}
-        logout={handleLogout}
-        username={state.user?.email}
-      /> */}
-        <StyledNavbar />
+      <GlobalStyles />
+      <GlobalEl.Container id="main_container">
+        <StyledNavbar
+          token={state.token}
+          logout={handleLogout}
+          username={state.user?.email}
+          updateState={() => updateState({ isOpen: !state.isOpen })}
+        />
+        <StyledSidebar isOpen={state.isOpen} updateState={updateState} />
+
         <MyAlertMessage
           success={state.alertSuccess}
           msg={state.alertMessage}
@@ -125,7 +142,7 @@ function App() {
         {/* <Spinner animation="border" role="status">
         <span className="sr-only">Loading...</span>
       </Spinner> */}
-        <MyRoutes state={state} updateState={updateState} />
+        <AppRouter state={state} updateState={updateState} />
       </GlobalEl.Container>
     </AuthContext.Provider>
   );

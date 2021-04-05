@@ -1,10 +1,13 @@
 export const myColors = {
-  primaryColor: "#2a3d66",
+  primaryColor: "rgba(9,77,140,1)",
+  primaryColor2: "rgba(9,86,164,1)",
+  primaryColor3: "rgba(24,95,173,1)",
   secondaryColor: "#ABB8C3",
+  secondaryColor2: "#ABB8C3",
   gray: "#ABB8C3",
   darkGray: "#697689",
   silver: "#D9E3F0",
-  lightGray: "#D9E3F0",
+  lightGray: "#f4f4f4",
   blue: "#0693E3",
   navBlue: "#2a3d66",
   lightBlue: "#8ED1FC",
@@ -18,4 +21,10 @@ export const myColors = {
   purple: "#9900EF",
   red: "#EB144C",
   teal: "#009688",
+};
+export const fontSize = {
+  logo: "24px",
+  link: "16px",
+  button: "16px",
+  text: "14px",
 };

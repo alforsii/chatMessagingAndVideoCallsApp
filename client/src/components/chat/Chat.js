@@ -1,39 +1,30 @@
-import { Container, Row, Col } from "react-bootstrap";
 import { Messages } from "./Messages";
-import { AddMessage } from "./AddMessage";
 import UserChats from "./UserChats";
 import ChatUsers from "./ChatUsers";
+import { StyledChatSidebar } from "./ChatSidebar";
+
+import { ChatEl } from "./ChatElements";
 
 export default function Chat(props) {
   const chatId = props?.match?.params?.id;
+  const { state, updateState } = props;
+  const { user, chats, isOpen } = state;
+  const { id: userId } = user;
 
   return (
-    <Container>
-      <Row className="row row-cols-2 g-2">
-        <Col md={4} lg={4}>
-          <UserChats updateState={props.updateState} userId={props.userId} />
-          <ChatUsers
-            chats={props.chats}
-            chatId={chatId}
-            currentUserId={props.userId}
-          />
-        </Col>
-
-        <Col md={8} lg={8}>
-          <Messages
-            username={props.username}
-            chatId={chatId}
-            userId={props.userId}
-          />
-          {chatId && (
-            <AddMessage
-              username={props.username}
-              chatId={chatId}
-              userId={props.userId}
-            />
-          )}
-        </Col>
-      </Row>
-    </Container>
+    <ChatEl.Container id="chat_container" isOpen={isOpen}>
+      <ChatEl.Row>
+        <StyledChatSidebar />
+        <ChatEl.Col>
+          <UserChats updateState={updateState} userId={userId} />
+        </ChatEl.Col>
+        <ChatEl.Col>
+          <ChatUsers chats={chats} chatId={chatId} currentUserId={userId} />
+        </ChatEl.Col>
+        <ChatEl.Col style={{ flex: 2 }}>
+          <Messages user={user} chatId={chatId} userId={userId} />
+        </ChatEl.Col>
+      </ChatEl.Row>
+    </ChatEl.Container>
   );
 }

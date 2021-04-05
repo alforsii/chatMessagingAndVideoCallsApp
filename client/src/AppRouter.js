@@ -1,30 +1,27 @@
 import { Route, Switch, Redirect } from "react-router-dom";
 
-import Chat from "./chat/Chat";
-import { LoginForm } from "./auth/Login";
-import { Signup } from "./auth/Signup";
-import Room from "./room/Room";
-import VideoRoom from "./groupVideoRoom/VideoRoom";
+import Chat from "./components/chat/Chat";
+import { LoginForm } from "./components/auth/Login";
+import { Signup } from "./components/auth/Signup";
+import Room from "./components/room/Room";
+import VideoRoom from "./components/groupVideoRoom/VideoRoom";
+import { navHeight } from "./components/navbar/NavbarElements";
 
-export function MyRoutes({ state, updateState }) {
+export function AppRouter({ state, updateState }) {
   return (
     <Switch>
       {!state.token && <Redirect from="/chat" to="/" exact />}
+      {state.token && <Redirect from="/signup" to="/" exact />}
       {state.token && <Redirect from="/" to="/chat" exact />}
 
       {state.token ? (
         <>
+          <div style={{ height: navHeight }}></div>
           <Route
             path="/chat"
             exact
             render={(props) => (
-              <Chat
-                {...props}
-                username={state.user?.email}
-                userId={state.user?.id}
-                updateState={updateState}
-                chats={state.chats}
-              />
+              <Chat {...props} updateState={updateState} state={state} />
             )}
           />
           <Route
@@ -68,13 +65,7 @@ export function MyRoutes({ state, updateState }) {
             path="/chat/:id"
             exact
             render={(props) => (
-              <Chat
-                {...props}
-                username={state.user?.email}
-                userId={state.user?.id}
-                updateState={updateState}
-                chats={state.chats}
-              />
+              <Chat {...props} updateState={updateState} state={state} />
             )}
           />
 

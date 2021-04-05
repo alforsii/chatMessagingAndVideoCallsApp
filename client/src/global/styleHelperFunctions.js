@@ -6,6 +6,18 @@ export const getStyles = ({ style }) => {
   return str;
 };
 
+export const getOffset = (el) => {
+  const rect = el.getBoundingClientRect();
+  return {
+    top: rect.top + window.scrollY,
+    bottom: rect.bottom + window.scrollY,
+    left: rect.left + window.scrollX,
+    right: rect.right + window.scrollY,
+    width: rect.width,
+    height: rect.height,
+  };
+};
+
 export const flexStart = (axel = "x") => {
   if (axel === "y") {
     return getStyles({

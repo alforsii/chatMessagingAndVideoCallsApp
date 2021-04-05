@@ -1,9 +1,13 @@
 import React from "react";
 import moment from "moment";
 import { Image } from "react-bootstrap";
-import { MessagePopover } from "./MessagePopover";
+import { MessageDropdown } from "./MessageDropdown";
+import { MessagesEl } from "./MessagesElements";
+import { useState } from "react";
+import StyledAvatar from "../Avatar";
 
 export default function GroupedMessages({ id, type, messages, name, userId }) {
+  const [msgId, setMsgId] = useState("");
   const handleTimeToggle = (msgId) => {
     document.querySelectorAll(".opacity_animation").forEach((el) => {
       el.classList.remove("opacity_animation");
@@ -21,60 +25,46 @@ export default function GroupedMessages({ id, type, messages, name, userId }) {
   };
 
   return (
-    <div className="message_content">
+    <>
       {messages.map((msg, i) => {
         const time = new Date(Number(msg.createdAt)).toISOString();
         const myUTC = new Date().getUTCDate();
         return (
-          <React.Fragment key={msg.id}>
-            <div
-              onMouseEnter={() => handleTimeToggle(msg.id)}
-              onMouseLeave={() => handleTimeToggle(msg.id)}
-              style={{
-                display: "flex",
-                justifyContent: `${
-                  type === "sent" ? "flex-end" : "flex-start"
-                }`,
-                alignItems: "center",
-              }}
-            >
-              {type === "sent" && (
-                <i id={msg.id} className="opacity_none text-muted">
-                  {moment(time).utc(myUTC).format("MMM Do YYYY, h:mm a")}
-                </i>
-              )}
-              <MessagePopover
-                userId={userId}
-                msg={msg}
-                type={type}
-                length={messages.length}
-                index={i}
-              />
-              {type === "received" && (
-                <i id={msg.id} className="opacity_none text-muted">
-                  {moment(time).utc(myUTC).format("MMM Do YYYY, h:mm a")}
-                </i>
-              )}
-            </div>
-          </React.Fragment>
+          <MessagesEl.Row
+            key={msg.id}
+            onMouseEnter={() => setMsgId(msg.id)}
+            onMouseLeave={() => setMsgId("")}
+            type={type}
+          >
+            {type === "sent" && (
+              <MessagesEl.Time display={msg.id === msgId ? "block" : "none"}>
+                {moment(time).utc(myUTC).format("MMM Do YYYY, h:mm a")}
+              </MessagesEl.Time>
+            )}
+            <MessageDropdown
+              userId={userId}
+              msg={msg}
+              type={type}
+              length={messages.length}
+              index={i}
+            />
+            {type === "received" && (
+              <MessagesEl.Time display={msg.id === msgId ? "block" : "none"}>
+                {moment(time).utc(myUTC).format("MMM Do YYYY, h:mm a")}
+              </MessagesEl.Time>
+            )}
+          </MessagesEl.Row>
         );
       })}
       {type === "received" && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-        >
-          <Image
-            style={{ width: "40px", height: "40px", margin: "1px" }}
+        <MessagesEl.Row type={type}>
+          <StyledAvatar
             src="https://source.unsplash.com/user/erondu"
             roundedCircle
           />
-          <p className="other_user text-muted">{name}</p>
-        </div>
+          <MessagesEl.Text>{name}</MessagesEl.Text>
+        </MessagesEl.Row>
       )}
-    </div>
+    </>
   );
 }

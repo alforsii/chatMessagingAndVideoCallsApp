@@ -1,8 +1,7 @@
-.messages {
+/* .messages {
   max-width: 678px;
-  /* margin: 10px; */
   scroll-behavior: smooth;
-}
+} */
 .message_content i {
   font-size: 0.8rem;
   margin: 0 15px;

@@ -6,7 +6,7 @@ import { NavLink, FormControl, Dropdown, Form } from "react-bootstrap";
 import { Button, Modal, InputGroup } from "react-bootstrap";
 
 import { AuthContext } from "../../context/AuthContext";
-import { successAlert, errorAlert } from "../globalHelpers";
+import { successAlert, errorAlert } from "../../global/globalHelpers";
 
 const DELETE_CHAT_QUERY = gql`
   mutation($chatId: ID!, $userId: ID!) {
@@ -98,7 +98,7 @@ export const UserChatsDropdown = ({
                   }
                   onClick={() => history.push(`/chat/${chatId}`)}
                 >
-                  Open Chat: {theChatName}
+                  Open
                 </Dropdown.Item>
                 <Dropdown.Item onClick={() => setSmShow2(true)}>
                   Rename

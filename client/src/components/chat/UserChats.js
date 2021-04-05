@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { gql, useSubscription } from "@apollo/client";
-import { ListGroup } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import CreateChat from "./CreateChat";
 import UserChatsDropdown from "./UserChatsDropdown";
+import { UserChatsEl } from "./UserChatsElements";
+import { AiFillWechat } from "react-icons/ai";
+import { FaSearchengin } from "react-icons/fa";
 
 const USER_CHATS_QUERY = gql`
   subscription($userId: ID!) {
@@ -18,6 +20,7 @@ export default function UserChats({ userId, updateState }) {
   const { data, error } = useSubscription(USER_CHATS_QUERY, {
     variables: { userId },
   });
+  const [activeBtn, setActiveBtn] = useState(null);
 
   useEffect(() => {
     updateState({ chats: data?.userChats });
@@ -28,30 +31,35 @@ export default function UserChats({ userId, updateState }) {
   if (error) return console.log(error);
 
   return (
-    <>
-      <ListGroup variant="flush">
-        <ListGroup.Item variant="primary">
-          <span>Your Chats</span>
-          <CreateChat />
-        </ListGroup.Item>
-        {data.userChats.map((chat) => (
-          <ListGroup.Item
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: 5,
-              marginLeft: 10,
-              padding: 5,
-              border: "none",
-              borderBottom: "1px solid #eee",
-            }}
-            key={chat.id}
-          >
-            <NavLink to={`/chat/${chat.id}`}>{chat.chatName}</NavLink>
-            <UserChatsDropdown chatId={chat.id} chatName={chat.chatName} />
-          </ListGroup.Item>
+    <UserChatsEl.Container>
+      <UserChatsEl.Header>
+        <UserChatsEl.Label htmlFor="search_chat_input">
+          <FaSearchengin />
+        </UserChatsEl.Label>
+        <UserChatsEl.Input id="search_chat_input" placeholder={`Chats...`} />
+        <CreateChat />
+      </UserChatsEl.Header>
+      <UserChatsEl.Menu>
+        {data.userChats?.map((chat) => (
+          <UserChatsEl.SubMenu key={chat.id}>
+            <UserChatsEl.Item>
+              <AiFillWechat />
+            </UserChatsEl.Item>
+            <NavLink to={`/chat/${chat.id}`}>
+              <UserChatsEl.Item
+                id={chat.id}
+                className={chat.id === activeBtn && "active"}
+                onClick={() => setActiveBtn(chat.id)}
+              >
+                {chat.chatName}
+              </UserChatsEl.Item>
+            </NavLink>
+            <UserChatsEl.Item>
+              <UserChatsDropdown chatId={chat.id} chatName={chat.chatName} />
+            </UserChatsEl.Item>
+          </UserChatsEl.SubMenu>
         ))}
-      </ListGroup>
-    </>
+      </UserChatsEl.Menu>
+    </UserChatsEl.Container>
   );
 }
