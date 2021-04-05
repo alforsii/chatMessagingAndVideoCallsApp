@@ -5,40 +5,40 @@ exports.ChatResolvers = {
   Query: {
     // => user chats array | id, chatName
     // =-=-==-=-=  Instead using Subscribe userChats!!! =-=-=-=-=-=-=-=-=-=-=
-    userChats: async (_, { userId }) => {
-      //   try {
-      //     const user = await User.findById(userId).populate([
-      //       {
-      //         path: "chats",
-      //         // populate: [
-      //         //   { path: "chatAuthor" },
-      //         //   { path: "chatUsers" },
-      //         //   {
-      //         //     path: "chatMessages",
-      //         //     populate: [{ path: "messageAuthor" }],
-      //         //   },
-      //         // ],
-      //       },
-      //     ]);
-      //     return user.chats;
-      //   } catch (err) {
-      //     console.log(err);
-      //     return err;
-      //   }
-    },
+    // userChats: async (_, { userId }) => {
+    //   //   try {
+    //   //     const user = await User.findById(userId).populate([
+    //   //       {
+    //   //         path: "chats",
+    //   //         // populate: [
+    //   //         //   { path: "chatAuthor" },
+    //   //         //   { path: "chatUsers" },
+    //   //         //   {
+    //   //         //     path: "chatMessages",
+    //   //         //     populate: [{ path: "messageAuthor" }],
+    //   //         //   },
+    //   //         // ],
+    //   //       },
+    //   //     ]);
+    //   //     return user.chats;
+    //   //   } catch (err) {
+    //   //     console.log(err);
+    //   //     return err;
+    //   //   }
+    // },
     // => users array in single chat | id, email, firstName, lastName
     // =-=-==-=-=  Instead using Subscribe chatUsers!!! =-=-=-=-=-=-=-=-=-=-=
-    chatUsers: async (_, { chatId }) => {
-      //   try {
-      //     const chat = await Chat.findById(chatId).populate([
-      //       { path: "chatUsers" },
-      //     ]);
-      //     return chat.chatUsers;
-      //   } catch (err) {
-      //     console.log(err);
-      //     return err;
-      //   }
-    },
+    // chatUsers: async (_, { chatId }) => {
+    //   //   try {
+    //   //     const chat = await Chat.findById(chatId).populate([
+    //   //       { path: "chatUsers" },
+    //   //     ]);
+    //   //     return chat.chatUsers;
+    //   //   } catch (err) {
+    //   //     console.log(err);
+    //   //     return err;
+    //   //   }
+    // },
   },
   Mutation: {
     // (parent, args, context, info)
@@ -143,7 +143,11 @@ exports.ChatResolvers = {
     },
     updateChat: async (_, { chatId, authorId, chatName }, { pubSub }) => {
       try {
-        const chatAuthor = await Chat.findOne({ chatAuthor: authorId });
+        const chatAuthor = await Chat.findOne({
+          _id: chatId,
+          chatAuthor: authorId,
+        });
+        console.log("🚀 ~ chatAuthor", chatAuthor);
         if (!chatAuthor) {
           throw new Error("You are not the author!");
         }
@@ -285,7 +289,10 @@ exports.ChatResolvers = {
           setTimeout(() => {
             // pubSub.publish(`channel`, { [SubscriptionName]: data });
             pubSub.publish(`CHAT_USERS-${chat._id}`, {
-              chatUsers: chat.chatUsers,
+              chatUsers: {
+                chatName: chat.chatName,
+                users: chat.chatUsers,
+              },
             });
           }, 0);
           //     pubSub.asyncIterator([`channel`]);

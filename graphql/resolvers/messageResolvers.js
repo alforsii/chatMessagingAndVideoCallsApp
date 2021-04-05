@@ -3,9 +3,17 @@ const { Message } = require("../../models/Message.model");
 
 exports.MessageResolvers = {
   Query: {
-    // messages: async () => {
-    //   const messages = await Message.find();
-    //   return messages;
+    // messages: async (_, { chatId }) => {
+    //   try {
+    //     const messages = await Message.find({ chatId }).populate(
+    //       "messageAuthor"
+    //     );
+    //     console.log({ messages });
+    //     return messages;
+    //   } catch (err) {
+    //     console.log(err);
+    //     return err;
+    //   }
     // },
   },
   Mutation: {
@@ -55,16 +63,22 @@ exports.MessageResolvers = {
     },
     deleteMessage: async (root, { chatId, messageId, userId }, { pubSub }) => {
       try {
+        let message;
         const foundMessage = await Message.findById(messageId).populate(
           "author"
         );
         if (foundMessage.messageAuthor._id.toString() === userId.toString()) {
-          await Message.findByIdAndDelete(messageId);
-          // console.log("msg deleted");
+          message = await Message.findByIdAndDelete(messageId);
+          console.log("msg deleted");
+          console.log(message);
         } else {
-          await Message.findByIdAndUpdate(messageId, {
-            $push: { blackList: userId },
-          });
+          message = await Message.findByIdAndUpdate(
+            messageId,
+            {
+              $push: { blackList: userId },
+            },
+            { new: true, runValidators: true }
+          );
           // console.log("msg pushed to blackList");
         }
         const messages = await Message.find({ chatId }).populate(
@@ -73,7 +87,7 @@ exports.MessageResolvers = {
         pubSub.publish(`CHAT_MESSAGES-${chatId}`, {
           messages,
         });
-        return { message: "Message successfully removed!", id: messageId };
+        return message;
       } catch (err) {
         console.log(err);
         return err;

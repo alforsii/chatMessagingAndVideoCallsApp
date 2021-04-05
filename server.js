@@ -5,7 +5,7 @@ const http = require("http");
 const socketIO = require("socket.io");
 const app = express();
 const httpServer = http.createServer(app);
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 
 // DB config
 require("./configs/db.configs");

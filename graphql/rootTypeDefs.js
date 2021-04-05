@@ -60,29 +60,34 @@ exports.RootTypeDefs = gql`
     message: String!
   }
 
+  type ChatUsers {
+    chatName: String!
+    users: [User]
+  }
+
   type Query {
-    messages: [Message]
+    # messages(chatId: ID!): [Message]
     allUsers: [User!]!
     someUsers(page: Int!, limit: Int!): [User!]!
-    userChats(userId: ID!): [Chat]
-    chatUsers(chatId: ID!): [User!]
+    # userChats(userId: ID!): [Chat]
+    # chatUsers(chatId: ID!): [User!]
   }
 
   type Mutation {
     getUser(id: ID!): User
+    searchedUser(email: String!): User
     signup(data: SignupInput!): User!
     login(email: String!, password: String!): AuthData!
     isLoggedIn(token: String!): AuthData!
 
     addMessage(data: MessageInput!): Message
-    deleteMessage(chatId: ID!, messageId: ID!, userId: ID!): ResMessage
+    deleteMessage(chatId: ID!, messageId: ID!, userId: ID!): Message
 
     createChat(userId: ID!, chatName: String!): Chat!
     deleteChat(chatId: ID!, userId: ID!): ResMessage!
+    updateChat(chatId: ID!, authorId: ID!, chatName: String!): Chat
     addChatUser(authorId: ID!, otherUserId: ID!, chatId: ID!): Chat
     deleteChatUser(authorId: ID!, otherUserId: ID!, chatId: ID!): ResMessage!
-    searchedUser(email: String!): User
-    updateChat(chatId: ID!, authorId: ID!, chatName: String!): Chat
 
     createRoom(userId: ID!, roomName: String!): Room!
     deleteTheRoom(userId: ID!, roomId: ID!): ID
@@ -91,7 +96,7 @@ exports.RootTypeDefs = gql`
   type Subscription {
     messages(chatId: ID!): [Message]
     userChats(userId: ID!): [Chat]
-    chatUsers(chatId: ID!): [User]
+    chatUsers(chatId: ID!): ChatUsers
     userRooms(userId: ID!): [Room]
   }
 `;
