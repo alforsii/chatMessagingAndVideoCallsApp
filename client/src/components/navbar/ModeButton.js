@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { myColors } from "../../global/colors";
 import { boxShadow } from "../../global/styleHelperFunctions";
 
 export function ModeButton({ updateState, mode }) {
@@ -69,7 +68,7 @@ const ModeButtonEl = {
     border-radius: 34px;
     transition: 0.4s;
     -webkit-transition: 0.4s;
-    background-color: ${myColors.blue};
+    background-color: ${({ theme }) => theme.colors.primary};
     ${boxShadow}
     :before {
       content: "";

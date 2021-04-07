@@ -12,6 +12,26 @@ export const ChatEl = {
     align-items: flex-start;
   `,
   Col: styled.div`
-    flex: ${({ flex }) => (flex ? flex : 1)};
+    flex: 1;
+    :nth-child(3) {
+      flex: 2;
+    }
+
+    @media screen and (max-width: 668px) {
+      :nth-child(2) {
+        display: none;
+        flex: 0;
+      }
+    }
+    @media screen and (max-width: 900px) {
+      :nth-child(3) {
+        flex: 3;
+        transition: 0.3s ease-in-out;
+      }
+      :nth-child(4) {
+        display: none;
+        flex: 0;
+      }
+    }
   `,
 };

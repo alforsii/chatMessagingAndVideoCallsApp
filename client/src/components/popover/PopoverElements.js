@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { myColors } from "../../global/colors";
 import { Link as LinkRoute } from "react-router-dom";
 import { boxShadow } from "../../global/styleHelperFunctions";
 
@@ -14,7 +13,7 @@ export const PopoverEl = {
     margin: 0;
     padding: 0;
     font-weight: 100;
-    color: ${myColors.gray};
+    color: ${({ theme }) => theme.colors.text};
   `,
   Menu: styled.ul`
     display: ${({ isOpen }) => (isOpen ? "block" : "none")};
@@ -27,20 +26,20 @@ export const PopoverEl = {
     max-height: 500px;
     overflow: scroll;
     z-index: 999;
-    background-color: ${myColors.white};
+    background-color: ${({ theme }) => theme.colors.body.secondary};
     border-radius: 3px;
     ${boxShadow}
   `,
   Item: styled.li`
     padding: 10px 15px;
     font-size: 1rem;
-    color: ${myColors.primaryColor};
+    color: ${({ theme }) => theme.colors.text};
     a {
-      color: ${myColors.primaryColor};
+      color: ${({ theme }) => theme.colors.text};
     }
     &:hover {
-      background-color: ${myColors.silver};
-      color: ${myColors.primaryColor};
+      background-color: ${({ theme }) => theme.colors.body.primary};
+      color: ${({ theme }) => theme.colors.text};
     }
   `,
   Link: styled(LinkRoute)`
@@ -48,10 +47,10 @@ export const PopoverEl = {
     font-size: 1rem;
     width: 100%;
     display: inline-block;
-    color: ${myColors.primaryColor};
+    color: ${({ theme }) => theme.colors.text};
     &:hover {
-      background-color: ${myColors.silver};
-      color: ${myColors.primaryColor};
+      background-color: ${({ theme }) => theme.colors.body.primary};
+      color: ${({ theme }) => theme.colors.primary};
       text-decoration: none;
     }
   `,

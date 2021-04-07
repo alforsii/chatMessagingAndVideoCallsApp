@@ -44,6 +44,8 @@ const initialState = {
   alertMessageId: null,
   alertSuccess: false,
   defaultMode: "light",
+  showChats: false,
+  showUsers: false,
 };
 
 function App() {
@@ -122,7 +124,13 @@ function App() {
           <span className="sr-only">Loading...</span>
         </Spinner>
       ) : (
-        <ThemeProvider theme={allThemes[state.defaultMode]}>
+        <ThemeProvider
+          theme={{
+            ...allThemes[state.defaultMode],
+            showChats: state.showChats,
+            showUsers: state.showUsers,
+          }}
+        >
           <GlobalStyles />
           <GlobalEl.Container id="main_container">
             <StyledNavbar

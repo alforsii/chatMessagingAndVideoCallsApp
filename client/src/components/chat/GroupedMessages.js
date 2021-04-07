@@ -43,6 +43,8 @@ export default function GroupedMessages({ id, type, messages, name, userId }) {
       {type === "received" && (
         <MessagesEl.Row>
           <StyledAvatar
+            width={35}
+            height={35}
             src="https://source.unsplash.com/user/erondu"
             roundedCircle
           />

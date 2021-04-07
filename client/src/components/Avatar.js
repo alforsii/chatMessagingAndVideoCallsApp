@@ -7,8 +7,8 @@ const borderSize = (size) => {
 };
 
 const AvatarEl = styled(Image)`
-  width: ${({ width }) => (width ? width : "35px")};
-  height: ${({ height }) => (height ? height : "35px")};
+  width: ${({ width }) => (width ? width : "100%")};
+  height: ${({ height }) => (height ? height : "100%")};
   border: ${({ border }) => (border ? borderSize(border) : 0)};
   border-color: ${({ theme }) =>
     theme.name === "dark" ? theme.colors.text : theme.colors.primary};

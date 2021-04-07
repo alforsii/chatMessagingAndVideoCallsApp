@@ -57,6 +57,8 @@ export function StyledNavbar({ logout, history, state, updateState }) {
       <ModeButton updateState={updateState} mode={mode} />
       <StyledAvatar
         roundedCircle
+        width={35}
+        height={35}
         border={2}
         src="https://source.unsplash.com/user/erondu"
       />

@@ -52,7 +52,6 @@ export default function ChatUsers({ chatId, currentUserId, chats }) {
                 <ChatUsersEl.Avatar>
                   <StyledAvatar
                     rounded
-                    style={{ width: "100%", height: "100%" }}
                     src="https://source.unsplash.com/user/erondu"
                   />
                 </ChatUsersEl.Avatar>

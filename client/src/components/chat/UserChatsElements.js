@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const UserChatsEl = {
   Container: styled.div`
     background-color: ${({ theme }) => theme.colors.body.secondary};
-    border-right: 1px solid ${({ theme }) => theme.colors.body.primary}; ;
+    border-right: 1px solid ${({ theme }) => theme.colors.body.primary};
+    /* display: ${({ theme }) => (theme.show === "chats" ? "none" : "grid")}; */
   `,
   Header: styled.header`
     font-size: 1.2rem;
