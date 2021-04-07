@@ -27,6 +27,23 @@ exports.AuthResolvers = {
         return err;
       }
     },
+    updateUserTheme: async (_, { mode, userId }) => {
+      try {
+        const user = await User.findById(userId);
+        if (!userId || !user) {
+          return null;
+        }
+
+        return await User.findByIdAndUpdate(
+          userId,
+          { mode },
+          { new: true, runValidators: true }
+        );
+      } catch (err) {
+        console.log(err);
+        return err;
+      }
+    },
     getUser: async (_, { id }) => {
       try {
         return await User.findById(id);

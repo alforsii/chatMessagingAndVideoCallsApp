@@ -6,6 +6,7 @@ exports.RootTypeDefs = gql`
     email: String!
     firstName: String
     lastName: String
+    mode: String
     chats: [Chat!]
   }
 
@@ -91,6 +92,8 @@ exports.RootTypeDefs = gql`
 
     createRoom(userId: ID!, roomName: String!): Room!
     deleteTheRoom(userId: ID!, roomId: ID!): ID
+
+    updateUserTheme(mode: String!, userId: ID!): User
   }
 
   type Subscription {

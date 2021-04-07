@@ -6,6 +6,7 @@ const UserSchema = new Schema(
     password: { type: String, require: true },
     firstName: { type: String },
     lastName: { type: String },
+    mode: { type: String, default: "light" },
     chats: [{ type: Schema.Types.ObjectId, ref: "Chat" }],
     rooms: [{ type: Schema.Types.ObjectId, ref: "Room" }],
   },
