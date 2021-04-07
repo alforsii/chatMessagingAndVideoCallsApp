@@ -38,7 +38,9 @@ export default function ChatUsers({ chatId, currentUserId, chats }) {
           <FaSearchengin />
         </ChatUsersEl.Label>
         <ChatUsersEl.Input id="search_user_input" placeholder={`Users...`} />
-        <AddChatUser chatId={chatId} />
+        <ChatUsersEl.InputIcon>
+          <AddChatUser chatId={chatId} />
+        </ChatUsersEl.InputIcon>
       </ChatUsersEl.Header>
 
       <ChatUsersEl.Menu>

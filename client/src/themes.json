@@ -1,0 +1,65 @@
+{
+  "data": {
+    "light": {
+      "id": "T_001",
+      "name": "light",
+      "colors": {
+        "body": { "primary": "#ffffff", "secondary": "#ECEFF1" },
+        "primary": "#448AFF",
+        "secondary": "#a5d6a7",
+        "text": "#121212",
+        "button": {
+          "text": "#FFFFFF",
+          "bg": "#448AFF",
+          "hover": { "text": "#FFFFFF", "bg": "#448AFF" }
+        },
+        "link": {
+          "text": "teal",
+          "opacity": 1,
+          "hover": { "text": "#FFFFFF", "bg": "teal" }
+        }
+      },
+      "font": "Tinos"
+    },
+    "dark": {
+      "id": "T_002",
+      "name": "dark",
+      "colors": {
+        "body": { "primary": "#1B1E20", "secondary": "#121212" },
+        "primary": "#448AFF",
+        "secondary": "#a5d6a7",
+        "text": "#FFFFFF",
+        "button": {
+          "text": "#448AFF",
+          "bg": "#121212",
+          "hover": { "text": "#FFFFFF", "bg": "#448AFF" }
+        },
+        "link": {
+          "text": "#448AFF",
+          "opacity": 1,
+          "hover": { "text": "#FFFFFF", "bg": "#448AFF" }
+        }
+      },
+      "font": "Roboto"
+    },
+    "seaWave": {
+      "id": "T_003",
+      "name": "Sea Wave",
+      "colors": {
+        "body": { "primary": "#1B1E20", "secondary": "#121212" },
+        "text": "#0d47a1",
+        "button": {
+          "text": "#ffffff",
+          "bg": "#0d47a1",
+          "hover": { "text": "#FFFFFF", "bg": "#0d47a1" }
+        },
+        "link": {
+          "text": "#0d47a1",
+          "opacity": 0.8,
+          "hover": { "text": "#FFFFFF", "bg": "#0d47a1" }
+        }
+      },
+      "font": "Ubuntu"
+    }
+  }
+}

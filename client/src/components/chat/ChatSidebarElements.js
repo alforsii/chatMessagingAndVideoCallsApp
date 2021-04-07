@@ -1,7 +1,4 @@
 import styled from "styled-components";
-import { Link as LinkRoute } from "react-router-dom";
-import { myColors } from "../../global/colors";
-import { boxShadow, flexStart } from "../../global/styleHelperFunctions";
 
 export const ChatSidebarEl = {
   Container: styled.nav`
@@ -11,16 +8,18 @@ export const ChatSidebarEl = {
     flex-direction: column;
     width: 50px;
     height: 100vh;
-    background-color: ${myColors.primaryColor};
-    border-right: 1px solid ${myColors.primaryColor3};
+    background-color: ${({ theme }) => theme.colors.body.primary};
+    border-right: 1px solid ${({ theme }) => theme.colors.body.secondary};
   `,
   Icon: styled.div`
-    color: ${myColors.silver};
+    color: ${({ theme }) => theme.colors.text};
     display: block;
     padding: 5px;
     transition: 0.2s linear;
+    opacity: 0.9;
     &:hover {
-      color: ${myColors.white};
+      opacity: 1;
+      color: ${({ theme }) => theme.colors.primary};
       cursor: pointer;
     }
   `,

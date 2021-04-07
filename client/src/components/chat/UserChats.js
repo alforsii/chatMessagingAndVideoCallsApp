@@ -37,7 +37,9 @@ export default function UserChats({ userId, updateState }) {
           <FaSearchengin />
         </UserChatsEl.Label>
         <UserChatsEl.Input id="search_chat_input" placeholder={`Chats...`} />
-        <CreateChat />
+        <UserChatsEl.InputIcon>
+          <CreateChat />
+        </UserChatsEl.InputIcon>
       </UserChatsEl.Header>
       <UserChatsEl.Menu>
         {data.userChats?.map((chat) => (

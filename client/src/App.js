@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Spinner } from "react-bootstrap";
+import { ThemeProvider } from "styled-components";
 
 import MyAlertMessage from "./components/MyAlertMessage";
 import { AuthContext } from "./context/AuthContext";
@@ -8,6 +9,8 @@ import { AppRouter } from "./AppRouter";
 import StyledNavbar from "./components/navbar/Navbar";
 import { GlobalStyles, GlobalEl } from "./global/styles";
 import StyledSidebar from "./components/navbar/Sidebar";
+import { data as allThemes } from "./themes.json";
+// import { lightOrDark } from "./global/globalHelpers";
 // import StyledLoader from "./components/StyledLoader";
 
 const IS_LOGGED_QUERY = gql`
@@ -25,26 +28,28 @@ const GET_USER_QUERY = gql`
       firstName
       lastName
       email
+      mode
     }
   }
 `;
 
+const initialState = {
+  token: "",
+  user: null,
+  isLoading: false,
+  isOpen: false,
+  message: "",
+  chats: [],
+  alertMessage: "",
+  alertMessageId: null,
+  alertSuccess: false,
+  defaultMode: "light",
+};
+
 function App() {
   const [IsLoggedIn] = useMutation(IS_LOGGED_QUERY);
   const [GetUser] = useMutation(GET_USER_QUERY);
-
-  const [state, setState] = useState({
-    token: "",
-    user: null,
-    isLoading: false,
-    isOpen: false,
-    message: "",
-    chats: [],
-    alertMessage: "",
-    alertMessageId: null,
-    alertSuccess: false,
-    // showAlert: false,
-  });
+  const [state, setState] = useState({ ...initialState });
 
   const updateState = (data) => {
     setState({
@@ -62,11 +67,13 @@ function App() {
       return setState({ ...state, message: errors[0].message });
     }
 
+    const mode = data.getUser?.mode || state.defaultMode;
+
     updateState({
+      ...initialState,
       token,
-      isLoading: false,
       user: data.getUser,
-      message: "",
+      defaultMode: mode,
     });
     return data.getUser.id;
   };
@@ -84,7 +91,7 @@ function App() {
 
       const { userId, token: validToken } = data.isLoggedIn;
 
-      await getUserDetails(userId, validToken);
+      getUserDetails(userId, validToken);
     } catch (err) {
       console.log(err);
       handleLogout();
@@ -92,29 +99,15 @@ function App() {
   };
 
   const handleLogout = () => {
-    updateState({ token: null, isLoading: false, user: null });
+    updateState({ ...initialState });
     localStorage.clear();
   };
 
   useEffect(() => {
     isLoginValid();
-    // handleGlobalClick();
     return () => {};
     // eslint-disable-next-line
   }, []);
-
-  // const handleGlobalClick = (e) => {
-  //   document.getElementById("main_container").addEventListener("click", (e) => {
-  //     console.log(e.currentTarget.getAttribute("id"));
-  //     if (
-  //       document.getElementById("myTooltip123") &&
-  //       e.currentTarget.getAttribute("id") !== "myTooltip123"
-  //     ) {
-  //       document.getElementById("myTooltip123").remove();
-  //     }
-  //   });
-  // };
-
   return (
     <AuthContext.Provider
       value={{
@@ -124,26 +117,31 @@ function App() {
         getUserDetails: getUserDetails,
       }}
     >
-      <GlobalStyles />
-      <GlobalEl.Container id="main_container">
-        <StyledNavbar
-          token={state.token}
-          logout={handleLogout}
-          username={state.user?.email}
-          updateState={() => updateState({ isOpen: !state.isOpen })}
-        />
-        <StyledSidebar isOpen={state.isOpen} updateState={updateState} />
+      {state.isLoading ? (
+        <Spinner animation="border" role="status">
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+      ) : (
+        <ThemeProvider theme={allThemes[state.defaultMode]}>
+          <GlobalStyles />
+          <GlobalEl.Container id="main_container">
+            <StyledNavbar
+              logout={handleLogout}
+              state={state}
+              updateState={updateState}
+            />
+            <StyledSidebar isOpen={state.isOpen} updateState={updateState} />
 
-        <MyAlertMessage
-          success={state.alertSuccess}
-          msg={state.alertMessage}
-          msgId={state.alertMessageId}
-        />
-        {/* <Spinner animation="border" role="status">
-        <span className="sr-only">Loading...</span>
-      </Spinner> */}
-        <AppRouter state={state} updateState={updateState} />
-      </GlobalEl.Container>
+            <MyAlertMessage
+              success={state.alertSuccess}
+              msg={state.alertMessage}
+              msgId={state.alertMessageId}
+            />
+
+            <AppRouter state={state} updateState={updateState} />
+          </GlobalEl.Container>
+        </ThemeProvider>
+      )}
     </AuthContext.Provider>
   );
 }

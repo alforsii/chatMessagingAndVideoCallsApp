@@ -1,50 +1,60 @@
 import styled from "styled-components";
-import { myColors } from "../../global/colors";
-import { boxShadow } from "../../global/styleHelperFunctions";
 
 export const UserChatsEl = {
   Container: styled.div`
-    background-color: ${myColors.primaryColor2};
-    height: 100vh;
-    border-right: 1px solid ${myColors.primaryColor3};
+    background-color: ${({ theme }) => theme.colors.body.secondary};
+    border-right: 1px solid ${({ theme }) => theme.colors.body.primary}; ;
   `,
   Header: styled.header`
     font-size: 1.2rem;
     text-transform: capitalize;
-    background-color: ${myColors.primaryColor};
-    padding: 10px;
+    position: relative;
     font-style: italic;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-wrap: nowrap;
     z-index: 9;
-    color: ${myColors.white};
+    color: ${({ theme }) => theme.colors.text};
     i {
       font-size: 10px;
     }
   `,
   Input: styled.input`
-    /* background-color: ${myColors.primaryColor}; */
-    background-color: transparent;
+    background-color: ${({ theme }) => theme.colors.body.primary};
     border: none;
-    font-size: 14px;
+    border: 1px solid ${({ theme }) => theme.colors.body.secondary};
+    font-size: 16px;
     font-style: italic;
-    padding-left: 10px;
+    padding: 10px 30px 3px 30px;
+    border-radius: 3px;
     outline: 0;
+    width: 100%;
     ::placeholder {
-      color: ${myColors.silver};
+      color: ${({ theme }) => theme.colors.text};
+      width: 80%;
+      opacity: 0.4;
+    }
+    :focus {
+      color: ${({ theme }) => theme.colors.text};
     }
   `,
   Label: styled.label`
     cursor: pointer;
+    position: absolute;
+    top: 5px;
+    left: 7px;
+  `,
+  InputIcon: styled.div`
+    cursor: pointer;
+    position: absolute;
+    top: 7px;
+    right: 7px;
   `,
   Menu: styled.ul`
-    background-color: ${myColors.primaryColor};
     margin: 0;
     padding: 0;
     height: calc(100vh - 100px);
-    box-sizing: border-box;
     overflow: scroll;
     ::-webkit-scrollbar {
       display: none;
@@ -53,10 +63,10 @@ export const UserChatsEl = {
   SubMenu: styled.div`
     display: flex;
     position: relative;
-    /* flex-wrap: wrap; */
-
+    border-bottom: 1px solid ${({ theme }) => theme.colors.body.primary};
     &:hover {
-      background-color: ${myColors.primaryColor3};
+      background-color: ${({ theme }) => theme.colors.body.primary};
+
       cursor: pointer;
     }
     a:nth-child(2) {
@@ -70,12 +80,11 @@ export const UserChatsEl = {
     }
     a:nth-child(2) li {
       &:hover {
-        color: ${myColors.blue};
-        ${boxShadow};
+        color: ${({ theme }) => theme.colors.primary};
       }
     }
     li.active {
-      color: ${myColors.blue};
+      color: ${({ theme }) => theme.colors.primary};
     }
     li:nth-child(3) {
       position: absolute;
@@ -83,16 +92,15 @@ export const UserChatsEl = {
     }
   `,
   Item: styled.li`
-    color: ${myColors.silver};
+    color: ${({ theme }) => theme.colors.text};
     padding: 10px;
     background-color: "red";
     list-style: none;
     font-size: 14px;
     a {
-      color: ${myColors.blue};
-
+      color: ${({ theme }) => theme.colors.text};
       &:hover {
-        color: ${myColors.white};
+        color: ${({ theme }) => theme.colors.primary};
         text-decoration: none;
       }
     }

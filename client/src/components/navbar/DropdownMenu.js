@@ -20,7 +20,6 @@ export const StyledDropMenu = withRouter(
       document
         .getElementById("main_container")
         .addEventListener("click", (e) => {
-          console.log(isOpen);
           setIsOpen(false);
         });
     };

@@ -1,11 +1,4 @@
 import styled from "styled-components";
-import { Link as LinkRoute } from "react-router-dom";
-import { myColors } from "../../global/colors";
-import {
-  getStyles,
-  boxShadow,
-  flexStart,
-} from "../../global/styleHelperFunctions";
 
 export const ChatEl = {
   Container: styled.div`

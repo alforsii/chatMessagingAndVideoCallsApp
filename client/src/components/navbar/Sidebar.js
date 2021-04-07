@@ -7,7 +7,7 @@ export default function StyledSidebar({ isOpen, updateState }) {
     <SidebarEl.Container dark={false} isOpen={isOpen}>
       <SidebarEl.Header>Styled Sidebar</SidebarEl.Header>
       <SidebarEl.CloseIcon onClick={() => updateState({ isOpen: false })}>
-        <FaTimes size={24} />
+        <FaTimes size={20} />
       </SidebarEl.CloseIcon>
       <SidebarEl.Menu>
         <SidebarEl.Link to="/chat">Chats</SidebarEl.Link>

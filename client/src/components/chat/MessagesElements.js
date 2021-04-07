@@ -1,17 +1,19 @@
 import styled from "styled-components";
-import { myColors } from "../../global/colors";
 import { boxShadow } from "../../global/styleHelperFunctions";
 
 export const MessagesEl = {
   Container: styled.div`
-    /* background-color: ${myColors.primaryColor}; */
     height: 100vh;
   `,
   SubContainer: styled.div`
     padding: 10px;
     scroll-behavior: smooth;
+    background-color: ${({ theme }) => theme.colors.body.primary};
     overflow: scroll;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 110px);
+    ::-webkit-scrollbar {
+      display: none;
+    }
   `,
   Row: styled.div`
     display: flex;
@@ -23,22 +25,23 @@ export const MessagesEl = {
     transition: 0.5s linear;
     opacity: 0;
     font-size: 12px;
+    margin: 5px;
     display: ${({ display }) => display};
     &:hover {
-      opacity: 1;
-      color: ${myColors.gray};
+      opacity: 0.5;
+      color: ${({ theme }) => theme.colors.text};
     }
   `,
   Form: styled.form`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${myColors.primaryColor};
-    padding: 10px;
+    border-top: 1px solid ${({ theme }) => theme.colors.body.secondary};
+    background-color: ${({ theme }) => theme.colors.body.primary};
+    padding: 7px;
   `,
   Input: styled.input`
-    /* background-color: ${myColors.primaryColor}; */
-    background-color: transparent;
+    background-color: ${({ theme }) => theme.colors.body.secondary};
     border: none;
     font-size: 14px;
     font-style: italic;
@@ -46,36 +49,31 @@ export const MessagesEl = {
     padding-left: 20px;
     outline: 0;
     width: 100%;
-    border-radius: 30px;
+    border-radius: 5px;
     margin-right: 5px;
-    border: 1px solid ${myColors.primaryColor3};
+    word-wrap: break-word;
+    border: 1px solid ${({ theme }) => theme.colors.body.primary};
     ::placeholder {
-      /* background-color: ${myColors.primaryColor}; */
-      color: ${myColors.primaryColor3};
+      color: ${({ theme }) => theme.colors.text};
+      opacity: 0.4;
     }
-    /* :focus {
-      background-color: ${myColors.primaryColor3};
-      ${boxShadow};
-    } */
+    :focus {
+      color: ${({ theme }) => theme.colors.text};
+      border: 1px solid ${({ theme }) => theme.colors.primary};
+    }
   `,
   Label: styled.label`
     cursor: pointer;
   `,
   Button: styled.button`
-    /* background-color: ${myColors.primaryColor}; */
-    background-color: transparent;
-    color: ${myColors.white};
     padding: 5px 34px;
-    border: 1px solid ${myColors.primaryColor3};
     border-radius: 30px;
-    font-weight: bold;
-    margin: 0 5px;
     transition: ease-in-out 0.3s all;
-
+    border: none;
+    color: ${({ theme }) => "#fff"};
+    background-color: ${({ theme }) => theme.colors.primary};
+    font-weight: bold;
     &:hover {
-      background-color: ${myColors.primaryColor3};
-      color: ${myColors.white};
-      font-weight: bold;
       ${boxShadow};
     }
   `,
@@ -84,7 +82,7 @@ export const MessagesEl = {
     padding: 0;
     font-size: 14px;
     padding: 5px;
-    color: ${myColors.green};
+    color: ${({ theme }) => theme.colors.text};
   `,
   Message: styled.p`
     font-size: 14px;
@@ -92,16 +90,19 @@ export const MessagesEl = {
     max-width: 60%;
     cursor: pointer;
     margin: 1px;
-    color: ${myColors.silver};
+    color: ${({ theme, type }) =>
+      type === "sent" ? "#fff" : theme.colors.primary};
     padding: 3px 15px;
     -moz-border-radius: 30px;
     -webkit-border-radius: 30px;
     border-radius: 30px;
     border-bottom-right-radius: ${({ borderR }) => borderR === "sent" && 0};
     border-bottom-left-radius: ${({ borderR }) => borderR === "received" && 0};
-    border: 1px solid;
-    border-color: ${({ type }) => myColors.primaryColor3};
-    background-color: ${(type) => myColors.primaryColor3};
+    background-color: ${({ theme, type }) => {
+      return type === "sent"
+        ? theme.colors.primary
+        : theme.colors.body.secondary;
+    }};
     &:hover {
       ${boxShadow};
     }

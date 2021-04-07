@@ -1,27 +1,28 @@
 import styled from "styled-components";
 import { Link as LinkRoute } from "react-router-dom";
-import { myColors } from "../../global/colors";
-import { boxShadow } from "../../global/styleHelperFunctions";
+import { boxShadow, flexStart } from "../../global/styleHelperFunctions";
 import { navHeight } from "./NavbarElements";
 export const SidebarEl = {
   Container: styled.aside`
     width: 100%;
     min-height: 100vh;
     max-width: 300px;
-    display: ${({ isOpen }) => (isOpen ? "block" : "none")};
-    background-color: ${({ dark }) => (dark ? "#333" : "#fff")};
-    position: fixed;
+    background-color: ${({ theme }) => theme.colors.body.primary};
+    display: ${({ isOpen }) => (isOpen ? "grid" : "none")};
     display: grid;
     align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: 0.3s ease-in-out;
+    position: fixed;
     top: ${navHeight};
     left: ${({ isOpen }) => (isOpen ? "0" : "-100%")};
     opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
-    transition: 0.3s ease-in-out;
     z-index: 2;
-    ${boxShadow}
+    /* ${boxShadow} */
   `,
   Header: styled.header`
-    color: ${({ dark }) => (dark ? "#fff" : "#333")};
+    color: ${({ theme }) => theme.colors.text};
     margin-top: 20px;
     margin-left: 10px;
   `,
@@ -29,53 +30,54 @@ export const SidebarEl = {
     position: absolute;
     top: 10px;
     right: 10px;
-    color: #eee;
+    color: ${({ theme }) => theme.colors.text};
     transition: 0.3s linear;
     cursor: pointer;
+    font-size: 14px;
 
+    opacity: 0.3;
     &:hover {
-      color: ${myColors.red};
+      opacity: 1;
+      color: ${({ theme }) => theme.colors.text};
     }
   `,
   Menu: styled.ul`
-    width: 100%;
     overflow: scroll;
-    z-index: 999;
     border-radius: 3px;
+    width: 100%;
+    ${flexStart("y")}
   `,
   Item: styled.li`
     padding: 10px 15px;
     padding: 0 30px;
     font-size: 1rem;
-    color: ${myColors.primaryColor};
+    color: ${({ theme }) => theme.colors.text};
     a {
-      color: ${myColors.primaryColor};
+      color: ${({ theme }) => theme.colors.text};
     }
     &:hover {
-      background-color: ${myColors.silver};
-      color: ${myColors.primaryColor};
+      color: ${({ theme }) => theme.colors.primary};
     }
   `,
   Link: styled(LinkRoute)`
     padding: 10px 15px;
     font-size: 1rem;
-    width: 100%;
+    /* width: 100%; */
     display: inline-block;
-    color: ${myColors.primaryColor};
+    color: ${({ theme }) => theme.colors.text};
     &:hover {
-      background-color: ${myColors.silver};
-      color: ${myColors.primaryColor};
+      color: ${({ theme }) => theme.colors.primary};
       text-decoration: none;
     }
   `,
   Footer: styled.footer`
-    padding: 10px 30px;
+    /* padding: 10px 30px; */
   `,
   Button: styled.button`
     display: block;
     width: 100%;
-    background-color: ${myColors.silver};
-    color: ${myColors.primaryColor};
+    background-color: ${({ theme }) => theme.colors.button.bg};
+    color: ${({ theme }) => theme.colors.button.text};
     padding: 5px 34px;
     border: none;
     border-radius: 30px;
@@ -84,8 +86,8 @@ export const SidebarEl = {
     transition: ease-in-out 0.3s all;
 
     &:hover {
-      background-color: ${myColors.green};
-      color: ${myColors.white};
+      background-color: ${({ theme }) => theme.colors.button.hover.bg};
+      color: ${({ theme }) => theme.colors.button.hover.text};
       font-weight: bold;
       ${boxShadow}
     }
