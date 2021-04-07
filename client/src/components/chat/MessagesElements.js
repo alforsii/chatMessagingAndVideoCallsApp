@@ -4,6 +4,7 @@ import { boxShadow } from "../../global/styleHelperFunctions";
 export const MessagesEl = {
   Container: styled.div`
     height: 100vh;
+    min-width: 300px;
   `,
   SubContainer: styled.div`
     padding: 10px;
@@ -49,7 +50,7 @@ export const MessagesEl = {
     padding-left: 20px;
     outline: 0;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 8px;
     margin-right: 5px;
     word-wrap: break-word;
     border: 1px solid ${({ theme }) => theme.colors.body.primary};
@@ -67,7 +68,7 @@ export const MessagesEl = {
   `,
   Button: styled.button`
     padding: 5px 34px;
-    border-radius: 30px;
+    border-radius: 8px;
     transition: ease-in-out 0.3s all;
     border: none;
     color: ${({ theme }) => "#fff"};
@@ -93,9 +94,9 @@ export const MessagesEl = {
     color: ${({ theme, type }) =>
       type === "sent" ? "#fff" : theme.colors.primary};
     padding: 3px 15px;
-    -moz-border-radius: 30px;
-    -webkit-border-radius: 30px;
-    border-radius: 30px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
     border-bottom-right-radius: ${({ borderR }) => borderR === "sent" && 0};
     border-bottom-left-radius: ${({ borderR }) => borderR === "received" && 0};
     background-color: ${({ theme, type }) => {

@@ -18,9 +18,11 @@ export const ChatUsersEl = {
   SubMenu: styled(UserChatsEl.SubMenu)`
     flex-wrap: wrap;
     border-radius: 10px;
-    border-bottom: 3px solid ${({ theme }) => theme.colors.primary};
     margin-bottom: 5px;
-
-    ${boxShadow}
+    border-bottom: 3px solid ${({ theme }) => theme.colors.body.primary};
+    &:hover {
+      border-bottom: 3px solid ${({ theme }) => theme.colors.primary};
+      ${boxShadow}
+    }
   `,
 };

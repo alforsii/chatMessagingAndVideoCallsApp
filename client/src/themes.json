@@ -19,7 +19,7 @@
           "hover": { "text": "#FFFFFF", "bg": "teal" }
         }
       },
-      "font": "Tinos"
+      "font": "Roboto"
     },
     "dark": {
       "id": "T_002",

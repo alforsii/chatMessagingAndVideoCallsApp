@@ -36,10 +36,10 @@ const GET_USER_QUERY = gql`
 const initialState = {
   token: "",
   user: null,
+  chats: [],
+  message: "",
   isLoading: false,
   isOpen: false,
-  message: "",
-  chats: [],
   alertMessage: "",
   alertMessageId: null,
   alertSuccess: false,
@@ -69,13 +69,11 @@ function App() {
       return setState({ ...state, message: errors[0].message });
     }
 
-    const mode = data.getUser?.mode || state.defaultMode;
-
     updateState({
       ...initialState,
       token,
       user: data.getUser,
-      defaultMode: mode,
+      defaultMode: data.getUser?.mode,
     });
     return data.getUser.id;
   };
@@ -101,7 +99,7 @@ function App() {
   };
 
   const handleLogout = () => {
-    updateState({ ...initialState });
+    updateState({ ...initialState, defaultMode: state.defaultMode });
     localStorage.clear();
   };
 

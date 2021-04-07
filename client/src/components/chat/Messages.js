@@ -33,7 +33,7 @@ export const Messages = ({ user, chatId, userId }) => {
   });
 
   //   Sorted messages structure: {
-  //    id: message id / later will be userId,
+  //    id: message id | first message.id in the group,
   //    type: "sent" /or "received",
   //    name: messaged username,
   //    avatar: user image,
@@ -67,13 +67,17 @@ export const Messages = ({ user, chatId, userId }) => {
             <span className="sr-only">Loading...</span>
           </Spinner>
         ) : !chatId ? (
-          <p>Chat not selected!</p>
+          <MessagesEl.Text style={{ opacity: 0.3 }}>
+            Chat not selected!
+          </MessagesEl.Text>
         ) : sortedMessages.length ? (
           sortedMessages.map((msgData) => (
             <GroupedMessages key={msgData.id} {...msgData} userId={userId} />
           ))
         ) : (
-          <p>You have no messages in this Chat!</p>
+          <MessagesEl.Text style={{ opacity: 0.3 }}>
+            You have no messages in this Chat!
+          </MessagesEl.Text>
         )}
       </MessagesEl.SubContainer>
       <AddMessage user={user} chatId={chatId} userId={userId} />

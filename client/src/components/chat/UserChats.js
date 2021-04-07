@@ -16,7 +16,7 @@ const USER_CHATS_QUERY = gql`
   }
 `;
 
-export default function UserChats({ userId, updateState }) {
+export default function UserChats({ userId, updateState, inputId }) {
   const { data, error } = useSubscription(USER_CHATS_QUERY, {
     variables: { userId },
   });
@@ -33,34 +33,46 @@ export default function UserChats({ userId, updateState }) {
   return (
     <UserChatsEl.Container>
       <UserChatsEl.Header>
-        <UserChatsEl.Label htmlFor="search_chat_input">
+        <UserChatsEl.Label htmlFor={`search_chat_input-${inputId}`}>
           <FaSearchengin />
         </UserChatsEl.Label>
-        <UserChatsEl.Input id="search_chat_input" placeholder={`Chats...`} />
+        <UserChatsEl.Input
+          id={`search_chat_input-${inputId}`}
+          placeholder={`Chats...`}
+        />
         <UserChatsEl.InputIcon>
           <CreateChat />
         </UserChatsEl.InputIcon>
       </UserChatsEl.Header>
       <UserChatsEl.Menu>
-        {data.userChats?.map((chat) => (
-          <UserChatsEl.SubMenu key={chat.id}>
-            <UserChatsEl.Item>
-              <AiFillWechat />
-            </UserChatsEl.Item>
-            <NavLink to={`/chat/${chat.id}`}>
-              <UserChatsEl.Item
-                id={chat.id}
-                className={chat.id === activeBtn && "active"}
-                onClick={() => setActiveBtn(chat.id)}
-              >
-                {chat.chatName}
+        {data.userChats?.length > 0 ? (
+          data.userChats?.map((chat) => (
+            <UserChatsEl.SubMenu key={chat.id}>
+              <UserChatsEl.Item>
+                <AiFillWechat />
               </UserChatsEl.Item>
-            </NavLink>
-            <UserChatsEl.Item>
-              <UserChatsDropdown chatId={chat.id} chatName={chat.chatName} />
-            </UserChatsEl.Item>
-          </UserChatsEl.SubMenu>
-        ))}
+              <NavLink to={`/chat/${chat.id}`}>
+                <UserChatsEl.Item
+                  id={chat.id}
+                  className={chat.id === activeBtn && "active"}
+                  onClick={() => {
+                    setActiveBtn(chat.id);
+                    updateState({ showChats: false });
+                  }}
+                >
+                  {chat.chatName}
+                </UserChatsEl.Item>
+              </NavLink>
+              <UserChatsEl.Item>
+                <UserChatsDropdown chatId={chat.id} chatName={chat.chatName} />
+              </UserChatsEl.Item>
+            </UserChatsEl.SubMenu>
+          ))
+        ) : (
+          <UserChatsEl.Item>
+            <i>You don't have a single chat...</i>
+          </UserChatsEl.Item>
+        )}
       </UserChatsEl.Menu>
     </UserChatsEl.Container>
   );

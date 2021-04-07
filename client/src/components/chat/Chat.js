@@ -37,22 +37,37 @@ export default function Chat(props) {
         <StyledChatSidebar updateState={updateState} state={state} />
         <ChatEl.Col>
           {state.showUsers && width === "md" ? (
-            <ChatUsers chats={chats} chatId={chatId} currentUserId={userId} />
+            <ChatUsers
+              chats={chats}
+              chatId={chatId}
+              currentUserId={userId}
+              inputId={1}
+            />
           ) : (
-            <UserChats updateState={updateState} userId={userId} />
+            <UserChats updateState={updateState} userId={userId} inputId={1} />
           )}
         </ChatEl.Col>
         <ChatEl.Col>
           {state.showChats && width === "sm" ? (
-            <UserChats updateState={updateState} userId={userId} />
+            <UserChats updateState={updateState} userId={userId} inputId={2} />
           ) : state.showUsers && width === "sm" ? (
-            <ChatUsers chats={chats} chatId={chatId} currentUserId={userId} />
+            <ChatUsers
+              chats={chats}
+              chatId={chatId}
+              currentUserId={userId}
+              inputId={2}
+            />
           ) : (
             <Messages user={user} chatId={chatId} userId={userId} />
           )}
         </ChatEl.Col>
-        <ChatEl.Col>
-          <ChatUsers chats={chats} chatId={chatId} currentUserId={userId} />
+        <ChatEl.Col style={{ flex: chatId ? 1 : 0 }}>
+          <ChatUsers
+            chats={chats}
+            chatId={chatId}
+            currentUserId={userId}
+            inputId={3}
+          />
         </ChatEl.Col>
       </ChatEl.Row>
     </ChatEl.Container>

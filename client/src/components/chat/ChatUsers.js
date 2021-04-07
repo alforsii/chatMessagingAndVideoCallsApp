@@ -21,7 +21,7 @@ const CHAT_USERS_QUERY = gql`
   }
 `;
 
-export default function ChatUsers({ chatId, currentUserId, chats }) {
+export default function ChatUsers({ chatId, currentUserId, chats, inputId }) {
   const { data, error } = useSubscription(CHAT_USERS_QUERY, {
     variables: { chatId },
   });
@@ -34,10 +34,13 @@ export default function ChatUsers({ chatId, currentUserId, chats }) {
   return (
     <ChatUsersEl.Container>
       <ChatUsersEl.Header>
-        <ChatUsersEl.Label htmlFor="search_user_input">
+        <ChatUsersEl.Label htmlFor={`search_user_input-${inputId}`}>
           <FaSearchengin />
         </ChatUsersEl.Label>
-        <ChatUsersEl.Input id="search_user_input" placeholder={`Users...`} />
+        <ChatUsersEl.Input
+          id={`search_user_input-${inputId}`}
+          placeholder={`Users...`}
+        />
         <ChatUsersEl.InputIcon>
           <AddChatUser chatId={chatId} />
         </ChatUsersEl.InputIcon>
@@ -69,9 +72,9 @@ export default function ChatUsers({ chatId, currentUserId, chats }) {
               </ChatUsersEl.SubMenu>
             ))
         ) : (
-          <div>
-            <p>{`No users in the Chat!`}</p>
-          </div>
+          <ChatUsersEl.Item>
+            <p>No one in this chatroom...</p>
+          </ChatUsersEl.Item>
         )}
       </ChatUsersEl.Menu>
     </ChatUsersEl.Container>

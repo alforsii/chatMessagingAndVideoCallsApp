@@ -1,21 +1,45 @@
+import { gql, useMutation } from "@apollo/client";
 import React from "react";
 import styled from "styled-components";
 import { boxShadow } from "../../global/styleHelperFunctions";
 
-export function ModeButton({ updateState, mode }) {
+const UPDATE_USER_THEME_QUERY = gql`
+  mutation($mode: String!, $userId: ID!) {
+    updateUserTheme(mode: $mode, userId: $userId) {
+      id
+      mode
+    }
+  }
+`;
+
+export function ModeButton({ updateState, state }) {
+  const [UpdateUserTheme] = useMutation(UPDATE_USER_THEME_QUERY);
+
+  const handleUserThemeUpdate = async (mode) => {
+    try {
+      const { data, errors } = await UpdateUserTheme({
+        variables: { mode, userId: state.user?.id },
+      });
+      if (!data) return null;
+      if (errors?.length) return console.log(errors[0].message);
+      console.log(data);
+      updateState({ defaultMode: data.updateUserTheme.mode });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <ModeButtonEl.Label>
       <ModeButtonEl.Input
-        onClick={(e) => {
-          //   const checked = e.currentTarget.checked;
-          console.log(mode);
-          if (mode === "dark") {
-            updateState({ defaultMode: "light" });
+        onClick={async (e) => {
+          if (state.defaultMode === "dark") {
+            handleUserThemeUpdate("light");
           } else {
-            updateState({ defaultMode: "dark" });
+            handleUserThemeUpdate("dark");
           }
         }}
         type="checkbox"
+        defaultChecked={state.defaultMode === "dark" ? true : false}
       />
       <ModeButtonEl.Slider></ModeButtonEl.Slider>
     </ModeButtonEl.Label>

@@ -25,7 +25,11 @@ export function MessageDropdown({ msg, userId, type, length, index }) {
         type={type}
         borderR={index === length - 1 && type}
         ref={dropdownToggleRef.current}
-        onClick={(e) => {
+        // onClick={(e) => {
+        //   e.preventDefault();
+        //   dropdownToggleClick.current(e);
+        // }}
+        onDoubleClick={(e) => {
           e.preventDefault();
           dropdownToggleClick.current(e);
         }}

@@ -4,6 +4,7 @@ export const UserChatsEl = {
   Container: styled.div`
     background-color: ${({ theme }) => theme.colors.body.secondary};
     border-right: 1px solid ${({ theme }) => theme.colors.body.primary};
+    transition: 0.3s ease-in-out;
     /* display: ${({ theme }) => (theme.show === "chats" ? "none" : "grid")}; */
   `,
   Header: styled.header`
@@ -64,10 +65,11 @@ export const UserChatsEl = {
   SubMenu: styled.div`
     display: flex;
     position: relative;
+    /* border-bottom: 1px solid ${({ theme }) => theme.colors.body.primary}; */
     border-bottom: 1px solid ${({ theme }) => theme.colors.body.primary};
     &:hover {
+      border-bottom: 1px solid ${({ theme }) => theme.colors.primary};
       background-color: ${({ theme }) => theme.colors.body.primary};
-
       cursor: pointer;
     }
     a:nth-child(2) {

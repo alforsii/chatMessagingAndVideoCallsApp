@@ -8,7 +8,7 @@ import StyledAvatar from "../Avatar";
 import { ModeButton } from "./ModeButton";
 
 export function StyledNavbar({ logout, history, state, updateState }) {
-  const { token, defaultMode: mode } = state;
+  const { token } = state;
   // const [isOpen, setIsOpen] = useState(false);
   return (
     <NavbarEl.Container>
@@ -54,7 +54,7 @@ export function StyledNavbar({ logout, history, state, updateState }) {
           </>
         )}
       </NavbarEl.Actions>
-      <ModeButton updateState={updateState} mode={mode} />
+      <ModeButton updateState={updateState} state={state} />
       <StyledAvatar
         roundedCircle
         width={35}
