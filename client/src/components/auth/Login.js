@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
-import { NavLink } from "react-router-dom";
-import {
-  Form,
-  Container,
-  FormControl,
-  InputGroup,
-  Button,
-} from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
-
-import "./Login.css";
+import { LoginEl } from "./LoginElements";
 
 const LOGIN_QUERY = gql`
   mutation($email: String!, $password: String!) {
@@ -65,41 +56,44 @@ export const LoginForm = (props) => {
         };
 
         return (
-          <Container style={{ maxWidth: "400px" }}>
-            <Form style={{ marginTop: "150px" }} onSubmit={handleLoginSubmit}>
-              <span>{errMessage && errMessage}</span>
-              <h2 className="primary_color">Login</h2>
-              <InputGroup className="mb-2 mr-sm-2">
-                <InputGroup.Prepend>
-                  <InputGroup.Text>@</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl placeholder="Email" required ref={emailEl} />
-                <Form.Control.Feedback type="invalid">
-                  Email is required!
-                </Form.Control.Feedback>
-              </InputGroup>
-              <Form.Control
-                className="mb-2 mr-sm-2"
-                placeholder="Password"
-                type="password"
-                ref={passwordEl}
-                required
-              />
-
-              <Form.Row>
-                <Form.Check
-                  type="checkbox"
-                  className="mb-2 mr-sm-2"
-                  id="inlineFormCheck"
-                  label="Remember me "
+          <LoginEl.Container>
+            <LoginEl.Form onSubmit={handleLoginSubmit}>
+              <LoginEl.Text code={"error"}>
+                {errMessage && errMessage}
+              </LoginEl.Text>
+              <LoginEl.Header className="primary_color">Login</LoginEl.Header>
+              <LoginEl.Control>
+                <LoginEl.Label htmlFor="login_email">Email</LoginEl.Label>
+                <LoginEl.Input
+                  id="login_email"
+                  type="email"
+                  placeholder="Email"
+                  ref={emailEl}
+                  required
                 />
-                <NavLink to="/signup">Signup</NavLink>
-              </Form.Row>
-              <Button type="submit" variant="outline-primary" className="mb-2">
-                Login
-              </Button>
-            </Form>
-          </Container>
+              </LoginEl.Control>
+              <LoginEl.Control>
+                <LoginEl.Label htmlFor="login_password">Password</LoginEl.Label>
+                <LoginEl.Input
+                  id="login_password"
+                  type="password"
+                  placeholder="Password"
+                  ref={passwordEl}
+                  required
+                />
+              </LoginEl.Control>
+              <LoginEl.Control>
+                <LoginEl.Row>
+                  <LoginEl.Check type="checkbox" />
+                  <LoginEl.Text>Remember me</LoginEl.Text>
+                </LoginEl.Row>
+              </LoginEl.Control>
+              <LoginEl.Control>
+                <LoginEl.Button type="submit">Login</LoginEl.Button>
+              </LoginEl.Control>
+              <LoginEl.Link to="/signup">Signup</LoginEl.Link>
+            </LoginEl.Form>
+          </LoginEl.Container>
         );
       }}
     </AuthContext.Consumer>

@@ -23,11 +23,11 @@ export default function Chat(props) {
     if (window.innerWidth > 900) {
       setWidth("lg");
     }
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
   }
   useEffect(() => {
     handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
     // eslint-disable-next-line
   }, []);
 

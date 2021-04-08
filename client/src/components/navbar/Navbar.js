@@ -4,7 +4,6 @@ import StyledPopover from "../popover/Popover";
 import { FiMenu } from "react-icons/fi";
 import { NavbarEl } from "./NavbarElements";
 import { StyledDropMenu } from "./DropdownMenu";
-import StyledAvatar from "../Avatar";
 import { ModeButton } from "./ModeButton";
 
 export function StyledNavbar({ logout, history, state, updateState }) {
@@ -55,13 +54,12 @@ export function StyledNavbar({ logout, history, state, updateState }) {
         )}
       </NavbarEl.Actions>
       <ModeButton updateState={updateState} state={state} />
-      <StyledAvatar
-        roundedCircle
-        width={35}
-        height={35}
-        border={2}
-        src="https://source.unsplash.com/user/erondu"
-      />
+      {token && (
+        <NavbarEl.Avatar
+          roundedCircle
+          src="https://source.unsplash.com/user/erondu"
+        />
+      )}
       <NavbarEl.Mobil onClick={() => updateState({ isOpen: !state.isOpen })}>
         <FiMenu />
       </NavbarEl.Mobil>

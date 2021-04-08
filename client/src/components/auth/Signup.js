@@ -1,7 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import React, { useState } from "react";
-import { Form, Container, Button } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { SignupEl } from "./SignupElements";
 
 const SIGNUP_MUTATION = gql`
   mutation(
@@ -25,7 +24,6 @@ const SIGNUP_MUTATION = gql`
 `;
 
 export const Signup = (props) => {
-  console.log("🚀 ~ file: Signup.js ~ line 28 ~ Signup ~ props", props);
   const [state, setState] = useState({
     message: "",
     emailEl: React.createRef(),
@@ -71,52 +69,57 @@ export const Signup = (props) => {
   };
 
   return (
-    <Container style={{ maxWidth: "400px" }}>
-      <Form onSubmit={handleSignupSubmit}>
-        <span style={{ padding: 10 }} className="red-text">
+    <SignupEl.Container>
+      <SignupEl.Form onSubmit={handleSignupSubmit}>
+        <SignupEl.Text code={"error"}>
           {state.message && state.message}
-        </span>
-        <h2 className="primary_color">Signup</h2>
-        <Form.Row>
-          <Form.Control
-            className="mb-2 mr-sm-2"
+        </SignupEl.Text>
+        <SignupEl.Header>Signup</SignupEl.Header>
+        <SignupEl.Control>
+          <SignupEl.Label htmlFor="signup_email">Email</SignupEl.Label>
+          <SignupEl.Input
+            id="signup_email"
             type="email"
-            ref={state.emailEl}
             placeholder="Email"
+            ref={state.emailEl}
+            required
           />
-          <Form.Control
-            className="mb-2 mr-sm-2"
+        </SignupEl.Control>
+        <SignupEl.Control>
+          <SignupEl.Label htmlFor="signup_password">Password</SignupEl.Label>
+          <SignupEl.Input
+            id="signup_password"
             type="password"
-            ref={state.passwordEl}
             placeholder="Password"
+            ref={state.passwordEl}
+            required
           />
-          <Form.Control
-            className="mb-2 mr-sm-2"
+        </SignupEl.Control>
+        <SignupEl.Control>
+          <SignupEl.Label htmlFor="signup_firstName">First name</SignupEl.Label>
+          <SignupEl.Input
+            id="signup_firstName"
             type="text"
-            ref={state.firstNameEl}
             placeholder="First name"
+            ref={state.firstNameEl}
+            required
           />
-          <Form.Control
-            className="mb-2 mr-sm-2"
+        </SignupEl.Control>
+        <SignupEl.Control>
+          <SignupEl.Label htmlFor="signup_lastName">Last name</SignupEl.Label>
+          <SignupEl.Input
+            id="signup_lastName"
             type="text"
-            ref={state.lastNameEl}
             placeholder="Last name"
+            ref={state.lastNameEl}
+            required
           />
-          <Button type="submit" variant="outline-primary" className="mb-2">
-            Signup
-          </Button>
-          <Form.Row>
-            <Form.Check
-              type="checkbox"
-              disabled
-              className="mb-2 ml-4 mr-sm-2"
-              id="inlineFormCheck"
-              label="Go to "
-            />
-            <NavLink to="/">Login</NavLink>
-          </Form.Row>
-        </Form.Row>
-      </Form>
-    </Container>
+        </SignupEl.Control>
+        <SignupEl.Control>
+          <SignupEl.Button type="submit">Signup</SignupEl.Button>
+        </SignupEl.Control>
+        <SignupEl.Link to="/">Login</SignupEl.Link>
+      </SignupEl.Form>
+    </SignupEl.Container>
   );
 };

@@ -99,6 +99,7 @@ export const UserChatsEl = {
     padding: 10px;
     background-color: "red";
     list-style: none;
+    letter-spacing: 0.5px;
     font-size: 14px;
     a {
       color: ${({ theme }) => theme.colors.text};

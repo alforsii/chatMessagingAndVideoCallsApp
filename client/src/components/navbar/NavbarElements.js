@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link as LinkRoute } from "react-router-dom";
+import { Image } from "react-bootstrap";
 import { boxShadow, flexStart } from "../../global/styleHelperFunctions";
 
 export const navHeight = "60px";
@@ -35,6 +36,7 @@ export const NavbarEl = {
   `,
   Logo: styled(LinkRoute)`
     color: ${({ theme }) => theme.colors.primary};
+    letter-spacing: 1.5px;
     text-decoration: none;
     font-size: 24px;
     font-weight: bold;
@@ -42,6 +44,12 @@ export const NavbarEl = {
     transition: ease-in-out 0.1s all;
     &:hover {
       text-decoration: none;
+    }
+    @media screen and (max-width: 468px) {
+      font-size: 18px;
+    }
+    @media screen and (max-width: 668px) {
+      font-size: 22px;
     }
   `,
   Menu: styled.ul`
@@ -51,6 +59,7 @@ export const NavbarEl = {
     list-style: none;
     padding: 0 10px;
     color: ${({ theme }) => theme.colors.text};
+    letter-spacing: 0.5px;
     &:hover {
       color: ${({ theme }) => theme.colors.text};
       opacity: 0.5;
@@ -59,6 +68,7 @@ export const NavbarEl = {
   Link: styled(LinkRoute)`
     color: ${({ theme }) => theme.colors.text};
     transition: ease-in-out 0.2s all;
+    letter-spacing: 0.5px;
     &:hover {
       color: ${({ theme }) => theme.colors.text};
       opacity: 0.5;
@@ -87,6 +97,21 @@ export const NavbarEl = {
       ${boxShadow}
     }
   `,
+  Avatar: styled(Image)`
+    width: 35px;
+    height: 35px;
+    border: 2px solid
+      ${({ theme }) =>
+        theme.name === "dark" ? theme.colors.text : theme.colors.primary};
+
+    @media screen and (max-width: 400px) {
+      width: 30px;
+      height: 30px;
+      border: 1px solid
+        ${({ theme }) =>
+          theme.name === "dark" ? theme.colors.text : theme.colors.primary};
+    }
+  `,
 
   Mobil: styled.div`
     display: none;
@@ -98,6 +123,9 @@ export const NavbarEl = {
       &:hover {
         color: ${({ theme }) => theme.colors.text};
       }
+    }
+    @media screen and (max-width: 400px) {
+      font-size: 22px;
     }
   `,
 };

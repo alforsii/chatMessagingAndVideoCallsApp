@@ -4,7 +4,6 @@ import AddChatUser from "./AddChatUser";
 import { NavLink } from "react-router-dom";
 import ChatUsersDropdown from "./ChatUsersDropdown";
 import { ChatUsersEl } from "./ChatUsersElements";
-import StyledAvatar from "../Avatar";
 import { FaSearchengin } from "react-icons/fa";
 
 const CHAT_USERS_QUERY = gql`
@@ -52,12 +51,10 @@ export default function ChatUsers({ chatId, currentUserId, chats, inputId }) {
             .filter((chatUser) => chatUser.id !== currentUserId)
             .map((chatUser) => (
               <ChatUsersEl.SubMenu key={chatUser.id}>
-                <ChatUsersEl.Avatar>
-                  <StyledAvatar
-                    rounded
-                    src="https://source.unsplash.com/user/erondu"
-                  />
-                </ChatUsersEl.Avatar>
+                <ChatUsersEl.Avatar
+                  rounded
+                  src="https://source.unsplash.com/user/erondu"
+                />
                 <ChatUsersEl.Item>
                   <NavLink to={`/user/${chatUser.id}`}>
                     {`${chatUser.firstName} ${chatUser.lastName}`}

@@ -67,7 +67,7 @@ export const MessagesEl = {
     cursor: pointer;
   `,
   Button: styled.button`
-    padding: 5px 34px;
+    padding: 3px 34px;
     border-radius: 8px;
     transition: ease-in-out 0.3s all;
     border: none;
@@ -76,6 +76,10 @@ export const MessagesEl = {
     font-weight: bold;
     &:hover {
       ${boxShadow};
+    }
+    @media screen and (max-width: 400px) {
+      /* font-size: 22px; */
+      padding: 3px 24px;
     }
   `,
   Text: styled.p`

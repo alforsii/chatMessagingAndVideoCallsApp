@@ -6,8 +6,6 @@ import { AddMessage } from "./MessageInput";
 import { formatMessages } from "./messagesUtils";
 import { MessagesEl } from "./MessagesElements";
 
-import "./Messages.css";
-
 const MESSAGES_SUB = gql`
   subscription($chatId: ID!) {
     messages(chatId: $chatId) {

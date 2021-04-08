@@ -17,6 +17,9 @@ export function ModeButton({ updateState, state }) {
 
   const handleUserThemeUpdate = async (mode) => {
     try {
+      if (!state.user?.id) {
+        return updateState({ defaultMode: mode });
+      }
       const { data, errors } = await UpdateUserTheme({
         variables: { mode, userId: state.user?.id },
       });
@@ -57,6 +60,10 @@ const ModeButtonEl = {
     opacity: 0.9;
     &:hover {
       opacity: 1;
+    }
+
+    @media screen and (max-width: 400px) {
+      display: none;
     }
   `,
   Input: styled.input`
