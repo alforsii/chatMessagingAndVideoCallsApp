@@ -85,7 +85,7 @@ export const NavbarEl = {
     color: ${({ theme }) => theme.colors.button.text};
     padding: 5px 34px;
     border: 1px solid ${({ theme }) => theme.colors.button.text};
-    border-radius: 30px;
+    border-radius: 3px;
     font-weight: bold;
     margin: 2px;
     transition: ease-in-out 0.3s all;

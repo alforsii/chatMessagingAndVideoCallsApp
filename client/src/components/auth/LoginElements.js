@@ -53,7 +53,7 @@ export const LoginEl = {
     width: 100%;
     padding: 3px 10px;
     margin-bottom: 10px;
-    border-radius: 5px;
+    border-radius: 3px;
     border: 1px solid ${({ theme }) => theme.colors.text};
     ::placeholder {
       color: ${({ theme }) =>

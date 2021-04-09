@@ -68,7 +68,7 @@ export function MessageDropdown({ msg, userId, type, length, index }) {
       <Dropdown>
         <Dropdown.Toggle as={CustomToggle}></Dropdown.Toggle>
 
-        <Dropdown.Menu>
+        <Dropdown.Menu style={{ margin: 0 }}>
           <Dropdown.Header>Actions</Dropdown.Header>
           <Dropdown.Divider></Dropdown.Divider>
           <Dropdown.Item disabled={true}>Reply</Dropdown.Item>

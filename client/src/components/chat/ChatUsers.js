@@ -1,7 +1,8 @@
 import React from "react";
-import { gql, useSubscription } from "@apollo/client";
-import AddChatUser from "./AddChatUser";
 import { NavLink } from "react-router-dom";
+import { gql, useSubscription } from "@apollo/client";
+
+import { ChatAddUser } from "./ChatAddUser";
 import ChatUsersDropdown from "./ChatUsersDropdown";
 import { ChatUsersEl } from "./ChatUsersElements";
 import { FaSearchengin } from "react-icons/fa";
@@ -41,7 +42,7 @@ export default function ChatUsers({ chatId, currentUserId, chats, inputId }) {
           placeholder={`Users...`}
         />
         <ChatUsersEl.InputIcon>
-          <AddChatUser chatId={chatId} />
+          <ChatAddUser chatId={chatId} />
         </ChatUsersEl.InputIcon>
       </ChatUsersEl.Header>
 
@@ -69,9 +70,7 @@ export default function ChatUsers({ chatId, currentUserId, chats, inputId }) {
               </ChatUsersEl.SubMenu>
             ))
         ) : (
-          <ChatUsersEl.Item>
-            <p>No one in this chatroom...</p>
-          </ChatUsersEl.Item>
+          <ChatUsersEl.Item>No one in this chatroom...</ChatUsersEl.Item>
         )}
       </ChatUsersEl.Menu>
     </ChatUsersEl.Container>

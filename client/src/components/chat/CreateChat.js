@@ -1,14 +1,8 @@
 import { gql, useMutation } from "@apollo/client";
 import React, { useState } from "react";
-import {
-  Button,
-  Form,
-  FormControl,
-  InputGroup,
-  Modal,
-  Badge,
-} from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
+import { StyledModal } from "./Modal";
+import { CreateChatForm } from "./CreateChatForm";
 
 const NEW_CHAT_QUERY = gql`
   mutation($userId: ID!, $chatName: String!) {
@@ -60,87 +54,30 @@ export default function CreateChat() {
 
         return (
           <>
-            <Badge
-              style={{ cursor: "pointer", float: "right" }}
-              onClick={() => {
-                setSmShow(true);
-              }}
-              variant="primary"
-            >
-              +
-            </Badge>
-            <CreateModal
+            <StyledModal
+              // size="sm"
+              show={smShow}
+              modalName="Create_chat_modal"
+              title="Create Chat"
+              setShow={setSmShow}
               onHide={() => {
                 setErrMessage("");
                 setSmShow(false);
               }}
-              onChange={(e) => {
-                setErrMessage("");
-                setChatName(e.target.value);
-              }}
-              chatName={chatName}
-              smShow={smShow}
-              errMessage={errMessage}
-              handleCreateChat={handleCreateChat}
-            />
+            >
+              <CreateChatForm
+                chatName={chatName}
+                message={errMessage}
+                handleCreateChat={handleCreateChat}
+                onChange={(e) => {
+                  setErrMessage("");
+                  setChatName(e.target.value);
+                }}
+              />
+            </StyledModal>
           </>
         );
       }}
     </AuthContext.Consumer>
   );
 }
-
-//
-
-const CreateModal = ({
-  onHide,
-  smShow,
-  chatName,
-  errMessage,
-  onChange,
-  handleCreateChat,
-}) => {
-  // const useFocus = () => {
-  //   const htmlElRef = useRef(null);
-  //   const setFocus = () => {
-  //     htmlElRef.current && htmlElRef.current.focus();
-  //   };
-
-  //   return [htmlElRef, setFocus];
-  // };
-
-  // const [inputRef, setInputFocus] = useFocus();
-
-  return (
-    <Modal
-      size="sm"
-      show={smShow}
-      onHide={onHide}
-      aria-labelledby="create-chat-form"
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="create-chat-form">Create Chat</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p style={{ color: "#dc3545" }}>{errMessage && errMessage}</p>
-        <Form inline onSubmit={handleCreateChat}>
-          <InputGroup className="mb-2 mr-sm-2">
-            <InputGroup.Prepend>
-              <InputGroup.Text>@</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              onChange={onChange}
-              value={chatName}
-              placeholder="ChatName..."
-              autoFocus
-            />
-          </InputGroup>
-
-          <Button type="submit" className="mb-2">
-            Create Chat
-          </Button>
-        </Form>
-      </Modal.Body>
-    </Modal>
-  );
-};

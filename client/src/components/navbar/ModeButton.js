@@ -25,7 +25,7 @@ export function ModeButton({ updateState, state }) {
       });
       if (!data) return null;
       if (errors?.length) return console.log(errors[0].message);
-      console.log(data);
+
       updateState({ defaultMode: data.updateUserTheme.mode });
     } catch (err) {
       console.log(err);
@@ -49,7 +49,7 @@ export function ModeButton({ updateState, state }) {
   );
 }
 
-const white = "#fff";
+const light = "#fff";
 const dark = "#121212";
 const ModeButtonEl = {
   Label: styled.label`
@@ -111,7 +111,7 @@ const ModeButtonEl = {
       transition: 0.4s;
       border-radius: 50%;
       -webkit-transition: 0.4s;
-      background-color: ${white};
+      background-color: ${light};
     }
   `,
 };

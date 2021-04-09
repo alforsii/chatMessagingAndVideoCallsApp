@@ -6,7 +6,7 @@ import { StyledChatSidebar } from "./ChatSidebar";
 import { ChatEl } from "./ChatElements";
 import { useEffect, useState } from "react";
 
-export default function Chat(props) {
+export function Chat(props) {
   const chatId = props?.match?.params?.id;
   const { state, updateState } = props;
   const { user, chats, isOpen } = state;

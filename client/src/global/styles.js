@@ -4,10 +4,12 @@ import { boxShadow } from "./styleHelperFunctions";
 export const GlobalStyles = createGlobalStyle`
 *{
     box-sizing: border-box;
-  margin: 0;
-  padding: 0;
- font-family: ${({ theme }) => theme.font}, sans-serif;
- transition: 0.3s ease-in-out;
+    margin: 0;
+    padding: 0;
+    font-family: ${({ theme }) => theme.font}, sans-serif;
+    transition: 0.3s ease-in-out;
+    -webkit-transition:  0.3s ease-in-out;
+    -ms-transition:  0.3s ease-in-out;
  .display_none {
      display:none;
  }

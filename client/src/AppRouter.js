@@ -1,6 +1,7 @@
 import { Route, Switch, Redirect } from "react-router-dom";
 
-import Chat from "./components/chat/Chat";
+// import Chat from "./components/chat/Chat";
+import { Chat } from "./components/chat/Chat";
 import { LoginForm } from "./components/auth/Login";
 import { Signup } from "./components/auth/Signup";
 import Room from "./components/room/Room";

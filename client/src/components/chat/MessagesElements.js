@@ -21,6 +21,8 @@ export const MessagesEl = {
     justify-content: ${({ type }) =>
       type === "sent" ? "flex-end" : "flex-start"};
     align-items: "center";
+    word-wrap: break-word;
+    word-break: break-all;
   `,
   Time: styled.i`
     transition: 0.5s linear;
@@ -46,14 +48,14 @@ export const MessagesEl = {
     border: none;
     font-size: 14px;
     font-style: italic;
-    padding: 5px;
+    padding: 4px;
     padding-left: 20px;
     outline: 0;
     width: 100%;
-    border-radius: 8px;
-    margin-right: 5px;
+    border-radius: 3px;
+    margin-right: 2px;
     word-wrap: break-word;
-    border: 1px solid ${({ theme }) => theme.colors.body.primary};
+    border: 1px solid ${({ theme }) => theme.colors.body.secondary};
     ::placeholder {
       color: ${({ theme }) => theme.colors.text};
       opacity: 0.4;
@@ -68,7 +70,7 @@ export const MessagesEl = {
   `,
   Button: styled.button`
     padding: 3px 34px;
-    border-radius: 8px;
+    border-radius: 3px;
     transition: ease-in-out 0.3s all;
     border: none;
     color: ${({ theme }) => "#fff"};
@@ -98,9 +100,9 @@ export const MessagesEl = {
     color: ${({ theme, type }) =>
       type === "sent" ? "#fff" : theme.colors.primary};
     padding: 3px 15px;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
-    border-radius: 8px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
     border-bottom-right-radius: ${({ borderR }) => borderR === "sent" && 0};
     border-bottom-left-radius: ${({ borderR }) => borderR === "received" && 0};
     background-color: ${({ theme, type }) => {
