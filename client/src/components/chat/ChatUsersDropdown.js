@@ -4,6 +4,7 @@ import { gql, useMutation } from "@apollo/client";
 import { Button } from "react-bootstrap";
 import { StyledModal } from "./Modal";
 import { DropdownEl, StyledDropdown } from "./DropdownElements";
+import { RiArrowDropDownLine } from "react-icons/ri";
 
 import { AuthContext } from "../../context/AuthContext";
 
@@ -62,13 +63,11 @@ export const ChatUsersDropdown = ({ chatId, otherUserId, history }) => {
 
         return (
           <React.Fragment>
-            <StyledDropdown toggleText="•••">
-              <DropdownEl.Item eventKey="0" disabled>
-                Options
-              </DropdownEl.Item>
-              <DropdownEl.Item eventKey="1">Open user page</DropdownEl.Item>
+            <StyledDropdown>
+              <RiArrowDropDownLine size={20} />
+              <DropdownEl.Item>Open user page</DropdownEl.Item>
               <DropdownEl.Divider />
-              <DropdownEl.Item onClick={() => setShow(true)} eventKey="2">
+              <DropdownEl.Item onClick={() => setShow(true)}>
                 Remove user
               </DropdownEl.Item>
             </StyledDropdown>

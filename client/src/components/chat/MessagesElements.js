@@ -24,17 +24,6 @@ export const MessagesEl = {
     word-wrap: break-word;
     word-break: break-all;
   `,
-  Time: styled.i`
-    transition: 0.5s linear;
-    opacity: 0;
-    font-size: 12px;
-    margin: 5px;
-    display: ${({ display }) => display};
-    &:hover {
-      opacity: 0.5;
-      color: ${({ theme }) => theme.colors.text};
-    }
-  `,
   Form: styled.form`
     display: flex;
     justify-content: center;
@@ -91,15 +80,17 @@ export const MessagesEl = {
     padding: 5px;
     color: ${({ theme }) => theme.colors.text};
   `,
-  Message: styled.p`
+  Message: styled.div`
+    float: ${({ type }) => (type === "sent" ? "right" : "left")};
     font-size: 14px;
     font-style: italic;
     max-width: 60%;
-    cursor: pointer;
+    /* cursor: pointer; */
     margin: 1px;
     color: ${({ theme, type }) =>
       type === "sent" ? "#fff" : theme.colors.primary};
-    padding: 3px 15px;
+    padding: 10px 15px;
+    /* padding-bottom: 10px; */
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
     border-radius: 15px;
@@ -113,5 +104,23 @@ export const MessagesEl = {
     &:hover {
       ${boxShadow};
     }
+    /* :hover {
+      span {
+        opacity: 0.6;
+        color: ${({ theme }) => theme.colors.text};
+      }
+    } */
+  `,
+  Time: styled.span`
+    transition: 0.5s linear;
+    opacity: 0;
+    font-size: 12px;
+    margin: 5px;
+    padding: 10px;
+    /* display: ${({ display }) => display}; */
+    /* &:hover {
+      opacity: 0.5;
+      color: ${({ theme }) => theme.colors.text};
+    } */
   `,
 };

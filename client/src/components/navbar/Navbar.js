@@ -47,9 +47,6 @@ export function StyledNavbar({ logout, history, state, updateState }) {
             <NavbarEl.Button onClick={() => history.push("/")}>
               Login
             </NavbarEl.Button>
-            <NavbarEl.Button onClick={() => history.push("/signup")}>
-              Signup
-            </NavbarEl.Button>
           </>
         )}
       </NavbarEl.Actions>

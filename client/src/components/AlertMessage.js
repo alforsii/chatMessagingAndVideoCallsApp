@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Alert } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 
-export default function MyAlertMessage({ msg, success, msgId }) {
+export function AlertMessage({ msg, success, msgId }) {
   const [smShow, setSmShow] = useState(false);
 
   useEffect(() => {

@@ -12,6 +12,9 @@ export function Chat(props) {
   const { user, chats, isOpen } = state;
   const { id: userId } = user;
   const [width, setWidth] = useState("");
+  const isAuthorizedChat = chatId
+    ? chats?.map((chat) => chat.id).includes(chatId)
+    : false;
 
   function handleResize() {
     if (window.innerWidth < 668) {
@@ -38,7 +41,7 @@ export function Chat(props) {
         <ChatEl.Col>
           {state.showUsers && width === "md" ? (
             <ChatUsers
-              chats={chats}
+              isAuthorizedChat={isAuthorizedChat}
               chatId={chatId}
               currentUserId={userId}
               inputId={1}
@@ -52,18 +55,23 @@ export function Chat(props) {
             <UserChats updateState={updateState} userId={userId} inputId={2} />
           ) : state.showUsers && width === "sm" ? (
             <ChatUsers
-              chats={chats}
+              isAuthorizedChat={isAuthorizedChat}
               chatId={chatId}
               currentUserId={userId}
               inputId={2}
             />
           ) : (
-            <Messages user={user} chatId={chatId} userId={userId} />
+            <Messages
+              isAuthorizedChat={isAuthorizedChat}
+              user={user}
+              chatId={chatId}
+              userId={userId}
+            />
           )}
         </ChatEl.Col>
         <ChatEl.Col style={{ flex: chatId ? 1 : 0 }}>
           <ChatUsers
-            chats={chats}
+            isAuthorizedChat={isAuthorizedChat}
             chatId={chatId}
             currentUserId={userId}
             inputId={3}

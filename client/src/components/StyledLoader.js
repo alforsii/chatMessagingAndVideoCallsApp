@@ -1,29 +1,26 @@
-import styled, { keyframes } from "styled-components";
-import { ImSpinner3 } from "react-icons/im";
+import styled from "styled-components";
+import { Spinner } from "react-bootstrap";
 
-// Create the keyframes
-const rotate = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(500deg);
-  }
-`;
-
-const Rotate = styled.div`
-  display: inline-block;
-  animation: ${rotate} 0.5s linear infinite;
-  transform: translateZ(0);
-  overflow: hidden;
-`;
-export default function StyledLoader() {
+const StyledSpinner = {
+  Container: styled.div`
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${({ theme }) =>
+      theme?.name ? theme.colors.body.primary : ""};
+  `,
+  Spinner: styled(Spinner)`
+    color: ${({ theme }) => (theme?.name ? theme.colors.text : "")};
+  `,
+};
+export function StyledLoader() {
   // Here we create a component that will rotate everything we pass in over two seconds
 
   return (
-    <Rotate>
-      <ImSpinner3 />
-    </Rotate>
+    <StyledSpinner.Container>
+      <StyledSpinner.Spinner animation="border" />
+    </StyledSpinner.Container>
   );
 }

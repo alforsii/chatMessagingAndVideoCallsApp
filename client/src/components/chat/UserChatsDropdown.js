@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
+import { AiFillWechat } from "react-icons/ai";
 
 import { AuthContext } from "../../context/AuthContext";
 import { StyledDropdown, DropdownEl } from "./DropdownElements";
@@ -15,20 +16,12 @@ export const UserChatsDropdown = ({ chatId, chatName, history }) => {
       {(ctx) => {
         return (
           <React.Fragment>
-            <StyledDropdown toggleText="•••">
-              <DropdownEl.Item
-                disabled={
-                  history?.location?.pathname === `/chat/${chatId}`
-                    ? true
-                    : false
-                }
-                onClick={() => history.push(`/chat/${chatId}`)}
-              >
-                Open
-              </DropdownEl.Item>
+            <StyledDropdown>
+              <AiFillWechat size={20} />
               <DropdownEl.Item onClick={() => setShowUpdateModal(true)}>
                 Rename
               </DropdownEl.Item>
+              <DropdownEl.Divider />
               <DropdownEl.Item onClick={() => setShowDeleteModal(true)}>
                 Remove
               </DropdownEl.Item>

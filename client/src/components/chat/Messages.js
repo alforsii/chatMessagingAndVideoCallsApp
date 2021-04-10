@@ -1,10 +1,11 @@
 import { useSubscription, gql } from "@apollo/client";
 import React, { useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
-import GroupedMessages from "./GroupedMessages";
-import { AddMessage } from "./MessageInput";
+// import { Spinner } from "react-bootstrap";
 import { formatMessages } from "./messagesUtils";
+import { MessagesGroup } from "./MessagesGroup";
+import { AddMessage } from "./MessageInput";
 import { MessagesEl } from "./MessagesElements";
+import { StyledLoader } from "../StyledLoader";
 
 const MESSAGES_SUB = gql`
   subscription($chatId: ID!) {
@@ -24,7 +25,7 @@ const MESSAGES_SUB = gql`
   }
 `;
 
-export const Messages = ({ user, chatId, userId }) => {
+export const Messages = ({ user, chatId, userId, isAuthorizedChat }) => {
   const [sortedMessages, setSortedMessages] = useState([]);
   const { data, loading, error } = useSubscription(MESSAGES_SUB, {
     variables: { chatId },
@@ -61,16 +62,17 @@ export const Messages = ({ user, chatId, userId }) => {
     <MessagesEl.Container>
       <MessagesEl.SubContainer className="messages">
         {loading ? (
-          <Spinner animation="border" role="status">
-            <span className="sr-only">Loading...</span>
-          </Spinner>
-        ) : !chatId ? (
+          <StyledLoader />
+        ) : // <Spinner animation="border" role="status">
+        //   <span className="sr-only">Loading...</span>
+        // </Spinner>
+        !chatId || !isAuthorizedChat ? (
           <MessagesEl.Text style={{ opacity: 0.3 }}>
             Chat not selected!
           </MessagesEl.Text>
         ) : sortedMessages.length ? (
           sortedMessages.map((msgData) => (
-            <GroupedMessages key={msgData.id} {...msgData} userId={userId} />
+            <MessagesGroup key={msgData.id} {...msgData} userId={userId} />
           ))
         ) : (
           <MessagesEl.Text style={{ opacity: 0.3 }}>

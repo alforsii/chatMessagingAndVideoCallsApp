@@ -22,6 +22,9 @@ export const UserChatsEl = {
       font-size: 10px;
     }
   `,
+  Form: styled.form`
+    width: 100%;
+  `,
   Input: styled.input`
     background-color: ${({ theme }) => theme.colors.body.primary};
     border: none;
@@ -64,6 +67,8 @@ export const UserChatsEl = {
   `,
   SubMenu: styled.div`
     display: flex;
+    justify-content: flex-start;
+    align-items: center;
     position: relative;
     /* border-bottom: 1px solid ${({ theme }) => theme.colors.body.primary}; */
     border-bottom: 1px solid ${({ theme }) => theme.colors.body.primary};
@@ -73,34 +78,31 @@ export const UserChatsEl = {
       cursor: pointer;
     }
     a:nth-child(2) {
-      padding-left: 20px;
-
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       width: 100%;
+
       text-decoration: none;
-    }
-    a:nth-child(2) li {
-      &:hover {
-        color: ${({ theme }) => theme.colors.primary};
+      li {
+        &:hover {
+          color: ${({ theme }) => theme.colors.primary};
+        }
       }
     }
-    li.active {
+    .active {
       color: ${({ theme }) => theme.colors.primary};
-    }
-    li:nth-child(3) {
-      position: absolute;
-      font-size: 10px;
     }
   `,
   Item: styled.li`
     color: ${({ theme }) => theme.colors.text};
     padding: 10px;
-    background-color: "red";
     list-style: none;
     letter-spacing: 0.5px;
     font-size: 14px;
+    :nth-child(1) {
+      padding-right: 0;
+    }
     a {
       color: ${({ theme }) => theme.colors.text};
       &:hover {

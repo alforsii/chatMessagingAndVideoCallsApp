@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { gql, useSubscription } from "@apollo/client";
+import { gql, useMutation, useSubscription } from "@apollo/client";
 import { NavLink } from "react-router-dom";
 import CreateChat from "./CreateChat";
 import UserChatsDropdown from "./UserChatsDropdown";
 import { UserChatsEl } from "./UserChatsElements";
-import { AiFillWechat } from "react-icons/ai";
 import { FaSearchengin } from "react-icons/fa";
 
 const USER_CHATS_QUERY = gql`
@@ -16,16 +15,44 @@ const USER_CHATS_QUERY = gql`
   }
 `;
 
+const SEARCH_CHAT_QUERY = gql`
+  mutation($chatName: String!, $userId: ID!) {
+    searchedChats(chatName: $chatName, userId: $userId) {
+      id
+      chatName
+    }
+  }
+`;
+
 export default function UserChats({ userId, updateState, inputId }) {
+  const [SearchedChats] = useMutation(SEARCH_CHAT_QUERY);
   const { data, error } = useSubscription(USER_CHATS_QUERY, {
     variables: { userId },
   });
   const [activeBtn, setActiveBtn] = useState(null);
+  const [userChats, setUserChats] = useState([]);
+  const [searchChatName, setSearchChatName] = useState("");
+
+  const handleSearchedChats = async (e) => {
+    try {
+      const chatName = e.currentTarget.value;
+      setSearchChatName(chatName);
+      const { data } = await SearchedChats({ variables: { chatName, userId } });
+      if (data) {
+        setUserChats(data.searchedChats);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    updateState({ chats: data?.userChats });
+    if (data) {
+      setUserChats(data.userChats);
+      updateState({ chats: data.userChats });
+    }
     // eslint-disable-next-line
-  }, [data?.userChats]);
+  }, [data]);
 
   if (!data) return null;
   if (error) return console.log(error);
@@ -39,17 +66,20 @@ export default function UserChats({ userId, updateState, inputId }) {
         <UserChatsEl.Input
           id={`search_chat_input-${inputId}`}
           placeholder={`Chats...`}
+          onChange={handleSearchedChats}
+          autoComplete={"false"}
+          autoSave="false"
         />
         <UserChatsEl.InputIcon>
           <CreateChat />
         </UserChatsEl.InputIcon>
       </UserChatsEl.Header>
       <UserChatsEl.Menu>
-        {data.userChats?.length > 0 ? (
-          data.userChats?.map((chat) => (
+        {userChats?.length > 0 ? (
+          userChats?.map((chat) => (
             <UserChatsEl.SubMenu key={chat.id}>
               <UserChatsEl.Item>
-                <AiFillWechat />
+                <UserChatsDropdown chatId={chat.id} chatName={chat.chatName} />
               </UserChatsEl.Item>
               <NavLink to={`/chat/${chat.id}`}>
                 <UserChatsEl.Item
@@ -63,15 +93,14 @@ export default function UserChats({ userId, updateState, inputId }) {
                   {chat.chatName}
                 </UserChatsEl.Item>
               </NavLink>
-              <UserChatsEl.Item>
-                <UserChatsDropdown chatId={chat.id} chatName={chat.chatName} />
-              </UserChatsEl.Item>
             </UserChatsEl.SubMenu>
           ))
-        ) : (
+        ) : searchChatName ? (
           <UserChatsEl.Item>
-            <i>You don't have a single chat...</i>
+            {`You don't have a chat with a name: ${searchChatName}`}
           </UserChatsEl.Item>
+        ) : (
+          <UserChatsEl.Item>You don't have a single chat...</UserChatsEl.Item>
         )}
       </UserChatsEl.Menu>
     </UserChatsEl.Container>

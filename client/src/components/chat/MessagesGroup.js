@@ -1,42 +1,43 @@
 import React from "react";
-import moment from "moment";
-import { MessageDropdown } from "./MessageDropdown";
+
+import { Message } from "./Message";
 import { MessagesEl } from "./MessagesElements";
-import { useState } from "react";
+// import { useState } from "react";
 import StyledAvatar from "../Avatar";
 
-export default function GroupedMessages({ id, type, messages, name, userId }) {
-  const [msgId, setMsgId] = useState("");
+export function MessagesGroup({ id, type, messages, name, userId }) {
+  // const [msgId, setMsgId] = useState("");
 
   return (
     <>
       {messages.map((msg, i) => {
-        const time = new Date(Number(msg.createdAt)).toISOString();
-        const myUTC = new Date().getUTCDate();
+        // const time = new Date(Number(msg.createdAt)).toISOString();
+        // const myUTC = new Date().getUTCDate();
         return (
           <MessagesEl.Row
             key={msg.id}
-            onMouseEnter={() => setMsgId(msg.id)}
-            onMouseLeave={() => setMsgId("")}
+            // onMouseEnter={() => setMsgId(msg.id)}
+            // onMouseLeave={() => setMsgId("")}
             type={type}
           >
-            {type === "sent" && (
-              <MessagesEl.Time display={msg.id === msgId ? "block" : "none"}>
+            {/* display={msg.id === msgId ? "block" : "none"} */}
+            {/* {type === "sent" && (
+              <MessagesEl.Time>
                 {moment(time).utc(myUTC).format("MMM Do YYYY, h:mm a")}
               </MessagesEl.Time>
-            )}
-            <MessageDropdown
+            )} */}
+            <Message
               userId={userId}
               msg={msg}
               type={type}
               length={messages.length}
               index={i}
             />
-            {type === "received" && (
-              <MessagesEl.Time display={msg.id === msgId ? "block" : "none"}>
+            {/* {type === "received" && (
+              <MessagesEl.Time>
                 {moment(time).utc(myUTC).format("MMM Do YYYY, h:mm a")}
               </MessagesEl.Time>
-            )}
+            )} */}
           </MessagesEl.Row>
         );
       })}

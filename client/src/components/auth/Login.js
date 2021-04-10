@@ -17,8 +17,18 @@ export const LoginForm = (props) => {
   const [errMessage, setErrMessage] = useState(null);
   const emailEl = React.createRef();
   const passwordEl = React.createRef();
+  const [remember, setRemember] = useState(false);
+
+  const handleCheckbox = (e) => {
+    setRemember(e.currentTarget.checked);
+  };
 
   useEffect(() => {
+    const rememberedUser = localStorage.getItem("remember_user");
+    if (rememberedUser) {
+      emailEl.current.value = JSON.parse(rememberedUser);
+      setRemember(true);
+    }
     return () => {
       console.log("LOGIN CLEARED");
     };
@@ -44,12 +54,16 @@ export const LoginForm = (props) => {
               return null;
             }
             const { userId, token } = data.login;
-            console.log(data);
 
-            context.getUserDetails(userId, token);
-            // context.updateState({ token: data.login?.token });
             localStorage.setItem("token", JSON.stringify(data.login?.token));
-            props.history.push("/chat");
+            if (remember) {
+              console.log("rememberEl");
+              localStorage.setItem("remember_user", JSON.stringify(email));
+            } else {
+              localStorage.removeItem("remember_user");
+            }
+            context.getUserDetails(userId, token);
+            // props.history.push("/chat"); // will be redirect from app | getUserDetails
           } catch (err) {
             return setErrMessage(err.message);
           }
@@ -84,7 +98,11 @@ export const LoginForm = (props) => {
               </LoginEl.Control>
               <LoginEl.Control>
                 <LoginEl.Row>
-                  <LoginEl.Check type="checkbox" />
+                  <LoginEl.Check
+                    checked={remember}
+                    onChange={handleCheckbox}
+                    type="checkbox"
+                  />
                   <LoginEl.Text>Remember me</LoginEl.Text>
                 </LoginEl.Row>
               </LoginEl.Control>

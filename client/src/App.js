@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { withRouter } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
-import { Spinner } from "react-bootstrap";
 import { ThemeProvider } from "styled-components";
 
-import MyAlertMessage from "./components/MyAlertMessage";
+import { AlertMessage } from "./components/AlertMessage";
 import { AuthContext } from "./context/AuthContext";
 import { AppRouter } from "./AppRouter";
 import StyledNavbar from "./components/navbar/Navbar";
 import { GlobalStyles, GlobalEl } from "./global/styles";
 import StyledSidebar from "./components/navbar/Sidebar";
 import { data as allThemes } from "./themes.json";
-// import { lightOrDark } from "./global/globalHelpers";
-// import StyledLoader from "./components/StyledLoader";
+import { StyledLoader } from "./components/StyledLoader";
 
 const IS_LOGGED_QUERY = gql`
   mutation($token: String!) {
@@ -48,7 +47,7 @@ const initialState = {
   showUsers: false,
 };
 
-function App() {
+function App({ history }) {
   const [IsLoggedIn] = useMutation(IS_LOGGED_QUERY);
   const [GetUser] = useMutation(GET_USER_QUERY);
   const [state, setState] = useState({ ...initialState });
@@ -73,8 +72,10 @@ function App() {
       ...initialState,
       token,
       user: data.getUser,
+      isLoading: false,
       defaultMode: data.getUser?.mode,
     });
+    history.push("/chat");
     return data.getUser.id;
   };
 
@@ -100,7 +101,8 @@ function App() {
 
   const handleLogout = () => {
     updateState({ ...initialState, defaultMode: state.defaultMode });
-    localStorage.clear();
+    localStorage.removeItem("token");
+    history.push("/");
   };
 
   useEffect(() => {
@@ -118,9 +120,7 @@ function App() {
       }}
     >
       {state.isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="sr-only">Loading...</span>
-        </Spinner>
+        <StyledLoader />
       ) : (
         <ThemeProvider
           theme={{
@@ -138,7 +138,7 @@ function App() {
             />
             <StyledSidebar isOpen={state.isOpen} updateState={updateState} />
 
-            <MyAlertMessage
+            <AlertMessage
               success={state.alertSuccess}
               msg={state.alertMessage}
               msgId={state.alertMessageId}
@@ -152,4 +152,4 @@ function App() {
   );
 }
 
-export default App;
+export default withRouter(App);

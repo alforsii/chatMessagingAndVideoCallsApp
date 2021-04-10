@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { gql, useSubscription } from "@apollo/client";
+import { gql, useMutation, useSubscription } from "@apollo/client";
 
 import { ChatAddUser } from "./ChatAddUser";
 import ChatUsersDropdown from "./ChatUsersDropdown";
@@ -21,16 +21,55 @@ const CHAT_USERS_QUERY = gql`
   }
 `;
 
-export default function ChatUsers({ chatId, currentUserId, chats, inputId }) {
+const SEARCHED_CHAT_USERS = gql`
+  mutation($username: String!, $chatId: ID!) {
+    searchedChatUsers(username: $username, chatId: $chatId) {
+      id
+      email
+      lastName
+      firstName
+    }
+  }
+`;
+
+export default function ChatUsers({
+  chatId,
+  currentUserId,
+  inputId,
+  isAuthorizedChat,
+}) {
   const { data, error } = useSubscription(CHAT_USERS_QUERY, {
     variables: { chatId },
   });
 
+  const [chatUsers, setChatUsers] = useState([]);
+  const [SearchedChatUsers] = useMutation(SEARCHED_CHAT_USERS);
+  const [searchedUsername, setSearchedUsername] = useState("");
+
+  const handleSearchedChatUsers = async (e) => {
+    try {
+      const username = e.currentTarget.value;
+      setSearchedUsername(username);
+      const { data } = await SearchedChatUsers({
+        variables: { username, chatId },
+      });
+      if (data) {
+        setChatUsers(data.searchedChatUsers);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      setChatUsers(data.chatUsers.users);
+    }
+  }, [data]);
+
   if (!data) return null;
   if (error) return console.log(error);
-  const isInChatUsers = chats?.map((user) => user.id).includes(chatId);
 
-  const chatUsers = data?.chatUsers?.users || [];
   return (
     <ChatUsersEl.Container>
       <ChatUsersEl.Header>
@@ -40,6 +79,7 @@ export default function ChatUsers({ chatId, currentUserId, chats, inputId }) {
         <ChatUsersEl.Input
           id={`search_user_input-${inputId}`}
           placeholder={`Users...`}
+          onChange={handleSearchedChatUsers}
         />
         <ChatUsersEl.InputIcon>
           <ChatAddUser chatId={chatId} />
@@ -47,7 +87,7 @@ export default function ChatUsers({ chatId, currentUserId, chats, inputId }) {
       </ChatUsersEl.Header>
 
       <ChatUsersEl.Menu>
-        {!isInChatUsers ? null : chatUsers?.length >= 2 ? (
+        {!isAuthorizedChat ? null : chatUsers.length >= 1 ? (
           chatUsers
             .filter((chatUser) => chatUser.id !== currentUserId)
             .map((chatUser) => (
@@ -57,18 +97,20 @@ export default function ChatUsers({ chatId, currentUserId, chats, inputId }) {
                   src="https://source.unsplash.com/user/erondu"
                 />
                 <ChatUsersEl.Item>
-                  <NavLink to={`/user/${chatUser.id}`}>
-                    {`${chatUser.firstName} ${chatUser.lastName}`}
-                  </NavLink>
-                </ChatUsersEl.Item>
-                <ChatUsersEl.Item>
                   <ChatUsersDropdown
                     chatId={chatId}
                     otherUserId={chatUser.id}
                   />
                 </ChatUsersEl.Item>
+                <ChatUsersEl.Item>
+                  <NavLink to={`/user/${chatUser.id}`}>
+                    {`${chatUser.firstName} ${chatUser.lastName}`}
+                  </NavLink>
+                </ChatUsersEl.Item>
               </ChatUsersEl.SubMenu>
             ))
+        ) : searchedUsername ? (
+          <ChatUsersEl.Item>{`No user in this chatroom with a name: ${searchedUsername}`}</ChatUsersEl.Item>
         ) : (
           <ChatUsersEl.Item>No one in this chatroom...</ChatUsersEl.Item>
         )}
