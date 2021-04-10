@@ -69,8 +69,7 @@ exports.MessageResolvers = {
         );
         if (foundMessage.messageAuthor._id.toString() === userId.toString()) {
           message = await Message.findByIdAndDelete(messageId);
-          console.log("msg deleted");
-          console.log(message);
+          // console.log("msg deleted");
         } else {
           message = await Message.findByIdAndUpdate(
             messageId,

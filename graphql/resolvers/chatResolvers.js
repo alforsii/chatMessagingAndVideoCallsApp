@@ -41,6 +41,40 @@ exports.ChatResolvers = {
     // },
   },
   Mutation: {
+    searchedChats: async (_, { chatName, userId }) => {
+      try {
+        let user = await User.findById(userId).populate("chats");
+        if (chatName) {
+          const searchedChats = user.chats.filter((chat) =>
+            chat.chatName.toLowerCase().includes(chatName.toLowerCase())
+          );
+          return searchedChats;
+        } else {
+          return user.chats;
+        }
+      } catch (err) {
+        console.log(err);
+        return err;
+      }
+    },
+    searchedChatUsers: async (_, { username, chatId }) => {
+      try {
+        let chat = await Chat.findById(chatId).populate("chatUsers");
+        if (username) {
+          const searchedChatUsers = chat.chatUsers.filter(
+            (user) =>
+              user.firstName.toLowerCase().includes(username.toLowerCase()) ||
+              user.lastName.toLowerCase().includes(username.toLowerCase())
+          );
+          return searchedChatUsers;
+        } else {
+          return chat.chatUsers;
+        }
+      } catch (err) {
+        console.log(err);
+        return err;
+      }
+    },
     // (parent, args, context, info)
     // => newly created chat | id, chatName
     createChat: async (_, { userId, chatName }, { pubSub }) => {
@@ -126,7 +160,11 @@ exports.ChatResolvers = {
         });
         // 2. Update chat users
         pubSub.publish(`CHAT_USERS-${updatedChat._id}`, {
-          chatUsers: updatedChat.chatUsers,
+          // chatUsers: updatedChat.chatUsers, // previous return
+          chatUsers: {
+            chatName: updatedChat.chatName,
+            users: updatedChat.chatUsers,
+          },
         });
 
         return {
@@ -147,20 +185,24 @@ exports.ChatResolvers = {
           _id: chatId,
           chatAuthor: authorId,
         });
-        console.log("🚀 ~ chatAuthor", chatAuthor);
+
         if (!chatAuthor) {
-          throw new Error("You are not the author!");
+          throw new Error("You are not the Author!");
         }
         const updatedChat = await Chat.findOneAndUpdate(
           { _id: chatId, chatAuthor: authorId },
           { chatName },
           { new: true }
         );
-        const user = await User.findById(authorId);
 
-        // Update user Chats
-        pubSub.publish(`USER_CHATS-${user._id}`, {
-          userChats: user.chats,
+        const chatUsers = updatedChat.chatUsers;
+        //since updatedChat.chatUsers not populated | will return only ids of each user
+        chatUsers.forEach(async (userId) => {
+          const user = await User.findById(userId).populate("chats");
+          //1. Send Updated chatName for each user in the chat
+          pubSub.publish(`USER_CHATS-${userId}`, {
+            userChats: user.chats,
+          });
         });
 
         return updatedChat;
@@ -218,7 +260,11 @@ exports.ChatResolvers = {
         });
         // 2. Update current chat users list for all users since it's the only chat for all
         pubSub.publish(`CHAT_USERS-${updatedChat._id}`, {
-          chatUsers: updatedChat.chatUsers,
+          // chatUsers: updatedChat.chatUsers, // previous return
+          chatUsers: {
+            chatName: updatedChat.chatName,
+            users: updatedChat.chatUsers,
+          },
         });
 
         return updatedChat;
@@ -263,7 +309,11 @@ exports.ChatResolvers = {
         });
         // 2. Update current chat users list for all users since it's the only chat for all
         pubSub.publish(`CHAT_USERS-${updatedChat._id}`, {
-          chatUsers: updatedChat.chatUsers,
+          // chatUsers: updatedChat.chatUsers, // previous return
+          chatUsers: {
+            chatName: updatedChat.chatName,
+            users: updatedChat.chatUsers,
+          },
         });
 
         return {

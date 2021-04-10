@@ -89,6 +89,8 @@ exports.RootTypeDefs = gql`
     updateChat(chatId: ID!, authorId: ID!, chatName: String!): Chat
     addChatUser(authorId: ID!, otherUserId: ID!, chatId: ID!): Chat
     deleteChatUser(authorId: ID!, otherUserId: ID!, chatId: ID!): ResMessage!
+    searchedChats(chatName: String!, userId: ID!): [Chat]
+    searchedChatUsers(username: String!, chatId: ID!): [User]
 
     createRoom(userId: ID!, roomName: String!): Room!
     deleteTheRoom(userId: ID!, roomId: ID!): ID
