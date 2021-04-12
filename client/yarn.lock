@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@apollo/client@^3.3.13":
-  "integrity" "sha512-usiVmXiOq0J/GpyIOIhlF8ItHpiPJObC7zoxLYPoOYj3G3OB0hCIcUKs3aTJ3ATW7u8QxvYgRaJg72NN7E1WOg=="
-  "resolved" "https://registry.npmjs.org/@apollo/client/-/client-3.3.13.tgz"
-  "version" "3.3.13"
+"@apollo/client@^3.3.14":
+  "integrity" "sha512-z7YwMvF9grmpWUG+26e3gPcBAOA/r/Ci5gwK7JVm3bGYG9kKqG8MF6sMXEbuwTsFseE4duSp0icJ6tdzxJhhlA=="
+  "resolved" "https://registry.npmjs.org/@apollo/client/-/client-3.3.14.tgz"
+  "version" "3.3.14"
   dependencies:
     "@graphql-typed-document-node/core" "^3.0.0"
     "@types/zen-observable" "^0.8.0"
@@ -1730,10 +1730,10 @@
     "@babel/runtime" "^7.12.5"
     "@testing-library/dom" "^7.28.1"
 
-"@testing-library/user-event@^13.1.1":
-  "integrity" "sha512-B4roX+0mpXKGj8ndd38YoIo3IV9pmTTWxr/2cOke5apTtrNabEUE0KMBccpcAcYlfPcr7uMu+dxeeC3HdXd9qQ=="
-  "resolved" "https://registry.npmjs.org/@testing-library/user-event/-/user-event-13.1.1.tgz"
-  "version" "13.1.1"
+"@testing-library/user-event@^13.1.2":
+  "integrity" "sha512-89S/QELVCXbcHmgAfPrk0U8kCu9qESqV8/QQaUe5B4+7qi3kJlfQYCiB7Pfi2XInBtO0qm7vDmJb+/Oa+TFdyQ=="
+  "resolved" "https://registry.npmjs.org/@testing-library/user-event/-/user-event-13.1.2.tgz"
+  "version" "13.1.2"
   dependencies:
     "@babel/runtime" "^7.12.5"
 

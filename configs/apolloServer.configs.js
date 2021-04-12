@@ -4,6 +4,10 @@ const { RootTypeDefs } = require("../graphql/rootTypeDefs");
 // const { User } = require("../models/User.model");
 // const jwt = require("jsonwebtoken");
 
+// import { EventEmitter } from "events";
+// const biggerEventEmitter = new EventEmitter();
+// biggerEventEmitter.setMaxListeners(30);
+// const pubSub = new PubSub({ eventEmitter: biggerEventEmitter });
 const pubSub = new PubSub();
 
 // const validateToken = async (token) => {

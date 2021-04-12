@@ -113,22 +113,5 @@ exports.AuthResolvers = {
       }
     },
   },
-  Subscription: {
-    // searchedUser: {
-    //   subscribe: async (_, { email }, { pubSub }) => {
-    //     try {
-    //       const user = await User.findOne({ email });
-    //       setTimeout(() => {
-    //         // pubSub.publish(`channel`, { [SubscriptionName]: data });
-    //         pubSub.publish(`searched-${user._id}`, { searchedUser: user });
-    //       }, 0);
-    //       //     pubSub.asyncIterator([`channel`]);
-    //       return pubSub.asyncIterator([`searched-${user._id}`]);
-    //     } catch (err) {
-    //       console.log(err);
-    //       return err;
-    //     }
-    //   },
-    // },
-  },
+  Subscription: {},
 };
