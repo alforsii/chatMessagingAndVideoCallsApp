@@ -4,8 +4,9 @@ exports.RootTypeDefs = gql`
   type User {
     id: ID!
     email: String!
-    firstName: String
-    lastName: String
+    firstName: String!
+    lastName: String!
+    image: String
     mode: String
     chats: [Chat!]
   }
@@ -45,8 +46,8 @@ exports.RootTypeDefs = gql`
   input SignupInput {
     email: String!
     password: String!
-    firstName: String
-    lastName: String
+    firstName: String!
+    lastName: String!
   }
 
   type AuthData {
@@ -66,6 +67,27 @@ exports.RootTypeDefs = gql`
     users: [User]
   }
 
+  type TypingUser {
+    id: ID!
+    username: String!
+  }
+  type TypingUsers {
+    id: ID!
+    users: [TypingUser]
+  }
+
+  type OnlineUser {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    image: String
+  }
+
+  type OnlineUsers {
+    id: ID!
+    users: [OnlineUser]
+  }
+
   type Query {
     # messages(chatId: ID!): [Message]
     allUsers: [User!]!
@@ -80,10 +102,8 @@ exports.RootTypeDefs = gql`
     signup(data: SignupInput!): User!
     login(email: String!, password: String!): AuthData!
     isLoggedIn(token: String!): AuthData!
-
     addMessage(data: MessageInput!): Message
     deleteMessage(chatId: ID!, messageId: ID!, userId: ID!): Message
-
     createChat(userId: ID!, chatName: String!): Chat!
     deleteChat(chatId: ID!, userId: ID!): ResMessage!
     updateChat(chatId: ID!, authorId: ID!, chatName: String!): Chat
@@ -91,6 +111,16 @@ exports.RootTypeDefs = gql`
     deleteChatUser(authorId: ID!, otherUserId: ID!, chatId: ID!): ResMessage!
     searchedChats(chatName: String!, userId: ID!): [Chat]
     searchedChatUsers(username: String!, chatId: ID!): [User]
+    userStartTyping(username: String!, userId: ID!, chatId: ID!): ID
+    userStopTyping(userId: ID!, chatId: ID!): ID
+    userOnline(
+      userId: ID!
+      chatId: ID!
+      firstName: String!
+      lastName: String!
+      image: String
+    ): ID
+    userOffline(userId: ID!, chatId: ID!): ID
 
     createRoom(userId: ID!, roomName: String!): Room!
     deleteTheRoom(userId: ID!, roomId: ID!): ID
@@ -103,5 +133,7 @@ exports.RootTypeDefs = gql`
     userChats(userId: ID!): [Chat]
     chatUsers(chatId: ID!): ChatUsers
     userRooms(userId: ID!): [Room]
+    typingChatUsers(chatId: ID!): TypingUsers
+    onlineUsers(chatId: ID!): OnlineUsers
   }
 `;

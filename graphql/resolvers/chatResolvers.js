@@ -1,6 +1,9 @@
 const { Chat } = require("../../models/Chat.model");
 const { User } = require("../../models/User.model");
 
+let typingUsers = {};
+let onlineUsers = {};
+
 exports.ChatResolvers = {
   Query: {
     // => user chats array | id, chatName
@@ -39,6 +42,8 @@ exports.ChatResolvers = {
     //   //     return err;
     //   //   }
     // },
+    // =-=-=-=-=-=-=-=-=-=- End Queries =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+    // =-=-=-=-=-=-=-=-=-=- End Queries =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
   },
   Mutation: {
     searchedChats: async (_, { chatName, userId }) => {
@@ -291,17 +296,29 @@ exports.ChatResolvers = {
             "Sorry, you can't remove users from this chat. You are not authorized!"
           );
         }
+        // 1.Remove other user from chat by Admin | Author
         const updatedChat = await Chat.findByIdAndUpdate(
           chatId,
           { $pull: { chatUsers: otherUserId } },
           { new: true, runValidators: true }
         ).populate("chatUsers");
+        //2.Update other users chats | since he is removed from current chat
         const updatedOtherUser = await User.findByIdAndUpdate(
           otherUserId,
           { $pull: { chats: chatId } },
           { new: true, runValidators: true }
         ).populate("chats");
-
+        // 3.If he is in the users typing list | remove!
+        if (typingUsers[chatId]) {
+          const isInTyping = typingUsers[chatId]
+            .map((user) => user.id)
+            .includes(otherUserId);
+          if (isInTyping) {
+            typingUsers[chatId] = typingUsers[chatId].filter(
+              (user) => user.id !== otherUserId
+            );
+          }
+        }
         // send update
         // 1. Update other user chats to otherUser chat list
         pubSub.publish(`USER_CHATS-${updatedOtherUser._id}`, {
@@ -325,8 +342,152 @@ exports.ChatResolvers = {
         return err;
       }
     },
+    userStartTyping: (_, { username, userId, chatId }, { pubSub }) => {
+      // if (!chatId || userId) {
+      //   return;
+      // }
+      if (!typingUsers[chatId]) {
+        typingUsers[chatId] = [{ username, id: userId }];
+      } else {
+        const isUserAlreadyTyping = typingUsers[chatId]
+          .map((user) => user.id)
+          .includes(userId);
+        if (!isUserAlreadyTyping) {
+          typingUsers[chatId].push({ username, id: userId });
+          // pubSub.publish(`channel`, { [SubscriptionName]: data });
+          pubSub.publish(`TYPING_CHAT_USERS-${chatId}`, {
+            typingChatUsers: {
+              id: chatId,
+              users: typingUsers[chatId],
+            },
+          });
+        } else {
+          pubSub.publish(`TYPING_CHAT_USERS-${chatId}`, {
+            typingChatUsers: {
+              id: chatId,
+              users: typingUsers[chatId],
+            },
+          });
+        }
+      }
+      return userId;
+    },
+
+    userStopTyping: (_, { userId, chatId }, { pubSub }) => {
+      // if (!chatId || userId) {
+      //   return;
+      // }
+      typingUsers[chatId] = typingUsers[chatId]?.filter(
+        (user) => user.id !== userId
+      );
+      // pubSub.publish(`channel`, { [SubscriptionName]: data });
+      pubSub.publish(`TYPING_CHAT_USERS-${chatId}`, {
+        typingChatUsers: {
+          id: chatId,
+          users: typingUsers[chatId],
+        },
+      });
+      return userId;
+    },
+    userOnline: (
+      _,
+      { userId, chatId, firstName, lastName, image },
+      { pubSub }
+    ) => {
+      console.log({ userId, chatId });
+      if (!onlineUsers[chatId]) {
+        onlineUsers[chatId] = [{ id: userId, firstName, lastName, image }];
+      } else {
+        const isUserAlreadyOnline = onlineUsers[chatId]
+          .map((user) => user.id)
+          .includes(userId);
+        if (!isUserAlreadyOnline) {
+          onlineUsers[chatId].push({ id: userId, firstName, lastName, image });
+          // pubSub.publish(`channel`, { [SubscriptionName]: data });
+          pubSub.publish(`ONLINE_CHAT_USERS-${chatId}`, {
+            onlineUsers: {
+              id: chatId,
+              users: onlineUsers[chatId],
+            },
+          });
+        } else {
+          pubSub.publish(`ONLINE_CHAT_USERS-${chatId}`, {
+            onlineUsers: {
+              id: chatId,
+              users: onlineUsers[chatId],
+            },
+          });
+        }
+      }
+      return userId;
+    },
+    userOffline: (_, { userId, chatId }, { pubSub }) => {
+      onlineUsers[chatId] = onlineUsers[chatId]?.filter(
+        (user) => user.id !== userId
+      );
+      // pubSub.publish(`channel`, { [SubscriptionName]: data });
+      pubSub.publish(`ONLINE_CHAT_USERS-${chatId}`, {
+        onlineUsers: {
+          id: chatId,
+          users: onlineUsers[chatId],
+        },
+      });
+      return userId;
+    },
+    // =-=-=-=-=-=-=-=-=-=- End Mutations =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+    // =-=-=-=-=-=-=-=-=-=- End Mutations =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
   },
   Subscription: {
+    onlineUsers: {
+      subscribe: (_, { chatId }, { pubSub }) => {
+        try {
+          if (!chatId) {
+            return;
+          }
+
+          setTimeout(() => {
+            //   // pubSub.publish(`channel`, { [SubscriptionName]: data });
+
+            pubSub.publish(`ONLINE_CHAT_USERS-${chatId}`, {
+              onlineUsers: {
+                id: chatId,
+                users: onlineUsers[chatId],
+              },
+            });
+          }, 0);
+          return pubSub.asyncIterator([`ONLINE_CHAT_USERS-${chatId}`]);
+        } catch (err) {
+          console.log(err);
+          return err;
+        }
+      },
+    },
+    typingChatUsers: {
+      subscribe: (_, { chatId }, { pubSub }) => {
+        try {
+          // const chat = await Chat.findById(chatId).populate([
+          //   { path: "chatUsers" },
+          // ]);
+          if (!chatId) {
+            return;
+          }
+          setTimeout(() => {
+            //   // pubSub.publish(`channel`, { [SubscriptionName]: data });
+            pubSub.publish(`TYPING_CHAT_USERS-${chatId}`, {
+              typingChatUsers: {
+                id: chatId,
+                users: typingUsers[chatId],
+              },
+            });
+          }, 0);
+          //     pubSub.asyncIterator([`channel`]);
+          return pubSub.asyncIterator([`TYPING_CHAT_USERS-${chatId}`]);
+        } catch (err) {
+          console.log(err);
+          return err;
+        }
+      },
+    },
     chatUsers: {
       subscribe: async (_, { chatId }, { pubSub }) => {
         try {
@@ -380,5 +541,7 @@ exports.ChatResolvers = {
         }
       },
     },
+    // =-=-=-=-=-=-=-=-=-=- End Subscriptions =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+    // =-=-=-=-=-=-=-=-=-=- End Subscriptions =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
   },
 };
