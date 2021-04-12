@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
-import { Button } from "react-bootstrap";
-import { StyledModal } from "./Modal";
-import { DropdownEl, StyledDropdown } from "./DropdownElements";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { Button } from "react-bootstrap";
+import { StyledModal } from "../Modal";
+import { DropdownEl, StyledDropdown } from "../DropdownElements";
 
 import { AuthContext } from "../../context/AuthContext";
 
@@ -82,7 +82,7 @@ export const ChatUsersDropdown = ({ chatId, otherUserId, history }) => {
               modalName="Alert_user_removal_modal"
             >
               <Button
-                style={{ marginRight: 2 }}
+                style={{ marginRight: "10px" }}
                 variant="secondary"
                 onClick={() => setShow(false)}
               >

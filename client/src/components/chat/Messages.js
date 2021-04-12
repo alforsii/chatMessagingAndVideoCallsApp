@@ -1,11 +1,14 @@
-import { useSubscription, gql } from "@apollo/client";
 import React, { useEffect, useState } from "react";
+import { useSubscription, gql } from "@apollo/client";
 // import { Spinner } from "react-bootstrap";
 import { formatMessages } from "./messagesUtils";
 import { MessagesGroup } from "./MessagesGroup";
-import { AddMessage } from "./MessageInput";
+import { MessageInput } from "./MessageInput";
 import { MessagesEl } from "./MessagesElements";
 import { StyledLoader } from "../StyledLoader";
+// import { ImPencil } from "react-icons/im";
+// import { GiKeyboard } from "react-icons/gi";
+// import { MessageTypingUsers } from "./MessageTypingUsers";
 
 const MESSAGES_SUB = gql`
   subscription($chatId: ID!) {
@@ -24,12 +27,27 @@ const MESSAGES_SUB = gql`
     }
   }
 `;
+// const TYPING_USERS_QUERY = gql`
+//   subscription($chatId: ID!) {
+//     typingChatUsers(chatId: $chatId) {
+//       id
+//       users {
+//         id
+//         username
+//       }
+//     }
+//   }
+// `;
 
 export const Messages = ({ user, chatId, userId, isAuthorizedChat }) => {
   const [sortedMessages, setSortedMessages] = useState([]);
-  const { data, loading, error } = useSubscription(MESSAGES_SUB, {
+  // const [typingUsers, setTypingUsers] = useState([]);
+  const { data, loading } = useSubscription(MESSAGES_SUB, {
     variables: { chatId },
   });
+  // const { data: data2, error: error2 } = useSubscription(TYPING_USERS_QUERY, {
+  //   variables: { chatId },
+  // });
 
   //   Sorted messages structure: {
   //    id: message id | first message.id in the group,
@@ -39,12 +57,11 @@ export const Messages = ({ user, chatId, userId, isAuthorizedChat }) => {
   //    messages: grouped lines of messages that belongs to the same user, which is between two users on the chat.
   // }
   const sortMessagesToGroups = () => {
-    if (error) return console.log(error.message);
-    if (data?.messages?.length) {
+    setSortedMessages([]);
+    if (data) {
       const formattedMessages = formatMessages(data.messages, user);
       setSortedMessages(formattedMessages);
-    } else {
-      setSortedMessages([]);
+      return;
     }
   };
 
@@ -52,22 +69,31 @@ export const Messages = ({ user, chatId, userId, isAuthorizedChat }) => {
     sortMessagesToGroups();
     // eslint-disable-next-line
   }, [data]);
+  // useEffect(() => {
+  //   if (data2) {
+  //     setTypingUsers(data2.typingChatUsers.users);
+  //   } else {
+  //     setTypingUsers([]);
+  //   }
+  //   // eslint-disable-next-line
+  // }, [data2]);
   useEffect(() => {
-    const messagesEl = document.querySelector(".messages");
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+    if (sortedMessages.length) {
+      const messagesEl = document.querySelector(".messages");
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
     // eslint-disable-next-line
   }, [sortedMessages]);
 
+  // if (error) console.log(error.message);
+  // if (error2) console.log(error2.message);
   return (
     <MessagesEl.Container>
       <MessagesEl.SubContainer className="messages">
         {loading ? (
           <StyledLoader />
-        ) : // <Spinner animation="border" role="status">
-        //   <span className="sr-only">Loading...</span>
-        // </Spinner>
-        !chatId || !isAuthorizedChat ? (
-          <MessagesEl.Text style={{ opacity: 0.3 }}>
+        ) : !chatId || !isAuthorizedChat ? (
+          <MessagesEl.Text style={{ opacity: 0.5 }}>
             Chat not selected!
           </MessagesEl.Text>
         ) : sortedMessages.length ? (
@@ -79,8 +105,9 @@ export const Messages = ({ user, chatId, userId, isAuthorizedChat }) => {
             You have no messages in this Chat!
           </MessagesEl.Text>
         )}
+        {/* <MessageTypingUsers userId={userId} chatId={chatId} /> */}
       </MessagesEl.SubContainer>
-      <AddMessage user={user} chatId={chatId} userId={userId} />
+      <MessageInput user={user} chatId={chatId} userId={userId} />
     </MessagesEl.Container>
   );
 };

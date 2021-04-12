@@ -10,7 +10,7 @@ export const LoginEl = {
     align-items: center;
     transition: 0.9s ease-in-out;
     height: 100vh;
-    background-color: ${({ theme }) => theme.colors.body.secondary};
+    background-color: ${({ theme }) => theme.colors.body.primary};
   `,
   Row: styled.div`
     display: flex;
@@ -22,7 +22,7 @@ export const LoginEl = {
     letter-spacing: 1.2px;
   `,
   Form: styled.form`
-    background-color: ${({ theme }) => theme.colors.body.primary};
+    background-color: ${({ theme }) => theme.colors.body.secondary};
     width: 500px;
     height: 400px;
 

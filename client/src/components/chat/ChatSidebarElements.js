@@ -6,10 +6,10 @@ export const ChatSidebarEl = {
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    width: 50px;
-    height: 100vh;
+    width: 40px;
+    height: 85vh;
     background-color: ${({ theme }) => theme.colors.body.primary};
-    border-right: 1px solid ${({ theme }) => theme.colors.body.secondary};
+    /* border-right: 1px solid ${({ theme }) => theme.colors.body.secondary}; */
   `,
   Icon: styled.div`
     color: ${({ theme }) => theme.colors.text};

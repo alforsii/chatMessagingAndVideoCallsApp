@@ -1,17 +1,26 @@
 import styled from "styled-components";
-import { boxShadow } from "../../global/styleHelperFunctions";
+import { boxShadow, breakWords } from "../../global/styleHelperFunctions";
+import { navbarHeight } from "./UserChatsElements";
 
 export const MessagesEl = {
   Container: styled.div`
-    height: 100vh;
+    /* height: 85vh; */
+    height: 100%;
     min-width: 300px;
+    position: relative;
+    /* margin: 20px; */
+    /* ${boxShadow} */
+    padding: 10px;
+    background-color: ${({ theme }) => theme.colors.body.secondary};
   `,
   SubContainer: styled.div`
-    padding: 10px;
     scroll-behavior: smooth;
-    background-color: ${({ theme }) => theme.colors.body.primary};
+    /* background-color: ${({ theme }) => theme.colors.body.secondary}; */
     overflow: scroll;
-    height: calc(100vh - 110px);
+    /* padding: 50px 0 10px; */
+    /* height: 85vh; */
+    height: calc(85vh - ${navbarHeight});
+    /* background-color: ${({ theme }) => theme.colors.body.primary}; */
     ::-webkit-scrollbar {
       display: none;
     }
@@ -21,30 +30,35 @@ export const MessagesEl = {
     justify-content: ${({ type }) =>
       type === "sent" ? "flex-end" : "flex-start"};
     align-items: "center";
-    word-wrap: break-word;
-    word-break: break-all;
+    /* word-wrap: break-word;
+    word-break: break-all; */
   `,
   Form: styled.form`
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top: 1px solid ${({ theme }) => theme.colors.body.secondary};
+    /* border-top: 1px solid ${({ theme }) => theme.colors.body.primary}; */
     background-color: ${({ theme }) => theme.colors.body.primary};
-    padding: 7px;
+    /* margin-top: 1px; */
+    /* padding: 7px; */
+    /* border-radius: 0 0 8px 8px; */
+    /* ${boxShadow} */
   `,
   Input: styled.input`
-    background-color: ${({ theme }) => theme.colors.body.secondary};
+    background-color: ${({ theme }) => theme.colors.body.primary};
     border: none;
     font-size: 14px;
     font-style: italic;
-    padding: 4px;
+    padding: 7px;
     padding-left: 20px;
     outline: 0;
     width: 100%;
-    border-radius: 3px;
-    margin-right: 2px;
-    word-wrap: break-word;
-    border: 1px solid ${({ theme }) => theme.colors.body.secondary};
+    border-radius: 5px;
+    /* margin-right: 2px; */
+    ${breakWords}
+    border: 1px solid ${({ theme }) => theme.colors.body.primary};
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     ::placeholder {
       color: ${({ theme }) => theme.colors.text};
       opacity: 0.4;
@@ -58,13 +72,15 @@ export const MessagesEl = {
     cursor: pointer;
   `,
   Button: styled.button`
-    padding: 3px 34px;
+    padding: 7px 34px;
     border-radius: 3px;
     transition: ease-in-out 0.3s all;
     border: none;
     color: ${({ theme }) => "#fff"};
     background-color: ${({ theme }) => theme.colors.primary};
     font-weight: bold;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     &:hover {
       ${boxShadow};
     }
@@ -86,24 +102,23 @@ export const MessagesEl = {
     font-style: italic;
     max-width: 60%;
     /* cursor: pointer; */
-    margin: 1px;
+    margin: 3px 0;
     color: ${({ theme, type }) =>
       type === "sent" ? "#fff" : theme.colors.primary};
-    padding: 10px 15px;
+    padding: 7px 15px;
     /* padding-bottom: 10px; */
+    ${breakWords}
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
     border-radius: 15px;
     border-bottom-right-radius: ${({ borderR }) => borderR === "sent" && 0};
     border-bottom-left-radius: ${({ borderR }) => borderR === "received" && 0};
     background-color: ${({ theme, type }) => {
-      return type === "sent"
-        ? theme.colors.primary
-        : theme.colors.body.secondary;
+      return type === "sent" ? theme.colors.primary : theme.colors.body.primary;
     }};
-    &:hover {
+    /* &:hover {
       ${boxShadow};
-    }
+    } */
     /* :hover {
       span {
         opacity: 0.6;

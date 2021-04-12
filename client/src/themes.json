@@ -7,7 +7,7 @@
         "body": { "primary": "#ffffff", "secondary": "#ECEFF1" },
         "primary": "#448AFF",
         "secondary": "#a5d6a7",
-        "text": "#121212",
+        "text": "#1B1E20",
         "button": {
           "text": "#FFFFFF",
           "bg": "#448AFF",
@@ -25,13 +25,13 @@
       "id": "T_002",
       "name": "dark",
       "colors": {
-        "body": { "primary": "#1B1E20", "secondary": "#121212" },
+        "body": { "primary": "#121212", "secondary": "#1B1E20" },
         "primary": "#448AFF",
         "secondary": "#a5d6a7",
         "text": "#FFFFFF",
         "button": {
           "text": "#448AFF",
-          "bg": "#121212",
+          "bg": "#1B1E20",
           "hover": { "text": "#FFFFFF", "bg": "#448AFF" }
         },
         "link": {

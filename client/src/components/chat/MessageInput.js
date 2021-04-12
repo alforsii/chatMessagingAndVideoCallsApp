@@ -1,7 +1,6 @@
+import { useEffect, useRef } from "react";
 import { useMutation, gql } from "@apollo/client";
 import { MessagesEl } from "./MessagesElements";
-import { useRef } from "react";
-// import { Elements } from "../GlobalElements";
 
 const NEW_MESSAGE = gql`
   mutation($content: String!, $username: String!, $userId: ID!, $chatId: ID!) {
@@ -19,10 +18,23 @@ const NEW_MESSAGE = gql`
     }
   }
 `;
+const START_TYPING_QUERY = gql`
+  mutation($username: String!, $userId: ID!, $chatId: ID!) {
+    userStartTyping(username: $username, userId: $userId, chatId: $chatId)
+  }
+`;
+const STOP_TYPING_QUERY = gql`
+  mutation($userId: ID!, $chatId: ID!) {
+    userStopTyping(userId: $userId, chatId: $chatId)
+  }
+`;
 
-export const AddMessage = ({ user, chatId, userId }) => {
+export const MessageInput = ({ user, chatId, userId }) => {
   const [AddMessage] = useMutation(NEW_MESSAGE);
+  const [StartTyping] = useMutation(START_TYPING_QUERY);
+  const [StopTyping] = useMutation(STOP_TYPING_QUERY);
   const inputRef = useRef("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -38,50 +50,70 @@ export const AddMessage = ({ user, chatId, userId }) => {
         inputRef.current.value = "";
         const messagesEl = document.querySelector(".messages");
         messagesEl.scrollTop = messagesEl.scrollHeight;
+        handleStopTyping();
       }
     } catch (err) {
       console.log(err);
     }
   };
 
+  const handleInputChange = (e) => {
+    if (e.currentTarget.value) {
+      handleStartTyping();
+    } else {
+      handleStopTyping();
+    }
+  };
+
+  const handleStartTyping = async (e) => {
+    try {
+      if (chatId) {
+        await StartTyping({
+          variables: {
+            userId,
+            chatId,
+            username: `${user.firstName} ${user.lastName}`,
+          },
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleStopTyping = async () => {
+    try {
+      if (chatId) {
+        await StopTyping({
+          variables: { userId, chatId },
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      handleStopTyping();
+    };
+    // eslint-disable-next-line
+  }, []);
+
   return (
-    <MessagesEl.Form onSubmit={handleSubmit}>
-      <MessagesEl.Label htmlFor="message_input"></MessagesEl.Label>
-      <MessagesEl.Input
-        id="message_input"
-        placeholder="Type message..."
-        ref={inputRef}
-      />
-      <MessagesEl.Button type="submit">Send</MessagesEl.Button>
-    </MessagesEl.Form>
+    <>
+      <MessagesEl.Form style={{ position: "relative" }} onSubmit={handleSubmit}>
+        <MessagesEl.Label htmlFor="message_input"></MessagesEl.Label>
+        <MessagesEl.Input
+          id="message_input"
+          placeholder="Type message..."
+          ref={inputRef}
+          autoComplete="off"
+          onChange={handleInputChange}
+          onBlur={handleStopTyping}
+          onPaste={handleInputChange}
+        />
+        <MessagesEl.Button type="submit">Send</MessagesEl.Button>
+      </MessagesEl.Form>
+    </>
   );
 };
-
-//  <MessagesEl.Form onSubmit={handleSubmit}>
-//    <MessagesEl.Label htmlFor="message_input"></MessagesEl.Label>
-//    <MessagesEl.Input
-//      id="message_input"
-//      placeholder="Type message..."
-//      ref={inputRef}
-//    />
-//    <MessagesEl.Button type="submit">Send</MessagesEl.Button>
-//  </MessagesEl.Form>;
-
-//  <Elements.Form onSubmit={handleSubmit} className="mr-1 ml-1">
-//    <Elements.InputGroup>
-//      <Elements.Label htmlFor="message_input"></Elements.Label>
-//      <Elements.Input
-//        id="message_input"
-//        placeholder="Type message..."
-//        ref={inputRef}
-//        style={{ borderRadius: "3px" }}
-//      />
-//      <Elements.Button
-//        type="submit"
-//        className="pl-4 pr-4"
-//        style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-//      >
-//        Send
-//      </Elements.Button>
-//    </Elements.InputGroup>
-//  </Elements.Form>

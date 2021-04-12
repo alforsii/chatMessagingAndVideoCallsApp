@@ -3,7 +3,7 @@ import React from "react";
 import { Message } from "./Message";
 import { MessagesEl } from "./MessagesElements";
 // import { useState } from "react";
-import StyledAvatar from "../Avatar";
+import { StyledAvatar } from "../Avatar";
 
 export function MessagesGroup({ id, type, messages, name, userId }) {
   // const [msgId, setMsgId] = useState("");

@@ -3,7 +3,7 @@ import React from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import moment from "moment";
 import { MessagesEl } from "./MessagesElements";
-import { StyledDropdown, DropdownEl } from "./DropdownElements";
+import { StyledDropdown, DropdownEl } from "../DropdownElements";
 
 const DELETE_MESSAGE_QUERY = gql`
   mutation($chatId: ID!, $messageId: ID!, $userId: ID!) {
@@ -21,10 +21,9 @@ export function Message({ msg, userId, type, length, index }) {
   const handleDeleteMessage = async () => {
     try {
       const { chatId, id } = msg;
-      const { data } = await DeleteMessage({
+      await DeleteMessage({
         variables: { chatId, messageId: id, userId },
       });
-      console.log(data);
     } catch (err) {
       console.log(err);
     }

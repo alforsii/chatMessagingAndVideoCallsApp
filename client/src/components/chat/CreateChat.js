@@ -1,8 +1,9 @@
-import { gql, useMutation } from "@apollo/client";
 import React, { useState } from "react";
+import { gql, useMutation } from "@apollo/client";
 import { AuthContext } from "../../context/AuthContext";
-import { StyledModal } from "./Modal";
+import { StyledModal } from "../Modal";
 import { CreateChatForm } from "./CreateChatForm";
+import { errorAlert } from "../../global/globalHelpers";
 
 const NEW_CHAT_QUERY = gql`
   mutation($userId: ID!, $chatName: String!) {
@@ -27,6 +28,13 @@ export default function CreateChat() {
           try {
             if (!chatName) return setErrMessage("Type a name!");
             if (!ctx.state.user.id) return ctx.logout();
+
+            if (chatName.length < 4 || chatName.length > 15) {
+              ctx.updateState(
+                errorAlert(`Chat name must be between 4 and 15 chars!`, true)
+              );
+              return;
+            }
 
             const { data, errors } = await CreateChat({
               variables: { chatName, userId: ctx.state.user.id },

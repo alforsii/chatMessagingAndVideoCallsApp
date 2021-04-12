@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Dropdown } from "react-bootstrap";
-import { boxShadow } from "../../global/styleHelperFunctions";
+import { boxShadow } from "../global/styleHelperFunctions";
 
 const CustomToggle = React.forwardRef((props, ref) => {
   // console.log(props);
@@ -13,15 +13,20 @@ const CustomToggle = React.forwardRef((props, ref) => {
         // console.log(e);
         props.onClick(e);
       }}
+      style={{
+        ...props.toggleStyle,
+      }}
     >
       {props.children}
     </DropdownEl.CustomToggle>
   );
 });
-export function StyledDropdown({ children }) {
+export function StyledDropdown({ children, toggleStyle }) {
   return (
     <DropdownEl.Dropdown>
-      <Dropdown.Toggle as={CustomToggle}>{children[0]}</Dropdown.Toggle>
+      <Dropdown.Toggle toggleStyle={toggleStyle} as={CustomToggle}>
+        {children[0]}
+      </Dropdown.Toggle>
       <DropdownEl.Menu as={Dropdown.Menu} style={{ margin: 0 }}>
         {children.slice(1)}
       </DropdownEl.Menu>
@@ -32,25 +37,25 @@ export function StyledDropdown({ children }) {
 export const DropdownEl = {
   Dropdown: styled(Dropdown)``,
   Menu: styled(Dropdown.Menu)`
-    background-color: ${({ theme }) => theme.colors.body.primary};
+    background-color: ${({ theme }) => theme.colors.body.secondary};
     ${boxShadow}
   `,
   CustomToggle: styled.div`
     cursor: pointer;
     color: ${({ theme }) => theme.colors.primary};
     font-size: 14px;
-    padding: 3px 5px;
+    padding: 5px;
     border-radius: 3px;
-    &:hover {
+    /* &:hover {
       background-color: ${({ theme }) => theme.colors.body.secondary};
-    }
+    } */
   `,
   Item: styled(Dropdown.Item)`
     font-size: 14px;
     padding: 10px;
     color: ${({ theme }) => theme.colors.text};
     &:hover {
-      background-color: ${({ theme }) => theme.colors.body.secondary};
+      background-color: ${({ theme }) => theme.colors.body.primary};
       color: ${({ theme }) => theme.colors.primary};
     }
   `,

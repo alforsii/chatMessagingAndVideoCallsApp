@@ -6,7 +6,7 @@ import { LoginForm } from "./components/auth/Login";
 import { Signup } from "./components/auth/Signup";
 import Room from "./components/room/Room";
 import VideoRoom from "./components/groupVideoRoom/VideoRoom";
-import { navHeight } from "./components/navbar/NavbarElements";
+// import { navHeight } from "./components/navbar/NavbarElements";
 
 export function AppRouter({ state, updateState }) {
   return (
@@ -17,7 +17,7 @@ export function AppRouter({ state, updateState }) {
 
       {state.token ? (
         <>
-          <div style={{ height: navHeight }}></div>
+          {/* <div style={{ height: navHeight }}></div> */}
           <Route
             path="/chat"
             exact

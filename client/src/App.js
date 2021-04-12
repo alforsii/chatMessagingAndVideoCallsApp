@@ -6,7 +6,7 @@ import { ThemeProvider } from "styled-components";
 import { AlertMessage } from "./components/AlertMessage";
 import { AuthContext } from "./context/AuthContext";
 import { AppRouter } from "./AppRouter";
-import StyledNavbar from "./components/navbar/Navbar";
+// import StyledNavbar from "./components/navbar/Navbar";
 import { GlobalStyles, GlobalEl } from "./global/styles";
 import StyledSidebar from "./components/navbar/Sidebar";
 import { data as allThemes } from "./themes.json";
@@ -131,11 +131,11 @@ function App({ history }) {
         >
           <GlobalStyles />
           <GlobalEl.Container id="main_container">
-            <StyledNavbar
+            {/* <StyledNavbar
               logout={handleLogout}
               state={state}
               updateState={updateState}
-            />
+            /> */}
             <StyledSidebar isOpen={state.isOpen} updateState={updateState} />
 
             <AlertMessage

@@ -12,7 +12,7 @@ const UPDATE_USER_THEME_QUERY = gql`
   }
 `;
 
-export function ModeButton({ updateState, state }) {
+export function ModeButton({ updateState, state, title }) {
   const [UpdateUserTheme] = useMutation(UPDATE_USER_THEME_QUERY);
 
   const handleUserThemeUpdate = async (mode) => {
@@ -32,26 +32,41 @@ export function ModeButton({ updateState, state }) {
     }
   };
   return (
-    <ModeButtonEl.Label>
-      <ModeButtonEl.Input
-        onClick={async (e) => {
-          if (state.defaultMode === "dark") {
-            handleUserThemeUpdate("light");
-          } else {
-            handleUserThemeUpdate("dark");
-          }
-        }}
-        type="checkbox"
-        defaultChecked={state.defaultMode === "dark" ? true : false}
-      />
-      <ModeButtonEl.Slider></ModeButtonEl.Slider>
-    </ModeButtonEl.Label>
+    <ModeButtonEl.Item>
+      <ModeButtonEl.Label>{title}</ModeButtonEl.Label>
+      <ModeButtonEl.Label>
+        <ModeButtonEl.Input
+          onClick={async (e) => {
+            if (state.defaultMode === "dark") {
+              handleUserThemeUpdate("light");
+            } else {
+              handleUserThemeUpdate("dark");
+            }
+          }}
+          type="checkbox"
+          defaultChecked={state.defaultMode === "dark" ? true : false}
+        />
+        <ModeButtonEl.Slider></ModeButtonEl.Slider>
+      </ModeButtonEl.Label>
+    </ModeButtonEl.Item>
   );
 }
 
 const light = "#fff";
 const dark = "#121212";
 const ModeButtonEl = {
+  Item: styled.li`
+    font-size: 14px;
+    padding: 10px;
+    color: ${({ theme }) => theme.colors.text};
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.body.secondary};
+      color: ${({ theme }) => theme.colors.primary};
+    }
+  `,
   Label: styled.label`
     width: 40px;
     height: 22px;

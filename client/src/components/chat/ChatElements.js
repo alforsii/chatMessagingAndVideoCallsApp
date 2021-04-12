@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { boxShadow } from "../../global/styleHelperFunctions";
 
 export const ChatEl = {
   Container: styled.div`
@@ -9,12 +10,29 @@ export const ChatEl = {
   Row: styled.div`
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
   `,
   Col: styled.div`
     flex: 1;
+    ${boxShadow}
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 10px;
+    min-width: 250px;
+    /* height: calc(100vh - 20px); */
+    /* max-height: 85vh; */
+    /* background-color: red; */
+    :nth-child(2) {
+      max-width: 300px;
+      flex: 1;
+    }
     :nth-child(3) {
       flex: 2;
+      max-width: 700px;
+    }
+    :nth-child(4) {
+      max-width: 300px;
+      flex: 1;
     }
 
     @media screen and (max-width: 668px) {
@@ -23,7 +41,7 @@ export const ChatEl = {
         flex: 0;
       }
     }
-    @media screen and (max-width: 900px) {
+    @media screen and (max-width: 998px) {
       :nth-child(3) {
         flex: 3;
         transition: 0.3s ease-in-out;

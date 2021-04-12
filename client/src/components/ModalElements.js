@@ -6,7 +6,7 @@ export const ModalEl = {
     /* background-color: ${({ theme }) => theme.colors.body.primary}; */
   `,
   Header: styled(Modal.Header)`
-    background-color: ${({ theme }) => theme.colors.body.primary};
+    background-color: ${({ theme }) => theme.colors.body.secondary};
     color: ${({ theme }) => theme.colors.text};
   `,
   Title: styled(Modal.Title)`
@@ -16,7 +16,7 @@ export const ModalEl = {
     }
   `,
   Body: styled(Modal.Body)`
-    background-color: ${({ theme }) => theme.colors.body.primary};
+    background-color: ${({ theme }) => theme.colors.body.secondary};
     color: ${({ theme }) => theme.colors.text};
   `,
   Dialog: styled(Modal.Dialog)``,

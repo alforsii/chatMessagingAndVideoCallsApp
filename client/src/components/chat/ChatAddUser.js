@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { AuthContext } from "../../context/AuthContext";
-import { StyledModal } from "./Modal";
+import { StyledModal } from "../Modal";
 import { ChatAddUserForm } from "./ChatAddUserForm";
 
 // otherUserId, chatId

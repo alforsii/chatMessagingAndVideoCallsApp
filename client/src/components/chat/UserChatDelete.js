@@ -3,7 +3,7 @@ import { gql, useMutation } from "@apollo/client";
 import { Button } from "react-bootstrap";
 
 import { successAlert, errorAlert } from "../../global/globalHelpers";
-import { StyledModal } from "./Modal";
+import { StyledModal } from "../Modal";
 
 const DELETE_CHAT_QUERY = gql`
   mutation($chatId: ID!, $userId: ID!) {
@@ -26,7 +26,7 @@ export const UserChatDelete = ({
     setShowDeleteModal(false);
     try {
       const userId = ctx.state.user.id;
-      console.log({ chatId, userId });
+
       const { data, errors } = await DeleteChat({
         variables: { chatId, userId },
       });
@@ -56,7 +56,7 @@ export const UserChatDelete = ({
       modalName="Alert_chat_removal_modal"
     >
       <Button
-        style={{ marginRight: 2 }}
+        style={{ marginRight: "10px" }}
         variant="secondary"
         onClick={() => setShowDeleteModal(false)}
       >

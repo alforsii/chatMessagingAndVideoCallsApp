@@ -18,7 +18,33 @@ const wsLink = new WebSocketLink({
 export const client = new ApolloClient({
   link: wsLink,
   uri: `${baseUrl}/graphql`,
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      TypingUsers: {
+        fields: {
+          users: {
+            merge(existing = [], incoming) {
+              return incoming;
+            },
+          },
+        },
+      },
+      Subscription: {
+        fields: {
+          userChats: {
+            merge(existing = [], incoming) {
+              return incoming;
+            },
+          },
+          messages: {
+            merge(existing = [], incoming) {
+              return incoming;
+            },
+          },
+        },
+      },
+    },
+  }),
   credentials: true,
 });
 

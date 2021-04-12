@@ -3,8 +3,8 @@ import { Spinner } from "react-bootstrap";
 
 const StyledSpinner = {
   Container: styled.div`
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: ${({ theme }) => (theme?.name ? "100%" : "100vh")};
     display: flex;
     justify-content: center;
     align-items: center;

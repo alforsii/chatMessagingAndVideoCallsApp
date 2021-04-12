@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 
 import { successAlert, errorAlert } from "../../global/globalHelpers";
-import { StyledModal } from "./Modal";
-import { FormEl } from "./FormElements";
+import { StyledModal } from "../Modal";
+import { FormEl } from "../FormElements";
 
 const UPDATE_CHAT_QUERY = gql`
   mutation($chatId: ID!, $authorId: ID!, $chatName: String!) {

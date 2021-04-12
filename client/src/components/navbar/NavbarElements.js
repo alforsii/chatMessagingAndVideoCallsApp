@@ -7,7 +7,7 @@ export const navHeight = "60px";
 export const NavbarEl = {
   Container: styled.div`
     display: flex;
-    position: fixed;
+    /* position: fixed; */
     justify-content: space-between;
     align-items: center;
     background-color: ${({ theme }) => theme.colors.body.primary};

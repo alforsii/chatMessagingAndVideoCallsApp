@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { AiFillWechat } from "react-icons/ai";
 
 import { AuthContext } from "../../context/AuthContext";
-import { StyledDropdown, DropdownEl } from "./DropdownElements";
+import { StyledDropdown, DropdownEl } from "../DropdownElements";
 import { UserChatUpdate } from "./UserChatUpdate";
 import { UserChatDelete } from "./UserChatDelete";
 

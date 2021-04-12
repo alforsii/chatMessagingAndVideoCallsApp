@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { gql, useMutation, useSubscription } from "@apollo/client";
 
@@ -6,6 +6,7 @@ import { ChatAddUser } from "./ChatAddUser";
 import ChatUsersDropdown from "./ChatUsersDropdown";
 import { ChatUsersEl } from "./ChatUsersElements";
 import { FaSearchengin } from "react-icons/fa";
+import { ChatOnlineUsers } from "./ChatOnlineUsers";
 
 const CHAT_USERS_QUERY = gql`
   subscription($chatId: ID!) {
@@ -38,20 +39,18 @@ export default function ChatUsers({
   inputId,
   isAuthorizedChat,
 }) {
-  const { data, error } = useSubscription(CHAT_USERS_QUERY, {
+  const { data } = useSubscription(CHAT_USERS_QUERY, {
     variables: { chatId },
   });
 
   const [chatUsers, setChatUsers] = useState([]);
   const [SearchedChatUsers] = useMutation(SEARCHED_CHAT_USERS);
-  const [searchedUsername, setSearchedUsername] = useState("");
+  const searchRef = useRef();
 
   const handleSearchedChatUsers = async (e) => {
     try {
-      const username = e.currentTarget.value;
-      setSearchedUsername(username);
       const { data } = await SearchedChatUsers({
-        variables: { username, chatId },
+        variables: { username: searchRef.current.value, chatId },
       });
       if (data) {
         setChatUsers(data.searchedChatUsers);
@@ -67,8 +66,8 @@ export default function ChatUsers({
     }
   }, [data]);
 
-  if (!data) return null;
-  if (error) return console.log(error);
+  // if (!data) return null;
+  // if (error) return console.log(error);
 
   return (
     <ChatUsersEl.Container>
@@ -80,6 +79,8 @@ export default function ChatUsers({
           id={`search_user_input-${inputId}`}
           placeholder={`Users...`}
           onChange={handleSearchedChatUsers}
+          ref={searchRef}
+          autoComplete="off"
         />
         <ChatUsersEl.InputIcon>
           <ChatAddUser chatId={chatId} />
@@ -87,12 +88,14 @@ export default function ChatUsers({
       </ChatUsersEl.Header>
 
       <ChatUsersEl.Menu>
-        {!isAuthorizedChat ? null : chatUsers.length >= 1 ? (
+        {!data ? null : !isAuthorizedChat ? null : chatUsers.length >= 1 ? (
           chatUsers
             .filter((chatUser) => chatUser.id !== currentUserId)
             .map((chatUser) => (
               <ChatUsersEl.SubMenu key={chatUser.id}>
                 <ChatUsersEl.Avatar
+                  width={35}
+                  height={35}
                   rounded
                   src="https://source.unsplash.com/user/erondu"
                 />
@@ -109,11 +112,12 @@ export default function ChatUsers({
                 </ChatUsersEl.Item>
               </ChatUsersEl.SubMenu>
             ))
-        ) : searchedUsername ? (
-          <ChatUsersEl.Item>{`No user in this chatroom with a name: ${searchedUsername}`}</ChatUsersEl.Item>
+        ) : searchRef.current?.value ? (
+          <ChatUsersEl.Item>{`No user in this chatroom with a name: ${searchRef.current?.value}`}</ChatUsersEl.Item>
         ) : (
           <ChatUsersEl.Item>No one in this chatroom...</ChatUsersEl.Item>
         )}
+        <ChatOnlineUsers chatId={chatId} />
       </ChatUsersEl.Menu>
     </ChatUsersEl.Container>
   );

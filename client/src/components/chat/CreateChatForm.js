@@ -1,4 +1,4 @@
-import { FormEl } from "./FormElements";
+import { FormEl } from "../FormElements";
 
 export function CreateChatForm({
   handleCreateChat,

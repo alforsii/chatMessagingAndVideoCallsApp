@@ -1,5 +1,5 @@
 import React from "react";
-import { FormEl } from "./FormElements";
+import { FormEl } from "../FormElements";
 
 export function ChatAddUserForm({
   handleSearchInput,

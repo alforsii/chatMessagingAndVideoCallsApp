@@ -1,7 +1,7 @@
 import React from "react";
-import { ChatSidebarEl } from "./ChatSidebarElements";
 import { AiFillWechat } from "react-icons/ai";
 import { FaUserFriends } from "react-icons/fa";
+import { ChatSidebarEl } from "./ChatSidebarElements";
 
 const iconSize = 30;
 export function StyledChatSidebar({ updateState, state }) {
