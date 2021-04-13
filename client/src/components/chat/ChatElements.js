@@ -14,16 +14,17 @@ export const ChatEl = {
   `,
   Col: styled.div`
     flex: 1;
-    ${boxShadow}
+    /* ${boxShadow} */
     border-radius: 8px;
     overflow: hidden;
     margin: 10px;
     min-width: 250px;
+    
     /* height: calc(100vh - 20px); */
     /* max-height: 85vh; */
     /* background-color: red; */
     :nth-child(2) {
-      max-width: 300px;
+      /* max-width: 300px; */
       flex: 1;
     }
     :nth-child(3) {
@@ -31,7 +32,7 @@ export const ChatEl = {
       max-width: 700px;
     }
     :nth-child(4) {
-      max-width: 300px;
+      /* max-width: 300px; */
       flex: 1;
     }
 

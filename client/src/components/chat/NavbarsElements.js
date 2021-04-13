@@ -11,7 +11,7 @@ export const NavbarLeftEl = {
     padding-left: 20px;
     min-width: 100%;
     border: none;
-    background-color: ${({ theme }) => theme.colors.body.secondary};
+    /* background-color: ${({ theme }) => theme.colors.body.secondary}; */
   `,
   Logo: styled(LinkRoute)`
     color: ${({ theme }) => theme.colors.primary};
@@ -19,7 +19,7 @@ export const NavbarLeftEl = {
     text-decoration: none;
     font-size: 24px;
     font-weight: bold;
-    transition: ease-in-out 0.1s all;
+    /* transition: ease-in-out 0.1s all; */
     &:hover {
       text-decoration: none;
     }
@@ -31,14 +31,7 @@ export const NavbarLeftEl = {
     }
   `,
 };
-export const NavbarRightEl = {
-  Container: styled.div`
-    height: ${rightNavbarHeight + "px"};
-    min-width: 100%;
-    border: none;
-    background-color: ${({ theme }) => theme.colors.body.secondary};
-  `,
-};
+
 export const NavbarCenterEl = {
   Container: styled.div`
     height: 50px;
@@ -47,5 +40,26 @@ export const NavbarCenterEl = {
     background-color: ${({ theme }) => theme.colors.primary};
     display: flex;
     justify-content: space-between;
+  `,
+};
+
+export const NavbarRightEl = {
+  Container: styled.div`
+    height: ${rightNavbarHeight + "px"};
+    /* min-width: 100%; */
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding: 20px; */
+    /* background-color: ${({ theme }) => theme.colors.body.secondary}; */
+  `,
+  Title: styled.h6`
+    margin: 0;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: bold;
+    padding: 5px;
+    color: ${({ theme }) => theme.colors.primary};
   `,
 };

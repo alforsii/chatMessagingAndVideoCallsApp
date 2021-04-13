@@ -12,6 +12,7 @@ const AvatarEl = styled(Image)`
 `;
 const Container = styled.div`
   position: relative;
+  margin: 3px;
 `;
 // const badgeColor = "#5ad539";
 

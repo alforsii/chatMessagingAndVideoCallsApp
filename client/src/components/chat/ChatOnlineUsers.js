@@ -1,6 +1,9 @@
 import { gql, useSubscription } from "@apollo/client";
 import { useState } from "react";
 import { StyledAvatar } from "../Avatar";
+import { RiArrowDropUpLine, RiArrowDropDownLine } from "react-icons/ri";
+import { ChatOnlineUsersEl } from "./ChatOnlineUsersElements";
+import { useEffect } from "react";
 
 const ONLINE_CHAT_USERS = gql`
   subscription($chatId: ID!) {
@@ -21,64 +24,48 @@ export function ChatOnlineUsers({ chatId }) {
     variables: { chatId },
   });
   const [rightFooterHeight, setRightFooterHeight] = useState(5);
-
+  const numberOfUsers = data?.onlineUsers?.users?.length;
+  useEffect(() => {
+    if (numberOfUsers) {
+      setRightFooterHeight(20);
+    } else {
+      setRightFooterHeight(5);
+    }
+    // eslint-disable-next-line
+  }, [data]);
   console.log(data);
   console.log(error);
   return (
-    <div
-      style={{
-        height: rightFooterHeight + "%",
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        width: "100%",
-      }}
-    >
-      <h4
+    <ChatOnlineUsersEl.Container height={rightFooterHeight}>
+      <ChatOnlineUsersEl.Button
         onClick={() => {
-          rightFooterHeight !== 5
-            ? setRightFooterHeight(5)
-            : setRightFooterHeight(100);
+          rightFooterHeight === 5 || rightFooterHeight === 20
+            ? setRightFooterHeight(100)
+            : setRightFooterHeight(5);
         }}
-        style={{ background: "gray", margin: 0, cursor: "pointer" }}
       >
         Online Users
-      </h4>
-      <div
-        style={{
-          height: "90%",
-          width: "100%",
-          background: "lightgreen",
-          overflow: "scroll",
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          flexDirection: "column",
-        }}
-      >
-        {rightFooterHeight !== 30 &&
-          data &&
+        {rightFooterHeight === 100 ? (
+          <RiArrowDropDownLine size={24} />
+        ) : (
+          <RiArrowDropUpLine size={24} />
+        )}
+        {numberOfUsers && `${numberOfUsers}`}
+      </ChatOnlineUsersEl.Button>
+      <ChatOnlineUsersEl.Menu>
+        {data &&
           data?.onlineUsers?.users?.map((user) => (
-            <div
-              key={user.id}
-              style={{
-                display: "flex",
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
-            >
+            <ChatOnlineUsersEl.Item key={user.id}>
               <StyledAvatar
                 width={35}
                 height={35}
                 roundedCircle
                 src={user.image}
               />
-              <p style={{ color: "#000", margin: "2px", padding: 0 }}>
-                {user.firstName}
-              </p>
-            </div>
+              <ChatOnlineUsersEl.Text>{`${user.firstName} ${user.lastName}`}</ChatOnlineUsersEl.Text>
+            </ChatOnlineUsersEl.Item>
           ))}
-      </div>
-    </div>
+      </ChatOnlineUsersEl.Menu>
+    </ChatOnlineUsersEl.Container>
   );
 }

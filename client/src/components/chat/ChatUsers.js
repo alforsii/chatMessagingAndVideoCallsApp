@@ -70,7 +70,7 @@ export default function ChatUsers({
   // if (error) return console.log(error);
 
   return (
-    <ChatUsersEl.Container>
+    <ChatUsersEl.Container style={{ display: chatId ? "block" : "none" }}>
       <ChatUsersEl.Header>
         <ChatUsersEl.Label htmlFor={`search_user_input-${inputId}`}>
           <FaSearchengin />
@@ -117,8 +117,8 @@ export default function ChatUsers({
         ) : (
           <ChatUsersEl.Item>No one in this chatroom...</ChatUsersEl.Item>
         )}
-        <ChatOnlineUsers chatId={chatId} />
       </ChatUsersEl.Menu>
+      <ChatOnlineUsers chatId={chatId} />
     </ChatUsersEl.Container>
   );
 }

@@ -73,7 +73,11 @@ export const UserChatUpdate = ({
             placeholder="ChatName..."
             autoFocus
           />
-          <FormEl.Button variant="success" type="submit">
+          <FormEl.Button
+            style={{ borderRadius: "0 3px 3px 0" }}
+            variant="success"
+            type="submit"
+          >
             Update
           </FormEl.Button>
         </FormEl.InputGroup>

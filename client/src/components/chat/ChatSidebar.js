@@ -4,7 +4,7 @@ import { FaUserFriends } from "react-icons/fa";
 import { ChatSidebarEl } from "./ChatSidebarElements";
 
 const iconSize = 30;
-export function StyledChatSidebar({ updateState, state }) {
+export function StyledChatSidebar({ updateState, state, display }) {
   return (
     <ChatSidebarEl.Container>
       <ChatSidebarEl.Icon
@@ -14,6 +14,7 @@ export function StyledChatSidebar({ updateState, state }) {
             showUsers: false,
           })
         }
+        style={{ display }}
       >
         <AiFillWechat size={iconSize} />
       </ChatSidebarEl.Icon>
@@ -24,6 +25,7 @@ export function StyledChatSidebar({ updateState, state }) {
             showChats: false,
           })
         }
+        style={{ display }}
       >
         <FaUserFriends size={iconSize} />
       </ChatSidebarEl.Icon>

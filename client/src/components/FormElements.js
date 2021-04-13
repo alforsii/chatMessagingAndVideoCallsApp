@@ -11,9 +11,16 @@ export const FormEl = {
     }
   `,
   Input: styled(Form.Control)`
+    border: none;
+    background-color: ${({ background, theme }) =>
+      background === "dark" ? theme.colors.body.primary : ""};
     ::placeholder {
       font-size: 14px;
       font-style: italic;
+    }
+    :focus {
+      background-color: ${({ background, theme }) =>
+        background === "dark" ? theme.colors.body.primary : ""};
     }
     @media screen and (max-width: 400px) {
       ::placeholder {

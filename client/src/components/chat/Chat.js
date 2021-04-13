@@ -107,32 +107,16 @@ export function Chat(props) {
     <ChatEl.Container id="chat_container" isOpen={isOpen}>
       <ChatEl.Row>
         <StyledChatSidebar updateState={updateState} state={state} />
-        <ChatEl.Col>
+        <ChatEl.Col
+          style={{
+            flex: !chatId ? 0.75 : 1,
+          }}
+        >
           <StyledNavbarLeft />
-          {/* {state.showUsers && width === "md" ? (
-            <ChatUsers
-              isAuthorizedChat={isAuthorizedChat}
-              chatId={chatId}
-              currentUserId={userId}
-              inputId={1}
-            />
-          ) : (
-            )} */}
           <UserChats updateState={updateState} userId={userId} inputId={1} />
         </ChatEl.Col>
-        <ChatEl.Col>
+        <ChatEl.Col style={{ display: chatId ? "block" : "none" }}>
           <StyledNavbarCenter chatId={chatId} userId={userId} />
-          {/* {state.showChats && width === "sm" ? (
-            <UserChats updateState={updateState} userId={userId} inputId={2} />
-          ) : state.showUsers && width === "sm" ? (
-            <ChatUsers
-              isAuthorizedChat={isAuthorizedChat}
-              chatId={chatId}
-              currentUserId={userId}
-              inputId={2}
-            />
-          ) : (
-            )} */}
           <Messages
             isAuthorizedChat={isAuthorizedChat}
             user={user}
@@ -141,8 +125,7 @@ export function Chat(props) {
           />
         </ChatEl.Col>
         <ChatEl.Col style={{ flex: chatId ? 1 : 0 }}>
-          <StyledNavbarRight />
-
+          <StyledNavbarRight chatId={chatId} />
           <ChatUsers
             isAuthorizedChat={isAuthorizedChat}
             chatId={chatId}
@@ -150,7 +133,11 @@ export function Chat(props) {
             inputId={3}
           />
         </ChatEl.Col>
-        <StyledChatSidebar updateState={updateState} state={state} />
+        <StyledChatSidebar
+          display="none"
+          updateState={updateState}
+          state={state}
+        />
       </ChatEl.Row>
     </ChatEl.Container>
   );

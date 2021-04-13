@@ -9,7 +9,9 @@ export const UserChatsEl = {
     transition: 0.3s ease-in-out;
     /* height: 85vh; */
     height: 100%;
-    padding: 10px;
+    padding: 5px;
+    background-color: ${({ theme }) => theme.colors.body.secondary};
+    border-radius: 8px;
     /* margin: 20px; */
     /* display: ${({ theme }) => (theme.show === "chats" ? "none" : "grid")}; */
   `,
@@ -22,7 +24,7 @@ export const UserChatsEl = {
     justify-content: flex-start;
     align-items: center;
     flex-wrap: nowrap;
-    z-index: 9;
+    /* z-index: 9; */
     color: ${({ theme }) => theme.colors.text};
     i {
       font-size: 10px;
@@ -70,6 +72,8 @@ export const UserChatsEl = {
     /* height: calc(100vh - 100px); */
     /* height: calc(100vh - ${navbarHeight}); */
     height: calc(85vh - ${navbarHeight});
+    /* background-color: ${({ theme }) => theme.colors.body.secondary};
+    border-radius:8px; */
     /* max-height: 85vh; */
     overflow: scroll;
     scroll-behavior: smooth;
@@ -107,13 +111,14 @@ export const UserChatsEl = {
       color: ${({ theme }) => theme.colors.primary};
     }
     flex-wrap: wrap;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     padding: 20px;
     margin: 5px 0;
-    border-bottom: 3px solid ${({ theme }) => theme.colors.body.primary};
-    background-color: ${({ theme }) => theme.colors.body.secondary};
+     border-bottom: 1px solid ${({ theme }) => theme.colors.body.primary};
+    /* border-bottom: 3px solid ${({ theme }) => theme.colors.body.primary}; */
+    /* background-color: ${({ theme }) => theme.colors.body.secondary}; */
     &:hover {
-      border-bottom: 3px solid ${({ theme }) => theme.colors.primary};
+      /* border-bottom: 3px solid ${({ theme }) => theme.colors.primary}; */
       /* background-color: ${({ theme }) => theme.colors.body.primary}; */
       cursor: pointer;
       /* ${boxShadow} */
@@ -130,7 +135,7 @@ export const UserChatsEl = {
     text-overflow: ellipsis; */
     ${breakWords}
     :nth-child(1) {
-      padding-right: 0;
+      padding-right: 5px;
     }
     a {
       color: ${({ theme }) => theme.colors.text};

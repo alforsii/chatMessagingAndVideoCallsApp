@@ -44,7 +44,7 @@ export const DropdownEl = {
     cursor: pointer;
     color: ${({ theme }) => theme.colors.primary};
     font-size: 14px;
-    padding: 5px;
+    /* padding: 5px; */
     border-radius: 3px;
     /* &:hover {
       background-color: ${({ theme }) => theme.colors.body.secondary};

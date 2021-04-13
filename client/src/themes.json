@@ -25,7 +25,7 @@
       "id": "T_002",
       "name": "dark",
       "colors": {
-        "body": { "primary": "#121212", "secondary": "#1B1E20" },
+        "body": { "primary": "#191919", "secondary": "#1f2427" },
         "primary": "#448AFF",
         "secondary": "#a5d6a7",
         "text": "#FFFFFF",

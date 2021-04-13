@@ -33,62 +33,65 @@ export const MessagesEl = {
     /* word-wrap: break-word;
     word-break: break-all; */
   `,
-  Form: styled.form`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* border-top: 1px solid ${({ theme }) => theme.colors.body.primary}; */
-    background-color: ${({ theme }) => theme.colors.body.primary};
-    /* margin-top: 1px; */
-    /* padding: 7px; */
-    /* border-radius: 0 0 8px 8px; */
-    /* ${boxShadow} */
-  `,
-  Input: styled.input`
-    background-color: ${({ theme }) => theme.colors.body.primary};
-    border: none;
-    font-size: 14px;
-    font-style: italic;
-    padding: 7px;
-    padding-left: 20px;
-    outline: 0;
-    width: 100%;
-    border-radius: 5px;
-    /* margin-right: 2px; */
-    ${breakWords}
-    border: 1px solid ${({ theme }) => theme.colors.body.primary};
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    ::placeholder {
-      color: ${({ theme }) => theme.colors.text};
-      opacity: 0.4;
-    }
-    :focus {
-      color: ${({ theme }) => theme.colors.text};
-      border: 1px solid ${({ theme }) => theme.colors.primary};
-    }
-  `,
-  Label: styled.label`
-    cursor: pointer;
-  `,
-  Button: styled.button`
-    padding: 7px 34px;
-    border-radius: 3px;
-    transition: ease-in-out 0.3s all;
-    border: none;
-    color: ${({ theme }) => "#fff"};
-    background-color: ${({ theme }) => theme.colors.primary};
-    font-weight: bold;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    &:hover {
-      ${boxShadow};
-    }
-    @media screen and (max-width: 400px) {
-      /* font-size: 22px; */
-      padding: 3px 24px;
-    }
-  `,
+  // Form: styled.form`
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  //   /* border-top: 1px solid ${({ theme }) => theme.colors.body.primary}; */
+  //   background-color: ${({ theme }) => theme.colors.body.primary};
+  //   /* margin-top: 1px; */
+  //   /* padding: 7px; */
+  //   /* border-radius: 0 0 8px 8px; */
+  //   /* ${boxShadow} */
+  // `,
+  // Input: styled.input`
+  //   background-color: ${({ theme }) => theme.colors.body.primary};
+  //   border: none;
+  //   font-size: 14px;
+  //   font-style: italic;
+  //   padding: 7px;
+  //   padding-left: 20px;
+  //   outline: 0;
+  //   width: 100%;
+  //   border-radius: 5px;
+  //   /* margin-right: 2px; */
+  //   ${breakWords}
+  //   border: 1px solid ${({ theme }) => theme.colors.body.primary};
+  //   border-top-right-radius: 0;
+  //   border-bottom-right-radius: 0;
+  //   ::placeholder {
+  //     color: ${({ theme }) => theme.colors.text};
+  //     opacity: 0.4;
+  //   }
+  //   :focus {
+  //     color: ${({ theme }) => theme.colors.text};
+  //     border: 1px solid ${({ theme }) => theme.colors.primary};
+  //   }
+  // `,
+  // Label: styled.label`
+  //   cursor: pointer;
+  // `,
+  // Button: styled.button`
+  //   padding: 5px 34px;
+  //   border-radius: 3px;
+  //   transition: ease-in-out 0.3s all;
+  //   border: none;
+  //   color: ${({ theme }) => theme.colors.primary};
+  //   background-color: ${({ theme }) => theme.colors.body.primary};
+  //   border: 1px solid ${({ theme }) => theme.colors.primary};
+  //   font-weight: bold;
+  //   border-top-left-radius: 0;
+  //   border-bottom-left-radius: 0;
+  //   &:hover {
+  //     ${boxShadow};
+  //     color: ${({ theme }) => "#fff"};
+  //     background-color: ${({ theme }) => theme.colors.primary};
+  //   }
+  //   @media screen and (max-width: 400px) {
+  //     /* font-size: 22px; */
+  //     padding: 3px 24px;
+  //   }
+  // `,
   Text: styled.p`
     margin: 0;
     padding: 0;
@@ -126,16 +129,16 @@ export const MessagesEl = {
       }
     } */
   `,
-  Time: styled.span`
-    transition: 0.5s linear;
-    opacity: 0;
-    font-size: 12px;
-    margin: 5px;
-    padding: 10px;
-    /* display: ${({ display }) => display}; */
-    /* &:hover {
-      opacity: 0.5;
-      color: ${({ theme }) => theme.colors.text};
-    } */
-  `,
+  // Time: styled.span`
+  //   transition: 0.5s linear;
+  //   opacity: 0;
+  //   font-size: 12px;
+  //   margin: 5px;
+  //   padding: 10px;
+  //   /* display: ${({ display }) => display}; */
+  //   /* &:hover {
+  //     opacity: 0.5;
+  //     color: ${({ theme }) => theme.colors.text};
+  //   } */
+  // `,
 };

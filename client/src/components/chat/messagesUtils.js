@@ -27,7 +27,7 @@ export const formatMessages = (messages, user) => {
         const newObj = {
           id: msg.id,
           type: "sent",
-          name: msg.username,
+          name: `${msg.messageAuthor.firstName} ${msg.messageAuthor.lastName}`,
           avatar: "",
           messages: [...userMessages, currentMsg],
         };
@@ -50,7 +50,7 @@ export const formatMessages = (messages, user) => {
         const newObj = {
           id: msg.id,
           type: "received",
-          name: msg.username,
+          name: `${msg.messageAuthor.firstName} ${msg.messageAuthor.lastName}`,
           avatar: "",
           messages,
         };

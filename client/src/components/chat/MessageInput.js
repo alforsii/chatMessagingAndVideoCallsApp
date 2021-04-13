@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useMutation, gql } from "@apollo/client";
-import { MessagesEl } from "./MessagesElements";
+// import { MessagesEl } from "./MessagesElements";
+import { FormEl } from "../FormElements";
 
 const NEW_MESSAGE = gql`
   mutation($content: String!, $username: String!, $userId: ID!, $chatId: ID!) {
@@ -101,19 +102,42 @@ export const MessageInput = ({ user, chatId, userId }) => {
 
   return (
     <>
-      <MessagesEl.Form style={{ position: "relative" }} onSubmit={handleSubmit}>
-        <MessagesEl.Label htmlFor="message_input"></MessagesEl.Label>
-        <MessagesEl.Input
-          id="message_input"
-          placeholder="Type message..."
-          ref={inputRef}
-          autoComplete="off"
-          onChange={handleInputChange}
-          onBlur={handleStopTyping}
-          onPaste={handleInputChange}
-        />
-        <MessagesEl.Button type="submit">Send</MessagesEl.Button>
-      </MessagesEl.Form>
+      <FormEl.Form style={{ position: "relative" }} onSubmit={handleSubmit}>
+        <FormEl.InputGroup>
+          <FormEl.Label htmlFor="message_input"></FormEl.Label>
+          <FormEl.Input
+            id="message_input"
+            placeholder="Type message..."
+            ref={inputRef}
+            autoComplete="off"
+            onChange={handleInputChange}
+            onBlur={handleStopTyping}
+            onPaste={handleInputChange}
+            background="dark"
+            style={{ maxWidth: "80%", borderRadius: "3px 0 0 3px" }}
+          />
+          <FormEl.Button
+            style={{ width: "20%", borderRadius: "0 3px 3px 0" }}
+            type="submit"
+          >
+            Send
+          </FormEl.Button>
+        </FormEl.InputGroup>
+      </FormEl.Form>
     </>
   );
 };
+
+//  <MessagesEl.Form style={{ position: "relative" }} onSubmit={handleSubmit}>
+//         <MessagesEl.Label htmlFor="message_input"></MessagesEl.Label>
+//         <MessagesEl.Input
+//           id="message_input"
+//           placeholder="Type message..."
+//           ref={inputRef}
+//           autoComplete="off"
+//           onChange={handleInputChange}
+//           onBlur={handleStopTyping}
+//           onPaste={handleInputChange}
+//         />
+//         <MessagesEl.Button type="submit">Send</MessagesEl.Button>
+//       </MessagesEl.Form>
